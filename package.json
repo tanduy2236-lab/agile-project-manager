@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\""
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client && npx prisma generate",
+    "start": "npm start --prefix server"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
