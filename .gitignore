@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Build output
+client/dist/
+
+# Generated Prisma files
+generated/prisma/
+
+# Uploaded files
+server/uploads/

@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\""
+  },
+  "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "prisma": "^6.19.3",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
