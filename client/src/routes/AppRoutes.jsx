@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from '../layouts/AuthLayout';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
@@ -21,6 +21,7 @@ const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
                 <Route element={<GuestRoute />}>
                     <Route element={<AuthLayout />}> 
                         <Route path="/login" element={<Login />} /> 
