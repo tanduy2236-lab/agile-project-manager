@@ -1,10 +1,6 @@
 import ProjectCard from "./ProjectCard";
 import EmptyProject from "./EmptyProject";
-
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 
 const ProjectList = ({
     projects,

@@ -1,7 +1,4 @@
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 
 const ProjectCard = ({
     project,
@@ -31,7 +28,6 @@ const ProjectCard = ({
             <div className="flex items-start justify-between gap-3">
 
                 <div>
-                    {/* Project Status */}
                     <div
                         className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wide ${
                             isCompleted
@@ -49,7 +45,6 @@ const ProjectCard = ({
                     </h3>
                 </div>
 
-                {/* Created date */}
                 <div className="rounded-xl bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-500 dark:bg-slate-700 dark:text-slate-400">
                     {new Date(
                         project.createdAt
@@ -61,13 +56,11 @@ const ProjectCard = ({
                 </div>
             </div>
 
-            {/* Description */}
             <p className="mt-4 flex-1 text-sm leading-6 text-slate-600 dark:text-slate-400">
                 {project.description ||
                     t.projects.noDescriptionCard}
             </p>
 
-            {/* Tags */}
             <div className="mt-5 flex flex-wrap gap-2">
 
                 <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-400">
@@ -79,11 +72,8 @@ const ProjectCard = ({
                 </span>
 
             </div>
-
-            {/* Actions */}
             <div className="mt-6 flex flex-col gap-2 sm:flex-row">
 
-                {/* Open */}
                 <button
                     onClick={() =>
                         onOpen(project)
@@ -92,8 +82,6 @@ const ProjectCard = ({
                 >
                     {t.projects.open}
                 </button>
-
-                {/* Edit */}
                 {canEdit && (
                     <button
                         onClick={() =>
@@ -104,8 +92,6 @@ const ProjectCard = ({
                         {t.common.edit}
                     </button>
                 )}
-
-                {/* Delete */}
                 {canDelete && (
                     <button
                         onClick={() =>
@@ -116,8 +102,6 @@ const ProjectCard = ({
                         {t.common.delete}
                     </button>
                 )}
-
-                {/* Complete */}
                 {canComplete && (
                     <button
                         onClick={() =>

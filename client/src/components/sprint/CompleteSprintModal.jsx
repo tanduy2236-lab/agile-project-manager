@@ -1,7 +1,3 @@
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
 const CompleteSprintModal = ({
     isOpen,
     sprint,

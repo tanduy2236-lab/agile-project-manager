@@ -1,7 +1,4 @@
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 
 const DeleteProjectModal = ({
     isOpen,

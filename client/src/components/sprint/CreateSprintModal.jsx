@@ -62,8 +62,6 @@ const CreateSprintModal = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 dark:bg-black/70">
 
             <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl dark:bg-slate-800">
-
-                {/* Header */}
                 <div className="flex items-center justify-between border-b border-slate-200 p-6 dark:border-slate-700">
 
                     <div>
@@ -96,8 +94,6 @@ const CreateSprintModal = ({
                                 {error}
                             </div>
                         )}
-
-                        {/* Sprint Name */}
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                 {t.sprints.sprintName}
@@ -113,8 +109,6 @@ const CreateSprintModal = ({
                                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder:text-slate-400 dark:focus:border-indigo-400 dark:focus:ring-indigo-900"
                             />
                         </div>
-
-                        {/* Goal */}
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                 {t.sprints.goal}
@@ -129,10 +123,7 @@ const CreateSprintModal = ({
                                 className="w-full resize-none rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder:text-slate-400 dark:focus:border-indigo-400 dark:focus:ring-indigo-900"
                             />
                         </div>
-
-                        {/* Dates */}
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
                             <div>
                                 <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                     {t.sprints.startDate}
@@ -164,8 +155,6 @@ const CreateSprintModal = ({
                         </div>
 
                     </div>
-
-                    {/* Footer */}
                     <div className="flex justify-end gap-3 border-t border-slate-200 p-6 dark:border-slate-700">
 
                         <button

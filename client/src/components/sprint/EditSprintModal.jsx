@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { updateSprint } from "../../api/sprint.api";
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 const EditSprintModal = ({
     sprint,
     onClose,
@@ -86,8 +83,6 @@ const EditSprintModal = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 dark:bg-black/70">
 
             <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl dark:bg-slate-800">
-
-                {/* Header */}
                 <div className="flex items-center justify-between border-b border-slate-200 p-6 dark:border-slate-700">
 
                     <div>
@@ -119,8 +114,6 @@ const EditSprintModal = ({
                                 {error}
                             </div>
                         )}
-
-                        {/* Sprint Name */}
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                 {t.sprints.sprintName}
@@ -135,8 +128,6 @@ const EditSprintModal = ({
                                 placeholder="Sprint 1"
                             />
                         </div>
-
-                        {/* Goal */}
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                 {t.sprints.goal}
@@ -152,7 +143,6 @@ const EditSprintModal = ({
                             />
                         </div>
 
-                        {/* Dates */}
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
 
                             <div>
@@ -186,8 +176,6 @@ const EditSprintModal = ({
                         </div>
 
                     </div>
-
-                    {/* Footer */}
                     <div className="flex justify-end gap-3 border-t border-slate-200 p-6 dark:border-slate-700">
 
                         <button

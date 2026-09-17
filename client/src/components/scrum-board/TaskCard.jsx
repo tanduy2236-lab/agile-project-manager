@@ -125,7 +125,6 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
             "
         >
 
-            {/* Header */}
             <div className="flex items-start justify-between gap-3">
 
                 <h3 className="
@@ -139,8 +138,6 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
                 </h3>
 
                 <div className="flex items-center gap-2">
-
-                    {/* Drag */}
                     <button
                         {...attributes}
                         {...listeners}
@@ -163,9 +160,6 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
                     >
                         ☰
                     </button>
-
-
-                    {/* Priority */}
                     <span
                         className={`
                             rounded-full
@@ -182,8 +176,6 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
                         {priority}
                     </span>
 
-
-                    {/* Delete */}
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
@@ -206,12 +198,7 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
 
                 </div>
             </div>
-
-
-            {/* Task Info */}
             <div className="mt-3 flex flex-wrap gap-2">
-
-                {/* Story Point */}
                 <span
                     className="
                         rounded-full
@@ -228,9 +215,6 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
                 >
                     {task.storyPoint ?? 0} SP
                 </span>
-
-
-                {/* Assignee */}
                 <span
                     className="
                         rounded-full
@@ -249,9 +233,6 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
                 </span>
 
             </div>
-
-
-            {/* Footer */}
             <div
                 className="
                     mt-4

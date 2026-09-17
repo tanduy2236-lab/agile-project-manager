@@ -1,8 +1,5 @@
 import TaskCard from "./TaskCard";
-import {
-    SortableContext,
-    verticalListSortingStrategy
-} from "@dnd-kit/sortable";
+import {SortableContext,verticalListSortingStrategy} from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
 
 const Column = ({
@@ -46,7 +43,6 @@ const Column = ({
             "
         >
 
-            {/* Column Header */}
             <div
                 className={`
                     mb-4 rounded-xl
@@ -110,8 +106,6 @@ const Column = ({
                 </div>
             </div>
 
-
-            {/* Add Task */}
             <button
                 onClick={() => onCreateTask(column.id)}
                 className="
@@ -142,7 +136,6 @@ const Column = ({
             </button>
 
 
-            {/* Tasks */}
             <SortableContext
                 items={taskIds}
                 strategy={verticalListSortingStrategy}

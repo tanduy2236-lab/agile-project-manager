@@ -1,8 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 
 const ProjectHeader = () => {
     const navigate = useNavigate();

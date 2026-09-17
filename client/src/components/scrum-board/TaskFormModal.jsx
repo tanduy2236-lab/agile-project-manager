@@ -99,8 +99,6 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                     className="space-y-4"
                     onSubmit={handleSubmit}
                 >
-
-                    {/* Title */}
                     <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             Title
@@ -119,8 +117,6 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                             placeholder="Enter task title"
                         />
                     </div>
-
-                    {/* Description */}
                     <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             Description
@@ -139,8 +135,6 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                             placeholder="Enter description"
                         />
                     </div>
-
-                    {/* Priority */}
                     <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             Priority
@@ -169,8 +163,6 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                             </option>
                         </select>
                     </div>
-
-                    {/* Assignee */}
                     <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             Assignee
@@ -206,8 +198,6 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                             </select>
                         )}
                     </div>
-
-                    {/* Deadline */}
                     <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             Deadline
@@ -226,7 +216,6 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                         />
                     </div>
 
-                    {/* Actions */}
                     <div className="flex justify-end gap-3 border-t border-slate-200 pt-5 dark:border-slate-700">
 
                         <button

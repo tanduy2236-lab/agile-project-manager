@@ -64,8 +64,6 @@ const Board = ({
 
             setColumns(boardColumns);
 
-
-            // Lấy danh sách assignee
             const assigneeMap = new Map();
 
             boardColumns.forEach((column) => {
@@ -133,11 +131,6 @@ const Board = ({
         const toColumnId =
             over.data.current?.columnId ||
             over.data.current?.sortable?.containerId;
-
-
-        // =========================
-        // Move inside same column
-        // =========================
 
         if (fromColumnId === toColumnId) {
 
@@ -224,11 +217,6 @@ const Board = ({
             return;
 
         }
-
-
-        // =========================
-        // Move between columns
-        // =========================
 
         const sourceColumn =
             columns.find(
@@ -408,10 +396,6 @@ const Board = ({
     }, [id]);
 
 
-    // =========================
-    // Loading
-    // =========================
-
     if (loading) {
 
         return (
@@ -473,11 +457,6 @@ const Board = ({
         );
 
     }
-
-
-    // =========================
-    // Filter tasks
-    // =========================
 
     const filteredColumns =
         columns.map((column) => ({
@@ -557,8 +536,6 @@ const Board = ({
                     "
                 >
 
-                    {/* Board Header */}
-
                     <div
                         className="
                             mb-4
@@ -569,7 +546,6 @@ const Board = ({
                             gap-3
                         "
                     >
-
                         <div>
 
                             <p
@@ -599,9 +575,6 @@ const Board = ({
 
                         </div>
 
-
-                        {/* Column count */}
-
                         <div
                             className="
                                 rounded-full
@@ -621,8 +594,6 @@ const Board = ({
 
                     </div>
 
-
-                    {/* Columns */}
 
                     <div
                         className="
@@ -693,9 +664,6 @@ const Board = ({
 
                     </div>
 
-
-                    {/* Create Task */}
-
                     {showCreateModal && (
 
                         <TaskFormModal
@@ -723,9 +691,6 @@ const Board = ({
                         />
 
                     )}
-
-
-                    {/* Task Detail */}
 
                     {selectedTask && (
 
@@ -766,10 +731,6 @@ const Board = ({
                         />
 
                     )}
-
-
-                    {/* Edit Task */}
-
                     {editingTask && (
 
                         <TaskFormModal
@@ -798,10 +759,6 @@ const Board = ({
                         />
 
                     )}
-
-
-                    {/* Delete Task */}
-
                     {deletingTask && (
 
                         <DeleteTaskModal

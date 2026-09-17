@@ -18,8 +18,6 @@ const ProjectToolbar = ({
     return (
         <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-
-                {/* Search */}
                 <label className="flex flex-1 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-700">
                     <span className="text-slate-400 dark:text-slate-500">
                         🔎
@@ -37,8 +35,6 @@ const ProjectToolbar = ({
                         className="w-full border-0 bg-transparent text-sm outline-none placeholder:text-slate-400 dark:text-white dark:placeholder:text-slate-500"
                     />
                 </label>
-
-                {/* Status */}
                 <select
                     value={statusFilter}
                     onChange={(e) =>
@@ -59,7 +55,6 @@ const ProjectToolbar = ({
                     </option>
                 </select>
 
-                {/* Sort */}
                 <select
                     value={sortBy}
                     onChange={(e) =>

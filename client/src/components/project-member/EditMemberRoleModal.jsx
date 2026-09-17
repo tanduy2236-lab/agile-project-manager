@@ -43,7 +43,6 @@ const EditMemberRoleModal = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 dark:bg-black/70">
             <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-800">
 
-                {/* Header */}
                 <div className="flex items-center justify-between border-b border-slate-200 p-6 dark:border-slate-700">
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -72,8 +71,6 @@ const EditMemberRoleModal = ({
                                 {error}
                             </div>
                         )}
-
-                        {/* Member information */}
                         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/60">
                             <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                 Member
@@ -108,8 +105,6 @@ const EditMemberRoleModal = ({
                             </select>
                         </div>
                     </div>
-
-                    {/* Footer */}
                     <div className="flex justify-end gap-3 border-t border-slate-200 p-6 dark:border-slate-700">
 
                         <button

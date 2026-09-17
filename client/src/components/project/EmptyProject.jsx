@@ -1,14 +1,10 @@
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 
 const EmptyProject = () => {
 
     const language = getSavedLanguage();
 
-    const t =
-        getTranslations(language);
+    const t = getTranslations(language);
 
     return (
         <div className="rounded-3xl border border-dashed border-slate-300 bg-white/80 p-10 text-center shadow-sm dark:border-slate-600 dark:bg-slate-800/80">

@@ -1,7 +1,4 @@
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 
 const CreateProjectForm = ({
     projectData,
@@ -46,8 +43,6 @@ const CreateProjectForm = ({
                 onSubmit={onSubmit}
                 className="space-y-5"
             >
-
-                {/* Feedback */}
                 {feedback.message && (
                     <div
                         className={`rounded-xl border px-4 py-3 text-sm ${
@@ -60,7 +55,6 @@ const CreateProjectForm = ({
                     </div>
                 )}
 
-                {/* Project name */}
                 <div>
 
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -79,8 +73,6 @@ const CreateProjectForm = ({
                     />
 
                 </div>
-
-                {/* Description */}
                 <div>
 
                     <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -100,7 +92,6 @@ const CreateProjectForm = ({
 
                 </div>
 
-                {/* Submit */}
                 <button
                     type="submit"
                     disabled={isCreating}

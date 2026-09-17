@@ -1,16 +1,5 @@
-import {
-    useCallback,
-    useEffect,
-    useState,
-} from "react";
-
-import {
-    getSprintById,
-    startSprint,
-    completeSprint,
-    deleteSprint,
-} from "../../api/sprint.api";
-
+import {useCallback,useEffect,useState,} from "react";
+import {getSprintById,startSprint,completeSprint,deleteSprint,} from "../../api/sprint.api";
 import EditSprintModal from "./EditSprintModal";
 import DeleteSprintModal from "./DeleteSprintModal";
 import BurndownChart from "../BurndownChart";
@@ -35,7 +24,6 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
         useState(false);
 
     const sprintT = t?.sprints || {};
-    const commonT = t?.common || {};
     const sprintId = sprint?.id;
 
     const loadSprintDetail = useCallback(async () => {
@@ -178,7 +166,6 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
     return (
         <div className="space-y-6">
 
-            {/* Sprint Information */}
             <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
 
                 <div className="flex flex-wrap items-start justify-between gap-4">
@@ -213,8 +200,6 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
 
                     </div>
                 </div>
-
-                {/* Sprint Information Grid */}
                 <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
 
                     <div className="rounded-xl bg-slate-50 p-4 dark:bg-slate-900/60">
@@ -258,8 +243,6 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
 
                 </div>
             </div>
-
-            {/* Tasks */}
             <div className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
 
                 <div className="border-b border-slate-200 p-6 dark:border-slate-700">
@@ -317,21 +300,16 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
 
                 </div>
             </div>
-
-            {/* Burndown Chart */}
             <BurndownChart
                 projectId={detail.projectId}
                 sprintId={detail.id}
             />
-
-            {/* Error */}
             {actionError && (
                 <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-600 dark:border-red-900 dark:bg-red-950/40 dark:text-red-400">
                     {actionError}
                 </div>
             )}
 
-            {/* Actions */}
             <div className="flex flex-wrap justify-end gap-3">
 
                 {detail.status === "Planning" && (
@@ -379,8 +357,6 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
                 )}
 
             </div>
-
-            {/* Edit Modal */}
             {showEditModal && (
                 <EditSprintModal
                     sprint={detail}
@@ -396,8 +372,6 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
                     }}
                 />
             )}
-
-            {/* Delete Modal */}
             {showDeleteModal && (
                 <DeleteSprintModal
                     isOpen={showDeleteModal}
@@ -411,7 +385,6 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
                 />
             )}
 
-            {/* Complete Modal */}
             {showCompleteModal && (
                 <CompleteSprintModal
                     isOpen={showCompleteModal}

@@ -55,11 +55,8 @@ const DeleteTaskModal = ({ task, onClose, onConfirm }) => {
                 className="w-full max-w-md transform overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-xl transition-all dark:border-slate-700 dark:bg-slate-800"
                 onMouseDown={(e) => e.stopPropagation()}
             >
-                {/* Header */}
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-4">
-
-                        {/* Warning Icon */}
                         <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
                             <svg
                                 className="h-6 w-6 text-red-600 dark:text-red-400"
@@ -89,8 +86,6 @@ const DeleteTaskModal = ({ task, onClose, onConfirm }) => {
                             </p>
                         </div>
                     </div>
-
-                    {/* Close */}
                     <button
                         ref={closeButtonRef}
                         onClick={onClose}
@@ -113,8 +108,6 @@ const DeleteTaskModal = ({ task, onClose, onConfirm }) => {
                         </svg>
                     </button>
                 </div>
-
-                {/* Content */}
                 <div className="mt-6 rounded-xl border border-red-100 bg-red-50/60 p-4 dark:border-red-900/40 dark:bg-red-950/20">
 
                     <p className="truncate font-medium text-red-700 dark:text-red-400">
@@ -132,7 +125,6 @@ const DeleteTaskModal = ({ task, onClose, onConfirm }) => {
                     </p>
                 </div>
 
-                {/* Actions */}
                 <div className="mt-6 flex justify-end gap-3">
 
                     <button
