@@ -10,24 +10,13 @@ import {
 } from "../api/document.api";
 
 const useDocuments = (projectId) => {
-    // =========================
-    // DOCUMENT
-    // =========================
 
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // =========================
-    // VERSION
-    // =========================
-
     const [versions, setVersions] = useState([]);
     const [loadingVersions, setLoadingVersions] =
         useState(false);
-
-    // =========================
-    // COMMON
-    // =========================
 
     const [submitting, setSubmitting] =
         useState(false);
@@ -43,9 +32,6 @@ const useDocuments = (projectId) => {
 
     const [changeNote, setChangeNote] =
         useState("");
-    // =========================
-    // EDIT DOCUMENT
-    // =========================
 
     const [editingDocumentId, setEditingDocumentId] =
         useState(null);
@@ -53,9 +39,6 @@ const useDocuments = (projectId) => {
     const [editingName, setEditingName] =
         useState("");
 
-    // =========================
-    // LOAD DOCUMENTS
-    // =========================
 
     const loadDocuments = async () => {
         if (!projectId) return;
@@ -83,9 +66,6 @@ const useDocuments = (projectId) => {
         }
     };
 
-    // =========================
-    // CREATE DOCUMENT
-    // =========================
 
     const createDocumentHandler = async (folderId = null) => {
     if (!documentName.trim()) {
@@ -135,9 +115,6 @@ const useDocuments = (projectId) => {
     }
 };
 
-    // =========================
-    // VERSION
-    // =========================
 
     const openVersionModal = (document) => {
         setSelectedDocument(document);
@@ -185,10 +162,6 @@ const useDocuments = (projectId) => {
         }
     };
 
-    // =========================
-    // VERSION HISTORY
-    // =========================
-
     const openVersions = async (document) => {
         try {
             setSelectedDocument(document);
@@ -220,10 +193,6 @@ const useDocuments = (projectId) => {
         }
     };
 
-    // =========================
-    // EDIT DOCUMENT
-    // =========================
-
     const startEditing = (document) => {
         setEditingDocumentId(document.id);
         setEditingName(document.name);
@@ -234,9 +203,7 @@ const useDocuments = (projectId) => {
         setEditingName("");
     };
 
-    const updateDocumentHandler = async (
-        documentId
-    ) => {
+    const updateDocumentHandler = async (documentId) => {
         if (!editingName.trim()) {
             alert("Document name is required.");
             return false;
@@ -274,13 +241,7 @@ const useDocuments = (projectId) => {
         }
     };
 
-    // =========================
-    // DELETE DOCUMENT
-    // =========================
-
-    const deleteDocumentHandler = async (
-        document
-    ) => {
+    const deleteDocumentHandler = async (document) => {
         if (!document) return false;
 
         try {
@@ -311,49 +272,41 @@ const useDocuments = (projectId) => {
     };
 
     return {
-    // Documents
-    documents,
-    setDocuments,
-    loading,
-    loadDocuments,
+        documents,
+        setDocuments,
+        loading,
+        loadDocuments,
 
-    // Upload form
-    documentName,
-    setDocumentName,
-    file,
-    setFile,
-    changeNote,
-    setChangeNote,
+        documentName,
+        setDocumentName,
+        file,
+        setFile,
+        changeNote,
+        setChangeNote,
 
-    // Versions
-    versions,
-    loadingVersions,
-    selectedDocument,
-    setSelectedDocument,
+        versions,
+        loadingVersions,
+        selectedDocument,
+        setSelectedDocument,
 
-    // Common
-    submitting,
-    setSubmitting,
+        submitting,
+        setSubmitting,
 
-    // Create
-    createDocumentHandler,
+        createDocumentHandler,
 
-    // Version
-    openVersionModal,
-    createVersion,
-    openVersions,
+        openVersionModal,
+        createVersion,
+        openVersions,
 
-    // Edit
-    editingDocumentId,
-    editingName,
-    setEditingName,
-    startEditing,
-    cancelEditing,
-    updateDocumentHandler,
+        editingDocumentId,
+        editingName,
+        setEditingName,
+        startEditing,
+        cancelEditing,
+        updateDocumentHandler,
 
-    // Delete
-    deleteDocumentHandler,
-};
+        deleteDocumentHandler,
+    };
 };
 
 export default useDocuments;

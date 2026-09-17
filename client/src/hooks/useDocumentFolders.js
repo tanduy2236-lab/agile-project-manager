@@ -1,28 +1,15 @@
 import { useState } from "react";
-
-import {
-    getFolders,
-    createFolder,
-    updateFolder,
-    deleteFolder,
-} from "../api/documentFolder.api";
+import {getFolders,createFolder,updateFolder,deleteFolder,} from "../api/documentFolder.api";
 
 const useDocumentFolders = (projectId, loadDocuments) => {
     const [folders, setFolders] = useState([]);
     const [loadingFolders, setLoadingFolders] = useState(true);
 
-    const [folderSubmitting, setFolderSubmitting] =
-        useState(false);
+    const [folderSubmitting, setFolderSubmitting] = useState(false);
 
-    const [showFolderModal, setShowFolderModal] =
-        useState(false);
+    const [showFolderModal, setShowFolderModal] = useState(false);
 
-    const [editingFolderId, setEditingFolderId] =
-        useState(null);
-
-    // =========================
-    // LOAD FOLDERS
-    // =========================
+    const [editingFolderId, setEditingFolderId] = useState(null);
 
     const loadFolders = async () => {
         if (!projectId) return;
@@ -49,27 +36,17 @@ const useDocumentFolders = (projectId, loadDocuments) => {
         }
     };
 
-    // =========================
-    // CREATE FOLDER MODAL
-    // =========================
-
     const openCreateFolderModal = () => {
         setEditingFolderId(null);
         setShowFolderModal(true);
     };
 
-    // =========================
-    // EDIT FOLDER MODAL
-    // =========================
 
     const openEditFolderModal = (folder) => {
         setEditingFolderId(folder.id);
         setShowFolderModal(true);
     };
 
-    // =========================
-    // CLOSE FOLDER MODAL
-    // =========================
 
     const closeFolderModal = () => {
         if (folderSubmitting) return;
@@ -77,10 +54,6 @@ const useDocumentFolders = (projectId, loadDocuments) => {
         setShowFolderModal(false);
         setEditingFolderId(null);
     };
-
-    // =========================
-    // CREATE FOLDER
-    // =========================
 
     const createFolderHandler = async (name) => {
         if (!projectId) return false;
@@ -120,9 +93,6 @@ const useDocumentFolders = (projectId, loadDocuments) => {
         }
     };
 
-    // =========================
-    // UPDATE FOLDER
-    // =========================
 
     const updateFolderHandler = async (name) => {
         if (!editingFolderId) return false;
@@ -134,41 +104,21 @@ const useDocumentFolders = (projectId, loadDocuments) => {
 
         try {
             setFolderSubmitting(true);
-
-            await updateFolder(
-                editingFolderId,
-                name.trim()
-            );
-
-            await Promise.all([
-                loadFolders(),
-                loadDocuments(),
-            ]);
+            await updateFolder(editingFolderId,name.trim());
+            await Promise.all([loadFolders(),loadDocuments(),]);
 
             closeFolderModal();
 
             return true;
         } catch (error) {
-            console.error(
-                "Error updating folder:",
-                error.response?.data || error
-            );
-
-            alert(
-                error.response?.data?.message ||
-                    "Failed to update folder."
-            );
+            console.error("Error updating folder:",error.response?.data || error);
+            alert(error.response?.data?.message || "Failed to update folder.");
 
             return false;
         } finally {
             setFolderSubmitting(false);
         }
     };
-
-    // =========================
-    // DELETE FOLDER
-    // =========================
-
     const deleteFolderHandler = async (folder) => {
         if (!folder) return false;
 
@@ -177,10 +127,7 @@ const useDocumentFolders = (projectId, loadDocuments) => {
 
             await deleteFolder(folder.id);
 
-            await Promise.all([
-                loadFolders(),
-                loadDocuments(),
-            ]);
+            await Promise.all([loadFolders(),loadDocuments(),]);
 
             return true;
         } catch (error) {
@@ -201,27 +148,21 @@ const useDocumentFolders = (projectId, loadDocuments) => {
     };
 
     return {
-        // Folder data
         folders,
         setFolders,
         loadingFolders,
         loadFolders,
 
-        // Folder modal
         showFolderModal,
         setShowFolderModal,
         editingFolderId,
         setEditingFolderId,
-
-        // Folder submitting
         folderSubmitting,
 
-        // Folder modal actions
         openCreateFolderModal,
         openEditFolderModal,
         closeFolderModal,
 
-        // Folder CRUD
         createFolderHandler,
         updateFolderHandler,
         deleteFolderHandler,

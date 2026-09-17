@@ -13,17 +13,13 @@ import {
 
 const SprintPage = () => {
     const { id } = useParams();
-    const [language, setLanguage] = useState(
-        getSavedLanguage()
-    );
+    const [language, setLanguage] = useState(getSavedLanguage());
     const t = getTranslations(language);
 
     useEffect(() => {
         setLanguage(getSavedLanguage());
 
-        const unsubscribe = listenForLanguageChange(
-            setLanguage
-        );
+        const unsubscribe = listenForLanguageChange(setLanguage);
 
         return unsubscribe;
     }, []);
@@ -61,11 +57,8 @@ const SprintPage = () => {
         } catch (error) {
             console.error("Error fetching sprints:", error);
 
-            setError(
-                error.response?.data?.message ||
-                t.sprints.loadingFailed
-            );
-              console.error("========== LOAD SPRINT ERROR ==========");
+            setError(error.response?.data?.message || t.sprints.loadingFailed);
+            console.error("========== LOAD SPRINT ERROR ==========");
             console.error("message:", error.message);
             console.error("status:", error.response?.status);
             console.error("data:", error.response?.data);
