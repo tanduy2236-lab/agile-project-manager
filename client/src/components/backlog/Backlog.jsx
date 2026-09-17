@@ -59,12 +59,8 @@ const Backlog = ({
     useEffect(() => {
         loadStories();
     }, [id]);
-
-    // Search + Filter
     const filteredStories =
         stories.filter((story) => {
-
-            // Search title + description
             const keyword =
                 search.trim().toLowerCase();
 
@@ -77,12 +73,10 @@ const Backlog = ({
                     ?.toLowerCase()
                     .includes(keyword);
 
-            // Priority filter
             const matchesPriority =
                 priorityFilter === "ALL" ||
                 story.priority === priorityFilter;
 
-            // Sprint filter
             const matchesSprint =
                 sprintFilter === "ALL"
                     ? true
@@ -148,7 +142,6 @@ const Backlog = ({
 
             </div>
 
-            {/* Create Story */}
             <button
                 onClick={() =>
                     setShowCreateModal(true)
@@ -158,7 +151,6 @@ const Backlog = ({
                 + {t.backlog.createStory}
             </button>
 
-            {/* Create */}
             {showCreateModal && (
                 <StoryFormModal
                     mode="create"
@@ -173,8 +165,6 @@ const Backlog = ({
                     }}
                 />
             )}
-
-            {/* Edit */}
             {editingStory && (
                 <StoryFormModal
                     mode="edit"
@@ -190,8 +180,6 @@ const Backlog = ({
                     }}
                 />
             )}
-
-            {/* Delete */}
             {deletingStory && (
                 <DeleteStoryModal
                     story={deletingStory}
@@ -205,8 +193,6 @@ const Backlog = ({
                     }}
                 />
             )}
-
-            {/* Add to Sprint */}
             {addingToSprint && (
                 <AddToSprintModal
                     story={addingToSprint}

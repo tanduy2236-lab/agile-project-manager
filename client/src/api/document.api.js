@@ -30,7 +30,6 @@ export const createDocument = async (
         formData.append("changeNote", changeNote);
     }
 
-    // Quan trọng: gửi folderId lên backend
     if (folderId !== null && folderId !== "") {
         formData.append(
             "folderId",

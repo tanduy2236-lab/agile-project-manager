@@ -1,32 +1,16 @@
 import { useEffect, useState } from "react";
+import {getSprints,addStoryToSprint,} from "../../api/sprint.api";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 
-import {
-    getSprints,
-    addStoryToSprint,
-} from "../../api/sprint.api";
-
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
-
-
-const AddToSprintModal = ({
-    story,
-    projectId,
-    onClose,
-    onSuccess,
-}) => {
+const AddToSprintModal = ({story,projectId,onClose,onSuccess,}) => {
     const language = getSavedLanguage();
     const t = getTranslations(language);
 
     const [sprints, setSprints] = useState([]);
-    const [selectedSprintId, setSelectedSprintId] =
-        useState("");
+    const [selectedSprintId, setSelectedSprintId] = useState("");
 
     const [loading, setLoading] = useState(true);
-    const [submitting, setSubmitting] =
-        useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
 
     useEffect(() => {
@@ -95,12 +79,8 @@ const AddToSprintModal = ({
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-
             <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-slate-800">
-
-                {/* Header */}
                 <div className="flex items-center justify-between border-b border-slate-200 p-6 dark:border-slate-700">
-
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-white">
                             {t.backlog.addToSprint}
@@ -110,8 +90,6 @@ const AddToSprintModal = ({
                             {t.backlog.addToSprintDescription}
                         </p>
                     </div>
-
-
                     <button
                         type="button"
                         onClick={onClose}
@@ -120,16 +98,9 @@ const AddToSprintModal = ({
                     >
                         ✕
                     </button>
-
                 </div>
-
-
                 <form onSubmit={handleSubmit}>
-
-                    {/* Content */}
                     <div className="space-y-5 p-6">
-
-                        {/* User Story */}
                         <div className="rounded-xl bg-slate-50 p-4 dark:bg-slate-900">
 
                             <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
@@ -139,18 +110,12 @@ const AddToSprintModal = ({
                             <p className="mt-1 font-semibold text-slate-900 dark:text-white">
                                 {story?.title}
                             </p>
-
                         </div>
-
-
-                        {/* Sprint Select */}
                         <div>
 
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                                 {t.backlog.selectSprint}
                             </label>
-
-
                             {loading ? (
 
                                 <div className="rounded-lg border border-slate-200 p-3 text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-700 dark:text-slate-400">
@@ -175,46 +140,31 @@ const AddToSprintModal = ({
                                     className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-indigo-400 dark:focus:ring-indigo-900"
                                     required
                                 >
-
                                     <option value="">
                                         {t.backlog.selectSprintPlaceholder}
                                     </option>
 
-
                                     {sprints.map((sprint) => (
-
                                         <option
                                             key={sprint.id}
                                             value={sprint.id}
                                         >
                                             {sprint.name}
                                         </option>
-
                                     ))}
-
                                 </select>
-
                             )}
-
                         </div>
-
-
-                        {/* Selected Sprint */}
                         {selectedSprint && (
-
                             <div className="rounded-xl border border-indigo-100 bg-indigo-50 p-4 dark:border-indigo-900/60 dark:bg-indigo-950/40">
 
                                 <p className="font-semibold text-indigo-900 dark:text-indigo-200">
                                     {selectedSprint.name}
                                 </p>
-
-
                                 <p className="mt-1 text-sm text-indigo-700 dark:text-indigo-300">
                                     {t.backlog.status}:{" "}
                                     {selectedSprint.status}
                                 </p>
-
-
                                 {selectedSprint.goal && (
 
                                     <p className="mt-2 text-sm text-indigo-700 dark:text-indigo-300">
@@ -223,15 +173,11 @@ const AddToSprintModal = ({
                                     </p>
 
                                 )}
-
                             </div>
 
                         )}
-
                     </div>
 
-
-                    {/* Footer */}
                     <div className="flex justify-end gap-3 border-t border-slate-200 bg-slate-50 p-6 dark:border-slate-700 dark:bg-slate-900">
 
                         <button
@@ -268,6 +214,5 @@ const AddToSprintModal = ({
         </div>
     );
 };
-
 
 export default AddToSprintModal;
