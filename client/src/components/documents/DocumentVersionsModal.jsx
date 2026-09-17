@@ -59,22 +59,18 @@ const DocumentVersionsModal = ({
                     </button>
                 </div>
 
-                {/* LOADING */}
                 {loadingVersions ? (
                     <p className="text-sm text-slate-500 dark:text-slate-400">
                         {docT.loading || "Loading versions..."}
                     </p>
 
                 ) : versions.length === 0 ? (
-
-                    /* EMPTY */
                     <p className="text-sm text-slate-500 dark:text-slate-400">
                         {docT.noVersions || "No versions found."}
                     </p>
 
                 ) : (
 
-                    /* VERSION LIST */
                     <div className="space-y-3">
                         {versions.map((version) => (
                             <div
@@ -90,7 +86,6 @@ const DocumentVersionsModal = ({
                                 "
                             >
                                 <div className="flex items-start justify-between gap-4">
-                                    {/* VERSION INFO */}
                                     <div className="min-w-0 flex-1">
                                         <div className="flex flex-wrap items-center gap-2">
                                             <span
@@ -132,7 +127,6 @@ const DocumentVersionsModal = ({
                                         </p>
                                     </div>
 
-                                    {/* ACTIONS */}
                                     <div className="flex shrink-0 gap-2">
                                         {isPreviewable(
                                             version.fileType

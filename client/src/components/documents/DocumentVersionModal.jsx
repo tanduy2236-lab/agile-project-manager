@@ -60,8 +60,6 @@ const DocumentVersionModal = ({
                     </button>
 
                 </div>
-
-                {/* QUAN TRỌNG */}
                 <form
                     onSubmit={async (e) => {
                         e.preventDefault();
@@ -77,12 +75,10 @@ const DocumentVersionModal = ({
                     }}
                     className="space-y-4"
                 >
-
                     <div>
                         <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             {docT.file || "File"}
                         </label>
-
                         <input
                             type="file"
                             onChange={(e) => {
@@ -213,9 +209,7 @@ const DocumentVersionModal = ({
                         </button>
 
                     </div>
-
                 </form>
-
             </div>
         </div>
     );

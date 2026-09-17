@@ -48,7 +48,6 @@ const DocumentFolder = ({
                 dark:bg-slate-800
             "
         >
-            {/* FOLDER HEADER */}
             <div
                 className="
                     flex
@@ -111,7 +110,6 @@ const DocumentFolder = ({
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {/* OWNER / ADMIN */}
                     {canManageFolder && (
                         <>
                             <button
@@ -160,7 +158,6 @@ const DocumentFolder = ({
                         </>
                     )}
 
-                    {/* OWNER / ADMIN / MEMBER */}
                     {canCreateDocument && (
                         <button
                             type="button"
@@ -186,7 +183,6 @@ const DocumentFolder = ({
                 </div>
             </div>
 
-            {/* DOCUMENT LIST */}
             {isOpen && (
                 <div
                     className="
@@ -235,7 +231,6 @@ const DocumentFolder = ({
                                             gap-4
                                         "
                                     >
-                                        {/* DOCUMENT INFO */}
                                         <div
                                             className="
                                                 flex
@@ -414,8 +409,6 @@ const DocumentFolder = ({
                                                 )}
                                             </div>
                                         </div>
-
-                                        {/* ACTIONS */}
                                         {!isEditing && (
                                             <DocumentActions
                                                 t={t}
@@ -459,8 +452,6 @@ const DocumentFolder = ({
                                             />
                                         )}
                                     </div>
-
-                                    {/* LATEST VERSION DETAILS */}
                                     {!isEditing &&
                                         latestVersion && (
                                             <div

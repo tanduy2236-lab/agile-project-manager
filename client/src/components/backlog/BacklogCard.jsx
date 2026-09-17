@@ -13,18 +13,9 @@ const BacklogCard = ({
     const t = getTranslations(language);
 
     const priorityStyles = {
-        High: `
-            bg-red-100 text-red-700
-            dark:bg-red-950/60 dark:text-red-400
-        `,
-        Medium: `
-            bg-yellow-100 text-yellow-700
-            dark:bg-yellow-950/60 dark:text-yellow-400
-        `,
-        Low: `
-            bg-green-100 text-green-700
-            dark:bg-green-950/60 dark:text-green-400
-        `,
+        High:`bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-400`,
+        Medium:`bg-yellow-100 text-yellow-700 dark:bg-yellow-950/60 dark:text-yellow-400`,
+        Low:`bg-green-100 text-green-700 dark:bg-green-950/60 dark:text-green-400`,
     };
 
     const priorityLabels = {
@@ -48,7 +39,6 @@ const BacklogCard = ({
                 dark:bg-slate-800
             "
         >
-            {/* Title */}
             <h3
                 className="
                     text-lg
@@ -60,8 +50,6 @@ const BacklogCard = ({
             >
                 {story.title}
             </h3>
-
-            {/* Description */}
             <p
                 className="
                     mt-2
@@ -75,8 +63,6 @@ const BacklogCard = ({
                 {story.description ||
                     t.backlog.noDescription}
             </p>
-
-            {/* Priority */}
             <div className="mt-3">
                 <span
                     className={`
@@ -104,7 +90,6 @@ const BacklogCard = ({
                 </span>
             </div>
 
-            {/* Assignee */}
             <div
                 className="
                     mt-4
@@ -128,7 +113,6 @@ const BacklogCard = ({
                     : t.backlog.unassigned}
             </div>
 
-            {/* Actions */}
             <div
                 className="
                     mt-5

@@ -68,10 +68,6 @@ const DocumentList = ({
     return (
         <div className="space-y-4">
 
-            {/* =========================
-                FOLDERS
-            ========================= */}
-
             {folders.map((folder) => {
                 const folderDocuments = documents.filter(
                     (document) =>
@@ -114,9 +110,6 @@ const DocumentList = ({
                 );
             })}
 
-            {/* =========================
-                ROOT DOCUMENTS
-            ========================= */}
 
             {rootDocuments.length > 0 && (
                 <div
@@ -176,10 +169,6 @@ const DocumentList = ({
                     </div>
                 </div>
             )}
-
-            {/* =========================
-                EMPTY STATE
-            ========================= */}
 
             {folders.length === 0 &&
                 rootDocuments.length === 0 && (

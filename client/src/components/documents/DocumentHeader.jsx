@@ -6,7 +6,6 @@ const DocumentHeader = ({
     onCreateFolder,
 }) => {
     const docT = t?.documents || {};
-    const commonT = t?.common || {};
     return (
         <div className="mb-6 flex items-center justify-between">
             <div>
@@ -20,7 +19,6 @@ const DocumentHeader = ({
             </div>
 
             <div className="flex items-center gap-3">
-                {/* OWNER / ADMIN */}
                 {canManageFolder && (
                     <button
                         type="button"
@@ -43,7 +41,6 @@ const DocumentHeader = ({
                     </button>
                 )}
 
-                {/* OWNER / ADMIN / MEMBER */}
                 {canUploadDocument && (
                     <button
                         type="button"

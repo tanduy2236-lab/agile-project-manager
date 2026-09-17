@@ -35,8 +35,6 @@ const DocumentUploadModal = ({
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 dark:bg-black/70">
             <div className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl dark:bg-slate-800">
-
-                {/* HEADER */}
                 <div className="mb-5 flex items-center justify-between">
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
@@ -71,12 +69,10 @@ const DocumentUploadModal = ({
                     </button>
                 </div>
 
-                {/* FORM */}
                 <form
                     onSubmit={handleSubmit}
                     className="space-y-4"
                 >
-                    {/* DOCUMENT NAME */}
                     <div>
                         <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             {docT.documentName || "Document Name"}
@@ -119,8 +115,6 @@ const DocumentUploadModal = ({
                             "
                         />
                     </div>
-
-                    {/* FOLDER */}
                     <div>
                         <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             {docT.folderName || "Folder"}
@@ -175,8 +169,6 @@ const DocumentUploadModal = ({
                             ))}
                         </select>
                     </div>
-
-                    {/* FILE */}
                     <div>
                         <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             {docT.file || "File"}
@@ -214,8 +206,6 @@ const DocumentUploadModal = ({
                             {docT.maxFileSize || "Maximum file size: 20 MB"}
                         </p>
                     </div>
-
-                    {/* CHANGE NOTE */}
                     <div>
                         <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             {docT.changeNote || "Change Note"}
@@ -257,7 +247,6 @@ const DocumentUploadModal = ({
                         />
                     </div>
 
-                    {/* ACTIONS */}
                     <div className="flex justify-end gap-2 border-t border-slate-100 pt-4 dark:border-slate-700">
 
                         <button

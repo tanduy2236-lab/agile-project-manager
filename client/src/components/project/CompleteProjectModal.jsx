@@ -40,8 +40,6 @@ const CompleteProjectModal = ({
                     </div>
 
                 </div>
-
-                {/* Project information */}
                 <div className="mt-5 rounded-xl bg-slate-50 p-4 dark:bg-slate-700/50">
 
                     <p className="text-sm font-medium text-slate-900 dark:text-white">
@@ -56,7 +54,6 @@ const CompleteProjectModal = ({
 
                 </div>
 
-                {/* Warning */}
                 <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 dark:border-amber-900/50 dark:bg-amber-900/20">
 
                     <p className="text-sm text-amber-700 dark:text-amber-300">
@@ -69,7 +66,6 @@ const CompleteProjectModal = ({
 
                 </div>
 
-                {/* Actions */}
                 <div className="mt-6 flex justify-end gap-3">
 
                     <button

@@ -22,7 +22,6 @@ const DocumentActions = ({
     return (
         <div className="flex shrink-0 flex-wrap justify-end gap-2">
 
-            {/* PREVIEW + DOWNLOAD */}
             {latestVersion && (
                 <>
                     {isPreviewable(
@@ -78,7 +77,6 @@ const DocumentActions = ({
                 </>
             )}
 
-            {/* NEW VERSION */}
             {canUploadVersion && (
                 <button
                     type="button"
@@ -104,7 +102,6 @@ const DocumentActions = ({
                 </button>
             )}
 
-            {/* VERSIONS */}
             <button
                 type="button"
                 onClick={() =>
@@ -128,7 +125,6 @@ const DocumentActions = ({
                 {docT.versions || "Versions"}
             </button>
 
-            {/* RENAME */}
             {canEditDocument && (
                 <button
                     type="button"
@@ -153,8 +149,6 @@ const DocumentActions = ({
                     {docT.rename || "Rename"}
                 </button>
             )}
-
-            {/* MOVE */}
             {canEditDocument && onMove && (
                 <button
                     type="button"
@@ -180,7 +174,6 @@ const DocumentActions = ({
                 </button>
             )}
 
-            {/* DELETE */}
             {canDeleteDocument && (
                 <button
                     type="button"

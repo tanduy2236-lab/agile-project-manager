@@ -27,18 +27,12 @@ const DocumentItem = ({
 }) => {
     const docT = t?.documents || {};
     const latestVersion = document.versions?.[0];
-
-    const isEditing =
-        editingDocumentId === document.id;
+    const isEditing = editingDocumentId === document.id;
 
     return (
         <div className="p-5">
 
             <div className="flex items-start justify-between gap-4">
-
-                {/* =========================
-                    DOCUMENT INFO
-                ========================= */}
 
                 <div className="min-w-0 flex-1">
 
@@ -171,10 +165,6 @@ const DocumentItem = ({
                         </div>
                     )}
 
-                    {/* =========================
-                        DOCUMENT INFO
-                    ========================= */}
-
                     <div className="
                         mt-2
                         flex
@@ -203,9 +193,6 @@ const DocumentItem = ({
 
                     </div>
 
-                    {/* =========================
-                        LATEST VERSION
-                    ========================= */}
 
                     {latestVersion && (
                         <div className="
@@ -265,10 +252,6 @@ const DocumentItem = ({
                     )}
 
                 </div>
-
-                {/* =========================
-                    ACTIONS
-                ========================= */}
 
                 {!isEditing && (
                     <DocumentActions

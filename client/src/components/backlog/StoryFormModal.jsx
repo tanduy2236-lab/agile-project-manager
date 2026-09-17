@@ -150,7 +150,6 @@ const StoryFormModal = ({
                     dark:bg-slate-800
                 "
             >
-                {/* Header */}
                 <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 dark:from-blue-700 dark:to-indigo-800">
                     <h2 className="flex items-center gap-3 text-3xl font-bold text-white">
                         {mode === "create" ? (
@@ -173,10 +172,8 @@ const StoryFormModal = ({
                     </h2>
                 </div>
 
-                {/* Form Content */}
                 <div className="space-y-6 p-8">
 
-                    {/* Submit Error */}
                     {errors.submit && (
                         <div
                             className="
@@ -200,7 +197,6 @@ const StoryFormModal = ({
                         </div>
                     )}
 
-                    {/* Title */}
                     <div className="space-y-2">
                         <label
                             className="
@@ -275,8 +271,6 @@ const StoryFormModal = ({
                             </p>
                         )}
                     </div>
-
-                    {/* Description */}
                     <div className="space-y-2">
                         <label
                             className="
@@ -324,10 +318,8 @@ const StoryFormModal = ({
                         />
                     </div>
 
-                    {/* Priority + Story Point */}
                     <div className="grid gap-6 sm:grid-cols-2">
 
-                        {/* Priority */}
                         <div className="space-y-2">
                             <label
                                 className="
@@ -382,7 +374,6 @@ const StoryFormModal = ({
                             </select>
                         </div>
 
-                        {/* Story Point */}
                         <div className="space-y-2">
                             <label
                                 className="
@@ -458,8 +449,6 @@ const StoryFormModal = ({
                         </div>
                     </div>
                 </div>
-
-                {/* Footer */}
                 <div
                     className="
                         flex

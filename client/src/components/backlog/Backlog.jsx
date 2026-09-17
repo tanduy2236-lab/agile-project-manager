@@ -6,17 +6,9 @@ import StoryFormModal from "../backlog/StoryFormModal";
 import DeleteStoryModal from "../backlog/DeleteStoryModal";
 import AddToSprintModal from "./AddToSprintModal";
 import BacklogCard from "./BacklogCard";
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
 
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
-
-const Backlog = ({
-    search = "",
-    priorityFilter = "ALL",
-    sprintFilter = "ALL",
-}) => {
+const Backlog = ({search = "",priorityFilter = "ALL",sprintFilter = "ALL",}) => {
     const { id } = useParams();
 
     const language = getSavedLanguage();
@@ -25,18 +17,13 @@ const Backlog = ({
     const [stories, setStories] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const [showCreateModal, setShowCreateModal] =
-        useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
 
-    const [editingStory, setEditingStory] =
-        useState(null);
+    const [editingStory, setEditingStory] = useState(null);
 
-    const [deletingStory, setDeletingStory] =
-        useState(null);
+    const [deletingStory, setDeletingStory] = useState(null);
 
-    const [addingToSprint, setAddingToSprint] =
-        useState(null);
-
+    const [addingToSprint, setAddingToSprint] = useState(null);
     const loadStories = async () => {
         setLoading(true);
 
@@ -94,7 +81,6 @@ const Backlog = ({
                 matchesSprint
             );
         });
-
     if (loading) {
         return (
             <div className="p-8 text-center text-slate-500 dark:text-slate-400">
@@ -102,13 +88,10 @@ const Backlog = ({
             </div>
         );
     }
-
     return (
         <>
             <div className="space-y-4">
-
                 {filteredStories.length > 0 ? (
-
                     filteredStories.map((story) => (
                         <BacklogCard
                             key={story.id}
@@ -120,9 +103,7 @@ const Backlog = ({
                             }
                         />
                     ))
-
                 ) : (
-
                     <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center dark:border-slate-700 dark:bg-slate-800">
 
                         <p className="font-medium text-slate-700 dark:text-white">
@@ -139,9 +120,7 @@ const Backlog = ({
 
                     </div>
                 )}
-
             </div>
-
             <button
                 onClick={() =>
                     setShowCreateModal(true)

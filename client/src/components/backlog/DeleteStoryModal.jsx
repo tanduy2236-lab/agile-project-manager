@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { deleteStory } from "../../api/backlog.api";
-
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
-
-const DeleteStoryModal = ({
-    story,
-    onClose,
-    onConfirm,
-}) => {
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
+const DeleteStoryModal = ({story,onClose,onConfirm,}) => {
     const language = getSavedLanguage();
     const t = getTranslations(language);
 
@@ -71,7 +62,6 @@ const DeleteStoryModal = ({
                     dark:bg-slate-800
                 "
             >
-                {/* Header */}
                 <div className="flex items-center gap-3">
                     <div
                         className="
@@ -116,7 +106,6 @@ const DeleteStoryModal = ({
                     </div>
                 </div>
 
-                {/* Content */}
                 <div className="mt-6">
                     <p
                         className="
@@ -162,7 +151,6 @@ const DeleteStoryModal = ({
                     )}
                 </div>
 
-                {/* Footer */}
                 <div
                     className="
                         mt-6
