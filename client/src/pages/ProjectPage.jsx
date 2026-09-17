@@ -33,23 +33,18 @@ const ProjectPage = () => {
     useEffect(() => {
         loadProjects();
     }, []);
-    
     const filteredProjects = [...projects]
-    // Search
     .filter((project) => {
         const keyword = searchTerm.trim().toLowerCase();
 
         if (!keyword) {
             return true;
         }
-
         return (
             project.name?.toLowerCase().includes(keyword) ||
             project.description?.toLowerCase().includes(keyword)
         );
     })
-
-    // Filter
     .filter((project) => {
         if (statusFilter === "ALL") {
             return true;
@@ -58,7 +53,6 @@ const ProjectPage = () => {
         return project.status === statusFilter;
     })
 
-    // Sort
     .sort((a, b) => {
         switch (sortBy) {
             case "NAME_ASC":
@@ -86,17 +80,17 @@ const ProjectPage = () => {
         }
     });
     const handleCompleteProject = (project) => {
-    if (project.role !== "OWNER") {
-        return;
-    }
+        if (project.role !== "OWNER") {
+            return;
+        }
 
-    if (project.status === "COMPLETED") {
-        return;
-    }
+        if (project.status === "COMPLETED") {
+            return;
+        }
 
-    setSelectedProject(project);
-    setShowCompleteModal(true);
-};
+        setSelectedProject(project);
+        setShowCompleteModal(true);
+    };
     const confirmComplete = async () => {
     if (!selectedProject) return;
 

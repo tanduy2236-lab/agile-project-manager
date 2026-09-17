@@ -85,15 +85,12 @@ const Register = () => {
             setLoading(false);
         }
     };
-
     const inputClassName =
         "w-full rounded-xl border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-700 p-3 pr-12 text-sm shadow-sm outline-none transition duration-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900 disabled:bg-gray-100 dark:disabled:bg-slate-600 dark:text-white";
-
     const handleSuccessConfirm = () => {
         setShowSuccessModal(false);
         navigate("/login");
     };
-
     return (
         <div className="w-full max-w-md">
             <div className="rounded-2xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-7 shadow-xl shadow-blue-100/70 dark:shadow-black/30">
@@ -108,12 +105,10 @@ const Register = () => {
                         {t.auth.register.description}
                     </p>
                 </div>
-
                 <div className="mb-5 rounded-xl border border-blue-100 dark:border-blue-900 bg-blue-50 dark:bg-blue-950 px-4 py-3 text-sm text-blue-700 dark:text-blue-300">
                     <p className="font-semibold">{t.auth.register.whyJoin}</p>
                     <p className="mt-1">{t.auth.register.whyJoinDesc}</p>
                 </div>
-
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.register.name}</label>
@@ -130,7 +125,6 @@ const Register = () => {
                         />
                         {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                     </div>
-
                     <div>
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.register.email}</label>
                         <input
@@ -145,7 +139,6 @@ const Register = () => {
                         />
                         {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                     </div>
-
                     <div>
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.register.password}</label>
                         <div className="relative">
@@ -169,7 +162,6 @@ const Register = () => {
                         </div>
                         {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
                     </div>
-
                     <div>
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.register.confirmPassword}</label>
                         <div className="relative">
@@ -192,9 +184,7 @@ const Register = () => {
                         </div>
                         {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
                     </div>
-
                     {serverError && <div className="rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400">{serverError}</div>}
-
                     <button
                         type="submit"
                         disabled={loading}
@@ -208,7 +198,6 @@ const Register = () => {
                     {t.auth.register.haveAccount} <Link to="/login" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">{t.auth.register.login}</Link>
                 </p>
             </div>
-
             <SuccessModal
                 isOpen={showSuccessModal}
                 title={t.auth.register.successTitle}
