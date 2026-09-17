@@ -6,25 +6,21 @@ const router = express.Router();
 
 router.use(authenticate);
 
-// Sprint list
 router.get(
     "/projects/:projectId/sprints",
     sprintController.getSprintsByProject
 );
 
-// Sprint detail
 router.get(
     "/sprints/:id",
     sprintController.getSprintById
 );
 
-// Start Sprint
 router.patch(
     "/sprints/:id/start",
     sprintController.startSprint
 );
 
-// Complete Sprint
 router.patch(
     "/sprints/:id/complete",
     sprintController.completeSprint

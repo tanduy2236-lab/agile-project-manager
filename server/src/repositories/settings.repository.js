@@ -14,7 +14,6 @@ export const getUserSettings = async (userId) => {
     });
 };
 
-
 export const updateSettings = async (userId, data) => {
     return await prisma.userSetting.upsert({
         where: {

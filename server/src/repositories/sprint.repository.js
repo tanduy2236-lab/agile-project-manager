@@ -67,7 +67,6 @@ const startSprint = async (sprintId) => {
         );
     }
 
-    // Không cho phép nhiều Sprint Active trong cùng Project
     const activeSprint = await prisma.sprint.findFirst({
         where: {
             projectId: sprint.projectId,
@@ -83,15 +82,11 @@ const startSprint = async (sprintId) => {
             `Project already has an active sprint: ${activeSprint.name}`
         );
     }
-
-    // Sprint phải có Task
     if (sprint.tasks.length === 0) {
         throw new Error(
             "Cannot start sprint without any tasks"
         );
     }
-
-    // Task phải có title
     const invalidTasks = sprint.tasks.filter(
         (task) => !task.title || task.title.trim() === ""
     );
@@ -101,8 +96,6 @@ const startSprint = async (sprintId) => {
             "All tasks in the sprint must have a title"
         );
     }
-
-    // Tìm To Do column
     const todoColumn = await prisma.taskColumn.findFirst({
         where: {
             projectId: sprint.projectId,
@@ -114,7 +107,6 @@ const startSprint = async (sprintId) => {
         throw new Error("To Do column not found");
     }
 
-    // Đưa Task về To Do
     for (let index = 0; index < sprint.tasks.length; index++) {
         await prisma.task.update({
             where: {
@@ -128,7 +120,6 @@ const startSprint = async (sprintId) => {
         });
     }
 
-    // Start Sprint
     return await prisma.sprint.update({
         where: {
             id,

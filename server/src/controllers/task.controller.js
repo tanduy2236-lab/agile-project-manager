@@ -72,7 +72,6 @@ export const moveTask = async (req, res) => {
             req.user.userId
         );
 
-        // Notification khi đổi column
         if (Number(oldColumnId) !== Number(columnId)) {
             await taskService.notifyTaskMoved(
                 id,

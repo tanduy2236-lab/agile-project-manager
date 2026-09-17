@@ -27,10 +27,6 @@ export const checkTaskDeadlines = async () => {
     for (const task of tasks) {
         const dueDate = new Date(task.dueDate);
 
-        // =========================
-        // OVERDUE
-        // =========================
-
         if (dueDate < now) {
             const existingNotification =
                 await prisma.notification.findFirst({
@@ -49,13 +45,8 @@ export const checkTaskDeadlines = async () => {
                     task.id
                 );
             }
-
             continue;
         }
-
-        // =========================
-        // DUE SOON
-        // =========================
 
         if (dueDate <= tomorrow) {
             const existingNotification =

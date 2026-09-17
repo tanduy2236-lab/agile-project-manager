@@ -78,7 +78,6 @@ export const deleteAttachment = async (req, res) => {
         const id = Number(req.params.id);
         const userId = Number(req.user.userId);
 
-        // Lấy attachment trước khi xóa để biết taskId và fileName
         const attachment = await getTaskAttachmentById(id);
 
         if (!attachment) {
@@ -87,17 +86,12 @@ export const deleteAttachment = async (req, res) => {
             });
         }
 
-        // Thực hiện xóa
         const result = await removeTaskAttachment(id, userId);
-
-        // Không xóa được vì không phải người upload
         if (result.count === 0) {
             return res.status(403).json({
                 message: "You do not have permission to delete this attachment",
             });
         }
-
-        // Chỉ tạo History khi xóa thành công
         await taskHistoryService.createTaskHistory({
             taskId: attachment.taskId,
             changedById: userId,
@@ -130,8 +124,6 @@ export const downloadAttachment = async (req, res) => {
                 message: "Attachment not found",
             });
         }
-
-        // Kiểm tra user có quyền truy cập task
         if (!attachment.task) {
             return res.status(404).json({
                 message: "Task not found",

@@ -1,5 +1,4 @@
-import * as settingsService from
-    "../services/settings.service.js";
+import * as settingsService from "../services/settings.service.js";
 
 
 export const getUserSettings = async (req, res) => {

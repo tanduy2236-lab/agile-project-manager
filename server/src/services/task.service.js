@@ -97,10 +97,6 @@ export const updateTask = async (taskId, data, changedById) => {
         data
     );
 
-    // =========================
-    // TASK HISTORY
-    // =========================
-
     if (
         data.title !== undefined &&
         data.title !== task.title
@@ -172,10 +168,6 @@ export const updateTask = async (taskId, data, changedById) => {
         });
     }
 
-    // =========================
-    // ASSIGNEE NOTIFICATION
-    // =========================
-
     if (
         data.assigneeId &&
         Number(data.assigneeId) !== task.assigneeId
@@ -218,7 +210,6 @@ export const moveTask = async (
         throw new Error("Column not found.");
     }
 
-    // Xác định status dựa trên tên column
     let newStatus = task.status;
 
     switch (newColumn.name) {
@@ -255,7 +246,6 @@ export const moveTask = async (
         newStatus
     );
 
-    // Chỉ tạo history khi thực sự đổi column
     if (Number(oldColumnId) !== Number(columnId)) {
         const oldColumn = oldColumnId
             ? await prisma.taskColumn.findUnique({

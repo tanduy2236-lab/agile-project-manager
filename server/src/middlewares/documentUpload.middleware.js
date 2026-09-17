@@ -25,14 +25,10 @@ const storage = multer.diskStorage({
 const documentUpload = multer({
     storage,
 
-    limits: {
-        // 20 MB
-        fileSize: 20 * 1024 * 1024,
-    },
+    limits: {fileSize: 20 * 1024 * 1024,},
 
     fileFilter: (req, file, cb) => {
         const allowedTypes = [
-            // Documents
             "application/pdf",
 
             "application/msword",
@@ -44,17 +40,14 @@ const documentUpload = multer({
             "application/vnd.ms-powerpoint",
             "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 
-            // Text
             "text/plain",
             "text/csv",
 
-            // Images
             "image/jpeg",
             "image/png",
             "image/gif",
             "image/webp",
 
-            // Archives
             "application/zip",
             "application/x-rar-compressed",
             "application/x-7z-compressed",

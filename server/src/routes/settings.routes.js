@@ -1,9 +1,6 @@
 import express from "express";
 
-import {
-    getUserSettings,
-    updateSettings,
-} from "../controllers/settings.controller.js";
+import {getUserSettings,updateSettings,} from "../controllers/settings.controller.js";
 
 import { authenticate } from "../middlewares/auth.middleware.js";
 

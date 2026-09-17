@@ -52,7 +52,6 @@ export const getProjectById = async (projectId, userId) => {
     return await projectRepository.findProjectById(projectId, userId);
 };
 export const completeProject = async (id, userId) => {
-    // 1. Kiểm tra project tồn tại và user có quyền truy cập
     const project = await projectRepository.findProjectById(
         id,
         userId
@@ -62,22 +61,17 @@ export const completeProject = async (id, userId) => {
         throw new Error("Project not found or access denied.");
     }
 
-    // 2. Chỉ OWNER mới được hoàn thành project
     if (project.members?.[0]?.role !== "OWNER") {
         throw new Error(
             "Only the project owner can complete the project."
         );
     }
 
-    // 3. Không cho hoàn thành project đã Completed
     if (project.status === "COMPLETED") {
         throw new Error("Project is already completed.");
     }
-
-    // 4. Lấy tất cả Sprint của project
     const sprints = await projectRepository.getProjectSprints(id);
 
-    // 5. Kiểm tra còn Sprint chưa Completed hay không
     const unfinishedSprints = sprints.filter(
         (sprint) => sprint.status !== "Completed"
     );
@@ -88,6 +82,5 @@ export const completeProject = async (id, userId) => {
         );
     }
 
-    // 6. Tất cả điều kiện đều hợp lệ
     return await projectRepository.completeProject(id);
 };

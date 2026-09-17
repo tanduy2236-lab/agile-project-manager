@@ -52,8 +52,6 @@ const completeSprint = async (sprintId, userId) => {
         userId,
         ["OWNER", "ADMIN"]
     );
-
-    // Sprint phải đang Active mới được Complete
     if (sprint.status !== "Active") {
         throw new Error(
             "Only an active sprint can be completed."

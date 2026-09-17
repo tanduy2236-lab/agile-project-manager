@@ -9,11 +9,9 @@ export const createTaskComment = async (taskId, userId, content) => {
     if (!content?.trim()) {
         throw new Error("Comment content is required.");
     }
-
     const taskIdNumber = Number(taskId);
     const userIdNumber = Number(userId);
 
-    // Tìm task và người được giao
     const task = await prisma.task.findUnique({
         where: {
             id: taskIdNumber,
@@ -32,14 +30,12 @@ export const createTaskComment = async (taskId, userId, content) => {
         throw new Error("Task not found.");
     }
 
-    // Tạo comment
     const comment = await commentRepository.createComment({
         taskId: taskIdNumber,
         userId: userIdNumber,
         content: content.trim(),
     });
 
-    // Thông báo cho Assignee
     if (
         task.assigneeId &&
         Number(task.assigneeId) !== userIdNumber

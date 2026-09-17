@@ -1,5 +1,4 @@
-import * as projectMemberRepository
-    from "../repositories/projectMember.repository.js";
+import * as projectMemberRepository from "../repositories/projectMember.repository.js";
 
 export const requireProjectRole = (...allowedRoles) => {
     return async (req, res, next) => {

@@ -292,8 +292,6 @@ export const moveDocument = async ({
     if (!document) {
         throw new Error("Document not found.");
     }
-
-    // Kiểm tra user có quyền trong project
     const member = await prisma.projectMember.findUnique({
         where: {
             projectId_userId: {
@@ -308,8 +306,6 @@ export const moveDocument = async ({
             "You do not have permission to perform this action."
         );
     }
-
-    // folderId = null => chuyển ra ngoài folder
     if (folderId !== null) {
         const folder = await prisma.documentFolder.findUnique({
             where: {

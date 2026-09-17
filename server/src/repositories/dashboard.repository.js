@@ -3,10 +3,6 @@ import prisma from "../config/prisma.js";
 export const getDashboardData = async (userId) => {
     const now = new Date();
 
-    // =========================
-    // PROJECTS
-    // =========================
-
     const projects = await prisma.project.findMany({
         where: {
             OR: [
@@ -33,10 +29,6 @@ export const getDashboardData = async (userId) => {
 
     const projectIds = projects.map((project) => project.id);
 
-    // =========================
-    // ACTIVE SPRINTS
-    // =========================
-
     const activeSprints = await prisma.sprint.count({
         where: {
             projectId: {
@@ -46,9 +38,6 @@ export const getDashboardData = async (userId) => {
         },
     });
 
-    // =========================
-    // ASSIGNED TASKS
-    // =========================
 
     const assignedTasks = await prisma.task.count({
         where: {
@@ -58,10 +47,6 @@ export const getDashboardData = async (userId) => {
             assigneeId: Number(userId),
         },
     });
-
-    // =========================
-    // OVERDUE TASKS
-    // =========================
 
     const overdueTasks = await prisma.task.count({
         where: {
@@ -79,10 +64,6 @@ export const getDashboardData = async (userId) => {
             },
         },
     });
-
-    // =========================
-    // PROJECT PROGRESS
-    // =========================
 
     const projectProgress = await Promise.all(
         projects.map(async (project) => {
@@ -117,10 +98,6 @@ export const getDashboardData = async (userId) => {
             };
         })
     );
-
-    // =========================
-    // RECENT ACTIVITIES
-    // =========================
 
     const recentActivities =
         await prisma.taskHistory.findMany({

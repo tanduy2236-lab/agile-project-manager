@@ -54,8 +54,6 @@ export const getSprintBurndown = async (
 
     while (currentDate <= endDate) {
         const day = new Date(currentDate);
-
-        // Tính toàn bộ thời gian của ngày
         day.setHours(23, 59, 59, 999);
 
         let remainingStoryPoints = 0;
@@ -67,7 +65,6 @@ export const getSprintBurndown = async (
                 continue;
             }
 
-            // Task chưa tồn tại vào ngày này
             if (
                 new Date(task.createdAt) > day
             ) {
@@ -123,10 +120,6 @@ export const getSprintBurndown = async (
             currentDate.getDate() + 1
         );
     }
-
-    // =========================
-    // IDEAL BURNDOWN
-    // =========================
 
     const totalDays = dailyData.length;
 
