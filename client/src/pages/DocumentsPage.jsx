@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import { getProjectMembers } from "../api/projectMember.api";
-
 import { moveDocument } from "../api/document.api";
 import useDocuments from "../hooks/useDocuments";
 import useDocumentFolders from "../hooks/useDocumentFolders";
-
 import DocumentHeader from "../components/documents/DocumentHeader";
 import DocumentList from "../components/documents/DocumentList";
 import DocumentUploadModal from "../components/documents/DocumentUploadModal";
@@ -131,10 +128,6 @@ const DocumentsPage = () => {
     setMoveFolderId(null);
 };
 
-    // =========================
-    // DELETE HANDLERS WITH MODAL
-    // =========================
-
     const handleDeleteDocument = (document) => {
         setItemToDelete(document);
         setDeleteItemType('document');
@@ -191,8 +184,6 @@ const DocumentsPage = () => {
             "RESULT FOLDER:",
             result.folderId
         );
-
-        // Cập nhật UI NGAY từ kết quả API
         setDocuments((prev) =>
             prev.map((doc) =>
                 doc.id === movingDocument.id
@@ -250,7 +241,6 @@ const DocumentsPage = () => {
         const currentUser =
             JSON.parse(storedUser);
 
-        // localStorage của project đang dùng userId
         const currentUserId =
             Number(currentUser.userId);
 
@@ -304,10 +294,6 @@ const DocumentsPage = () => {
         loadUserRole();
     }, [projectId]);
 
-    // =========================
-    // PERMISSION
-    // =========================
-
     const canCreateDocument =
         ["OWNER", "ADMIN", "MEMBER"].includes(
             userRole
@@ -332,10 +318,6 @@ const DocumentsPage = () => {
         ["OWNER", "ADMIN"].includes(
             userRole
         );
-
-    // =========================
-    // FILE
-    // =========================
 
     const getFileUrl = (fileUrl) => {
         if (!fileUrl) return "#";
@@ -416,10 +398,6 @@ const DocumentsPage = () => {
             );
         }
     };
-
-    // =========================
-    // RENDER
-    // =========================
 
     return (
         <div className="p-6 space-y-6">
