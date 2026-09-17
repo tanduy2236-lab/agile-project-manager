@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { getCurrentUser } from "../api/auth.api";
-
-import {
-    updateProfile,
-    changePassword,
-    uploadAvatar,
-} from "../api/user.api";
-
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../utils/language";
-
+import {updateProfile,changePassword,uploadAvatar,} from "../api/user.api";
+import {getTranslations,getSavedLanguage,} from "../utils/language";
 
 const ProfilePage = () => {
 
@@ -35,16 +25,9 @@ const ProfilePage = () => {
 
     const [saving, setSaving] = useState(false);
 
-    const [
-        passwordLoading,
-        setPasswordLoading,
-    ] = useState(false);
-
-    const [
-        avatarLoading,
-        setAvatarLoading,
-    ] = useState(false);
-
+    const [passwordLoading,setPasswordLoading,] = useState(false);
+    
+    const [avatarLoading,setAvatarLoading,] = useState(false);
 
     const [
         profileMessage,
@@ -132,14 +115,9 @@ const ProfilePage = () => {
 
     };
 
-
     const handleAvatarChange = (e) => {
-
-        const file =
-            e.target.files?.[0];
-
+        const file = e.target.files?.[0];
         if (!file) return;
-
 
         if (
             !file.type.startsWith("image/")
@@ -152,21 +130,15 @@ const ProfilePage = () => {
             return;
 
         }
-
-
         if (
             file.size >
             10 * 1024 * 1024
         ) {
-
             setAvatarError(
                 t.profile.avatarTooLarge
             );
-
             return;
-
         }
-
 
         setAvatarError("");
         setAvatarMessage("");
@@ -181,7 +153,6 @@ const ProfilePage = () => {
 
 
     const handleAvatarUpload = async () => {
-
         if (!avatarFile) {
 
             setAvatarError(
@@ -189,9 +160,7 @@ const ProfilePage = () => {
             );
 
             return;
-
         }
-
 
         try {
 
@@ -199,7 +168,6 @@ const ProfilePage = () => {
 
             setAvatarError("");
             setAvatarMessage("");
-
 
             const formData =
                 new FormData();
@@ -209,15 +177,8 @@ const ProfilePage = () => {
                 avatarFile
             );
 
-
-            const result =
-                await uploadAvatar(
-                    formData
-                );
-
-
-            const updatedUser =
-                result.user;
+            const result = await uploadAvatar(formData);
+            const updatedUser = result.user;
 
 
             setProfile((prev) => ({
@@ -226,11 +187,9 @@ const ProfilePage = () => {
                     updatedUser.avatar,
             }));
 
-
             setAvatarPreview("");
 
             setAvatarFile(null);
-
 
             const savedUser =
                 JSON.parse(
@@ -238,7 +197,6 @@ const ProfilePage = () => {
                         "user"
                     ) || "{}"
                 );
-
 
             localStorage.setItem(
                 "user",
@@ -248,7 +206,6 @@ const ProfilePage = () => {
                         updatedUser.avatar,
                 })
             );
-
 
             setAvatarMessage(
                 t.profile.avatarUploadedSuccess
@@ -273,17 +230,13 @@ const ProfilePage = () => {
         }
 
     };
-
-
     const handleProfileSubmit = async (e) => {
 
         e.preventDefault();
 
-
         setProfileError("");
 
         setProfileMessage("");
-
 
         try {
 
@@ -345,23 +298,13 @@ const ProfilePage = () => {
                         "",
                 })
             );
-
-
-            setProfileMessage(
-                t.profile.profileUpdateSuccess
-            );
+            setProfileMessage(t.profile.profileUpdateSuccess);
 
         } catch (error) {
 
-            console.error(
-                "Error updating profile:",
-                error
-            );
+            console.error("Error updating profile:",error);
 
-            setProfileError(
-                error.response?.data?.error ||
-                t.profile.failedToUpdate
-            );
+            setProfileError(error.response?.data?.error || t.profile.failedToUpdate);
 
         } finally {
 
@@ -395,8 +338,6 @@ const ProfilePage = () => {
                 return;
 
             }
-
-
             if (
                 !passwordData.newPassword
             ) {
@@ -409,8 +350,6 @@ const ProfilePage = () => {
                 return;
 
             }
-
-
             if (
                 passwordData.newPassword
                     .length < 6
@@ -424,8 +363,6 @@ const ProfilePage = () => {
                 return;
 
             }
-
-
             if (
                 passwordData.newPassword !==
                 passwordData.confirmPassword
@@ -439,13 +376,9 @@ const ProfilePage = () => {
                 return;
 
             }
-
-
             try {
 
                 setPasswordLoading(true);
-
-
                 await changePassword({
 
                     currentPassword:
@@ -457,8 +390,6 @@ const ProfilePage = () => {
                             .newPassword,
 
                 });
-
-
                 setPasswordData({
 
                     currentPassword: "",
@@ -468,8 +399,6 @@ const ProfilePage = () => {
                     confirmPassword: "",
 
                 });
-
-
                 setPasswordMessage(
                     t.profile
                         .passwordChangeSuccess
@@ -498,7 +427,6 @@ const ProfilePage = () => {
 
 
     if (loading) {
-
         return (
             <div className="p-8 text-center text-slate-500 dark:text-slate-400">
 
@@ -509,35 +437,17 @@ const ProfilePage = () => {
 
     }
 
-
     return (
-
         <div className="min-h-screen bg-slate-50 p-6 dark:bg-slate-900">
-
             <div className="mx-auto max-w-4xl space-y-6">
-
-
-                {/* HEADER */}
-
                 <div>
-
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-
                         {t.profile.title}
-
                     </h1>
-
-
                     <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-
                         {t.profile.description}
-
                     </p>
-
                 </div>
-
-
-                {/* PROFILE */}
 
                 <form
                     onSubmit={
@@ -555,11 +465,7 @@ const ProfilePage = () => {
 
                     </h2>
 
-
                     <div className="mt-6 space-y-5">
-
-
-                        {/* AVATAR */}
 
                         <div>
 
@@ -683,9 +589,6 @@ const ProfilePage = () => {
 
                         </div>
 
-
-                        {/* NAME */}
-
                         <div>
 
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -715,8 +618,6 @@ const ProfilePage = () => {
                         </div>
 
 
-                        {/* EMAIL */}
-
                         <div>
 
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -744,9 +645,6 @@ const ProfilePage = () => {
                             />
 
                         </div>
-
-
-                        {/* SAVE */}
 
                         <div className="flex items-center gap-3">
 
@@ -794,9 +692,6 @@ const ProfilePage = () => {
 
                 </form>
 
-
-                {/* PASSWORD */}
-
                 <form
                     onSubmit={
                         handlePasswordSubmit
@@ -813,11 +708,7 @@ const ProfilePage = () => {
 
                     </h2>
 
-
                     <div className="mt-6 space-y-5">
-
-
-                        {/* CURRENT PASSWORD */}
 
                         <div>
 
@@ -848,14 +739,8 @@ const ProfilePage = () => {
                                 }
                                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                             />
-
                         </div>
-
-
-                        {/* NEW PASSWORD */}
-
                         <div>
-
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
                                 {
@@ -864,8 +749,6 @@ const ProfilePage = () => {
                                 }
 
                             </label>
-
-
                             <input
                                 type="password"
                                 value={
@@ -883,14 +766,8 @@ const ProfilePage = () => {
                                 }
                                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                             />
-
                         </div>
-
-
-                        {/* CONFIRM PASSWORD */}
-
                         <div>
-
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
                                 {
@@ -899,8 +776,6 @@ const ProfilePage = () => {
                                 }
 
                             </label>
-
-
                             <input
                                 type="password"
                                 value={
@@ -918,14 +793,8 @@ const ProfilePage = () => {
                                 }
                                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                             />
-
                         </div>
-
-
-                        {/* CHANGE PASSWORD */}
-
                         <div className="flex flex-wrap items-center gap-3">
-
                             <button
                                 type="submit"
                                 disabled={
@@ -940,25 +809,16 @@ const ProfilePage = () => {
                                         .changePassword}
 
                             </button>
-
-
                             {passwordMessage && (
 
                                 <span className="text-sm font-medium text-green-600 dark:text-green-400">
-
                                     ✓ {
                                         passwordMessage
                                     }
-
                                 </span>
-
                             )}
-
-
                             {passwordError && (
-
                                 <span className="text-sm font-medium text-red-600 dark:text-red-400">
-
                                     {
                                         passwordError
                                     }
