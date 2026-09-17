@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-
 import authRouter from "./routes/auth.routes.js";
 import projectRouter from "./routes/project.routes.js";
 import taskRouter from "./routes/task.routes.js";
@@ -25,16 +24,9 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// =========================
-// MIDDLEWARE
-// =========================
 
 app.use(cors());
 app.use(express.json());
-
-// =========================
-// UPLOADS
-// =========================
 
 app.use(
     "/uploads",
@@ -43,9 +35,6 @@ app.use(
     )
 );
 
-// =========================
-// API ROUTES
-// =========================
 
 app.use("/api/auth", authRouter);
 app.use("/api/projects", projectRouter);
@@ -70,9 +59,6 @@ app.use("/api", documentFolderRoutes);
 
 app.use("/api/settings", settingsRoutes);
 
-// =========================
-// FRONTEND - PRODUCTION
-// =========================
 
 const clientDistPath = path.join(
     __dirname,
@@ -83,9 +69,7 @@ app.use(
     express.static(clientDistPath)
 );
 
-// React Router fallback
 app.get("/{*splat}", (req, res, next) => {
-    // Không cho fallback bắt API request
     if (req.path.startsWith("/api")) {
         return next();
     }
