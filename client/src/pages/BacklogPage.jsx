@@ -37,10 +37,7 @@ const BacklogPage = () => {
 
                 </div>
 
-                {/* Search + Priority Filter */}
                 <div className="mb-6 flex flex-wrap gap-3 rounded-2xl bg-white p-4 shadow dark:bg-slate-800">
-
-                    {/* Search */}
                     <input
                         type="text"
                         placeholder={
@@ -53,7 +50,6 @@ const BacklogPage = () => {
                         className="w-72 rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
 
-                    {/* Priority Filter */}
                     <select
                         value={priorityFilter}
                         onChange={(e) =>
@@ -64,30 +60,15 @@ const BacklogPage = () => {
                         className="rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     >
 
-                        <option value="ALL">
-                            {t.backlog.allPriority}
-                        </option>
-
-                        <option value="High">
-                            {t.backlog.high}
-                        </option>
-
-                        <option value="Medium">
-                            {t.backlog.medium}
-                        </option>
-
-                        <option value="Low">
-                            {t.backlog.low}
-                        </option>
-
+                        <option value="ALL"> {t.backlog.allPriority} </option>
+                        <option value="High">{t.backlog.high}</option>
+                        <option value="Medium">{t.backlog.medium}</option>
+                        <option value="Low">{t.backlog.low}</option>
                     </select>
 
                 </div>
 
-                <Backlog
-                    search={search}
-                    priorityFilter={priorityFilter}
-                />
+                <Backlog search={search} priorityFilter={priorityFilter}/>
 
             </div>
         </div>

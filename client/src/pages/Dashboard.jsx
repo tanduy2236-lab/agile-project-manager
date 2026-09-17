@@ -18,9 +18,6 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    // =========================
-    // LOGOUT
-    // =========================
 
     const handleLogout = async () => {
         try {
@@ -32,10 +29,6 @@ const Dashboard = () => {
         clearAuth();
         navigate("/login");
     };
-
-    // =========================
-    // LOAD DASHBOARD
-    // =========================
 
     const loadDashboard = async () => {
         try {
@@ -67,10 +60,6 @@ const Dashboard = () => {
         loadDashboard();
     }, []);
 
-    // =========================
-    // LOADING
-    // =========================
-
     if (loading) {
         return (
             <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
@@ -85,10 +74,6 @@ const Dashboard = () => {
         );
     }
 
-    // =========================
-    // ERROR
-    // =========================
-
     if (error) {
         return (
             <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
@@ -102,10 +87,6 @@ const Dashboard = () => {
             </div>
         );
     }
-
-    // =========================
-    // DASHBOARD DATA
-    // =========================
 
     const totalProjects = dashboard?.totalProjects ?? 0;
 
@@ -129,10 +110,6 @@ const Dashboard = () => {
             />
 
             <main className="mx-auto max-w-7xl space-y-8 p-8">
-
-                {/* =========================
-                    OVERVIEW
-                ========================= */}
 
                 <section>
                     <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white shadow">
@@ -159,13 +136,7 @@ const Dashboard = () => {
                     </div>
                 </section>
 
-                {/* =========================
-                    STATISTICS
-                ========================= */}
-
                 <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-
-                    {/* Projects */}
 
                     <div className="rounded-2xl bg-white p-5 shadow dark:bg-slate-800">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -181,8 +152,6 @@ const Dashboard = () => {
                         </p>
                     </div>
 
-                    {/* Active Sprints */}
-
                     <div className="rounded-2xl bg-white p-5 shadow dark:bg-slate-800">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                             {t.dashboard.activeSprints}
@@ -197,8 +166,6 @@ const Dashboard = () => {
                         </p>
                     </div>
 
-                    {/* Assigned Tasks */}
-
                     <div className="rounded-2xl bg-white p-5 shadow dark:bg-slate-800">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
                             {t.dashboard.assignedTasks}
@@ -212,8 +179,6 @@ const Dashboard = () => {
                             {t.dashboard.assignedAcross}
                         </p>
                     </div>
-
-                    {/* Overdue Tasks */}
 
                     <div className="rounded-2xl bg-white p-5 shadow dark:bg-slate-800">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -230,10 +195,6 @@ const Dashboard = () => {
                     </div>
 
                 </section>
-
-                {/* =========================
-                    PROJECT PROGRESS
-                ========================= */}
 
                 <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
 
@@ -309,10 +270,6 @@ const Dashboard = () => {
                         )}
 
                     </div>
-
-                    {/* =========================
-                        RECENT ACTIVITY
-                    ========================= */}
 
                     <div className="rounded-2xl bg-white p-6 shadow dark:bg-slate-800">
 
