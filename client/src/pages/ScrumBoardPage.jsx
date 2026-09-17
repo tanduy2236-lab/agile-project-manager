@@ -115,43 +115,11 @@ const ScrumBoardPage = () => {
                                 </p>
                             </div>
 
-                            <div
-                                className="
-                                    rounded-2xl
-                                    border
-                                    border-slate-200
-                                    bg-slate-50
-                                    px-4
-                                    py-3
-
-                                    dark:border-slate-600
-                                    dark:bg-slate-700/70
-                                "
-                            >
-                                <p
-                                    className="
-                                        text-[11px]
-                                        font-semibold
-                                        uppercase
-                                        tracking-[0.24em]
-                                        text-slate-500
-
-                                        dark:text-slate-400
-                                    "
-                                >
+                            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-600 dark:bg-slate-700/70">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
                                     {t.board.delivery}
                                 </p>
-
-                                <p
-                                    className="
-                                        mt-1
-                                        text-lg
-                                        font-semibold
-                                        text-slate-800
-
-                                        dark:text-white
-                                    "
-                                >
+                                <p className="mt-1 text-lg font-semibold text-slate-800 dark:text-white">
                                     {t.board.shipClear}
                                 </p>
                             </div>

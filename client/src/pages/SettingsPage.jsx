@@ -27,76 +27,68 @@ const SettingsPage = () => {
 
     const navigate = useNavigate();
 
-    const [settings, setSettings] =
-        useState(DEFAULT_SETTINGS);
+    const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
-    const [message, setMessage] =
-        useState("");
+    const [message, setMessage] = useState("");
 
-const loadSettings = async () => {
-    const savedSettings =
-        JSON.parse(
-            localStorage.getItem("settings")
-        ) || {};
+    const loadSettings = async () => {
+        const savedSettings =
+            JSON.parse(
+                localStorage.getItem("settings")
+            ) || {};
 
-    try {
-        const data = await getSettings();
+        try {
+            const data = await getSettings();
 
-        setSettings({
-            ...DEFAULT_SETTINGS,
+            setSettings({
+                ...DEFAULT_SETTINGS,
 
-            notifications:
-                data.notifications ??
-                DEFAULT_SETTINGS.notifications,
+                notifications:
+                    data.notifications ??
+                    DEFAULT_SETTINGS.notifications,
 
-            taskAssigned:
-                data.taskAssigned ??
-                DEFAULT_SETTINGS.taskAssigned,
+                taskAssigned:
+                    data.taskAssigned ??
+                    DEFAULT_SETTINGS.taskAssigned,
 
-            taskUpdated:
-                data.taskUpdated ??
-                DEFAULT_SETTINGS.taskUpdated,
+                taskUpdated:
+                    data.taskUpdated ??
+                    DEFAULT_SETTINGS.taskUpdated,
 
-            projectNotifications:
-                data.projectNotifications ??
-                DEFAULT_SETTINGS.projectNotifications,
+                projectNotifications:
+                    data.projectNotifications ??
+                    DEFAULT_SETTINGS.projectNotifications,
 
-            theme:
-                savedSettings.theme ??
-                DEFAULT_SETTINGS.theme,
+                theme:
+                    savedSettings.theme ??
+                    DEFAULT_SETTINGS.theme,
 
-            language:
-                savedSettings.language ??
-                DEFAULT_SETTINGS.language,
-        });
+                language:
+                    savedSettings.language ??
+                    DEFAULT_SETTINGS.language,
+            });
 
-    } catch (error) {
+        } catch (error) {
+            console.error("Error loading settings:",error);
+            setSettings({
+                ...DEFAULT_SETTINGS,
 
-        console.error(
-            "Error loading settings:",
-            error
-        );
+                theme:
+                    savedSettings.theme ??
+                    DEFAULT_SETTINGS.theme,
 
-        // Vẫn load Theme + Language
-        setSettings({
-            ...DEFAULT_SETTINGS,
-
-            theme:
-                savedSettings.theme ??
-                DEFAULT_SETTINGS.theme,
-
-            language:
-                savedSettings.language ??
-                DEFAULT_SETTINGS.language,
-        });
-    }
-};
-useEffect(() => {
-    loadSettings();
-}, []);
+                language:
+                    savedSettings.language ??
+                    DEFAULT_SETTINGS.language,
+            });
+        }
+    };
+    useEffect(() => {
+        loadSettings();
+    }, []);
 
     const t = getTranslations(settings.language);
-    // Apply theme immediately when it changes
+
     useEffect(() => {
         applyTheme(settings.theme);
     }, [settings.theme]);
@@ -149,12 +141,12 @@ useEffect(() => {
 };
 
 
-const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
 
-    navigate("/login");
-};
+        navigate("/login");
+    };
 
 
     return (
@@ -280,8 +272,7 @@ const handleLogout = () => {
                                 e.target.value
                             )
                         }
-                        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-indigo-400 dark:focus:ring-indigo-900"
-                    >
+                        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-indigo-400 dark:focus:ring-indigo-900">
                         <option value="vi">
                             {t.settings.vietnamese}
                         </option>
@@ -328,12 +319,10 @@ const handleLogout = () => {
                             {message}
                         </span>
                     )}
-
                     <button
                         type="button"
                         onClick={handleSave}
-                        className="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700"
-                    >
+                        className="rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700">
                         {t.settings.save}
                     </button>
                 </div>
@@ -349,7 +338,6 @@ const SettingToggle = ({title,description,checked,disabled = false,onChange,}) =
                 <p className="font-medium text-slate-800 dark:text-slate-200">
                     {title}
                 </p>
-
                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     {description}
                 </p>
