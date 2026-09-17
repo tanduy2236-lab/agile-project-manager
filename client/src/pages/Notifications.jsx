@@ -66,7 +66,6 @@ const Notifications = () => {
         }
     };
 
-
     const handleMarkAsRead = async (id) => {
 
         try {
@@ -94,7 +93,6 @@ const Notifications = () => {
         }
     };
 
-
     const handleMarkAllAsRead = async () => {
 
         try {
@@ -117,7 +115,6 @@ const Notifications = () => {
 
         }
     };
-
 
     const handleDelete = async (id) => {
 
@@ -185,9 +182,6 @@ const Notifications = () => {
 
             <div className="mx-auto max-w-4xl">
 
-
-                {/* HEADER */}
-
                 <div className="mb-6 flex items-center justify-between">
 
                     <div>
@@ -218,10 +212,6 @@ const Notifications = () => {
 
                 </div>
 
-
-
-                {/* FILTER */}
-
                 <div className="mb-4 flex items-center gap-2">
 
 
@@ -237,7 +227,6 @@ const Notifications = () => {
                     >
                         {t.notifications.all}
                     </button>
-
 
 
                     <button
@@ -268,13 +257,7 @@ const Notifications = () => {
                 </div>
 
 
-
-                {/* CONTENT */}
-
                 <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
-
-
-                    {/* LOADING */}
 
                     {loading && (
 
@@ -286,9 +269,6 @@ const Notifications = () => {
 
                     )}
 
-
-
-                    {/* ERROR */}
 
                     {!loading && error && (
 
@@ -312,9 +292,6 @@ const Notifications = () => {
 
                     )}
 
-
-
-                    {/* EMPTY */}
 
                     {!loading &&
                         !error &&
@@ -346,10 +323,6 @@ const Notifications = () => {
 
                         )}
 
-
-
-                    {/* NOTIFICATION LIST */}
-
                     {!loading &&
                         !error &&
                         filteredNotifications.length > 0 && (
@@ -370,9 +343,6 @@ const Notifications = () => {
                                             }`}
                                         >
 
-
-                                            {/* UNREAD INDICATOR */}
-
                                             <div className="pt-2">
 
                                                 <div
@@ -384,10 +354,6 @@ const Notifications = () => {
                                                 />
 
                                             </div>
-
-
-
-                                            {/* ICON */}
 
                                             <div
                                                 className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
@@ -403,9 +369,6 @@ const Notifications = () => {
 
                                             </div>
 
-
-
-                                            {/* CONTENT */}
 
                                             <div className="min-w-0 flex-1">
 
@@ -434,9 +397,6 @@ const Notifications = () => {
 
                                             </div>
 
-
-
-                                            {/* ACTIONS */}
 
                                             <div className="flex shrink-0 items-center gap-2 opacity-0 transition group-hover:opacity-100">
 
@@ -489,7 +449,6 @@ const Notifications = () => {
                             </div>
 
                         )}
-
 
                 </div>
 
