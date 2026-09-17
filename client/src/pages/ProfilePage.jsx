@@ -506,10 +506,7 @@ const ProfilePage = () => {
                                     </div>
 
                                 )}
-
-
                                 <div className="flex-1">
-
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -518,20 +515,14 @@ const ProfilePage = () => {
                                         }
                                         className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                                     />
-
-
                                     <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-
                                         {
                                             t.profile
                                                 .selectAvatar
                                         }
-
                                     </p>
 
-
                                     {avatarFile && (
-
                                         <div className="mt-3">
 
                                             <button
@@ -552,52 +543,29 @@ const ProfilePage = () => {
                                                         .uploadAvatar}
 
                                             </button>
-
-
                                             {avatarMessage && (
-
                                                 <p className="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
-
-                                                    {
-                                                        avatarMessage
-                                                    }
-
+                                                    {avatarMessage}
                                                 </p>
 
                                             )}
-
-
                                             {avatarError && (
-
                                                 <p className="mt-2 text-sm font-medium text-red-600 dark:text-red-400">
-
-                                                    {
-                                                        avatarError
-                                                    }
-
+                                                    {avatarError}
                                                 </p>
-
                                             )}
 
                                         </div>
-
                                     )}
-
                                 </div>
-
                             </div>
-
                         </div>
-
                         <div>
-
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
                                 {t.profile.name}
 
                             </label>
-
-
                             <input
                                 type="text"
                                 value={
@@ -614,18 +582,13 @@ const ProfilePage = () => {
                                 }
                                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                             />
-
                         </div>
-
-
                         <div>
-
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
                                 {t.profile.email}
 
                             </label>
-
 
                             <input
                                 type="email"
@@ -643,85 +606,53 @@ const ProfilePage = () => {
                                 }
                                 className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                             />
-
                         </div>
-
                         <div className="flex items-center gap-3">
-
                             <button
                                 type="submit"
                                 disabled={saving}
                                 className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-
                                 {saving
                                     ? t.profile.saving
                                     : t.profile.save}
 
                             </button>
 
-
                             {profileMessage && (
-
                                 <span className="text-sm font-medium text-green-600 dark:text-green-400">
-
-                                    {
-                                        profileMessage
-                                    }
-
+                                    {profileMessage}
                                 </span>
-
                             )}
-
-
                             {profileError && (
-
                                 <span className="text-sm font-medium text-red-600 dark:text-red-400">
-
-                                    {
-                                        profileError
-                                    }
-
+                                    {profileError}
                                 </span>
-
                             )}
-
                         </div>
-
                     </div>
-
                 </form>
-
                 <form
                     onSubmit={
                         handlePasswordSubmit
                     }
                     className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800"
                 >
-
                     <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-
                         {
                             t.profile
                                 .changePassword
                         }
-
                     </h2>
 
                     <div className="mt-6 space-y-5">
-
                         <div>
-
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-
                                 {
                                     t.profile
                                         .currentPassword
                                 }
-
                             </label>
-
-
                             <input
                                 type="password"
                                 value={
