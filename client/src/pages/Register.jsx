@@ -198,6 +198,7 @@ const Register = () => {
                     {t.auth.register.haveAccount} <Link to="/login" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">{t.auth.register.login}</Link>
                 </p>
             </div>
+
             <SuccessModal
                 isOpen={showSuccessModal}
                 title={t.auth.register.successTitle}
