@@ -5,22 +5,18 @@ import {updateProfile,changePassword,uploadAvatar,} from "../api/user.api";
 import {getTranslations,getSavedLanguage,} from "../utils/language";
 
 const ProfilePage = () => {
-
     const language = getSavedLanguage();
     const t = getTranslations(language);
-
     const [profile, setProfile] = useState({
         name: "",
         email: "",
         avatar: "",
     });
-
     const [passwordData, setPasswordData] = useState({
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
     });
-
     const [loading, setLoading] = useState(true);
 
     const [saving, setSaving] = useState(false);
@@ -79,16 +75,12 @@ const ProfilePage = () => {
 
 
     const loadProfile = async () => {
-
         try {
-
             setLoading(true);
 
             setProfileError("");
 
-            const data =
-                await getCurrentUser();
-
+            const data = await getCurrentUser();
             setProfile({
                 name: data.name || "",
                 email: data.email || "",
@@ -96,16 +88,8 @@ const ProfilePage = () => {
             });
 
         } catch (error) {
-
-            console.error(
-                "Error loading profile:",
-                error
-            );
-
-            setProfileError(
-                error.response?.data?.error ||
-                t.profile.failedToLoad
-            );
+            console.error("Error loading profile:",error);
+            setProfileError(error.response?.data?.error || t.profile.failedToLoad);
 
         } finally {
 
@@ -130,10 +114,7 @@ const ProfilePage = () => {
             return;
 
         }
-        if (
-            file.size >
-            10 * 1024 * 1024
-        ) {
+        if (file.size > 10 * 1024 * 1024) {
             setAvatarError(
                 t.profile.avatarTooLarge
             );
@@ -150,8 +131,6 @@ const ProfilePage = () => {
         );
 
     };
-
-
     const handleAvatarUpload = async () => {
         if (!avatarFile) {
 
@@ -161,7 +140,6 @@ const ProfilePage = () => {
 
             return;
         }
-
         try {
 
             setAvatarLoading(true);
@@ -210,38 +188,27 @@ const ProfilePage = () => {
             setAvatarMessage(
                 t.profile.avatarUploadedSuccess
             );
-
         } catch (error) {
-
             console.error(
                 "Error uploading avatar:",
                 error
             );
-
             setAvatarError(
                 error.response?.data?.error ||
                 t.profile.failedToUploadAvatar
             );
-
         } finally {
-
             setAvatarLoading(false);
-
         }
 
     };
     const handleProfileSubmit = async (e) => {
-
         e.preventDefault();
-
         setProfileError("");
-
         setProfileMessage("");
-
         try {
 
             setSaving(true);
-
 
             const result =
                 await updateProfile({
@@ -251,10 +218,8 @@ const ProfilePage = () => {
                         profile.email,
                 });
 
-
             const updatedUser =
                 result.user;
-
 
             setProfile({
                 name:
@@ -267,14 +232,12 @@ const ProfilePage = () => {
                     updatedUser.avatar || "",
             });
 
-
             const savedUser =
                 JSON.parse(
                     localStorage.getItem(
                         "user"
                     ) || "{}"
                 );
-
 
             localStorage.setItem(
                 "user",
@@ -299,144 +262,88 @@ const ProfilePage = () => {
                 })
             );
             setProfileMessage(t.profile.profileUpdateSuccess);
-
         } catch (error) {
-
             console.error("Error updating profile:",error);
-
             setProfileError(error.response?.data?.error || t.profile.failedToUpdate);
-
         } finally {
-
             setSaving(false);
-
         }
 
     };
 
-
     const handlePasswordSubmit =
         async (e) => {
-
             e.preventDefault();
-
-
             setPasswordError("");
-
             setPasswordMessage("");
-
 
             if (
                 !passwordData.currentPassword
             ) {
-
-                setPasswordError(
-                    t.profile
-                        .currentPasswordRequired
-                );
-
+                setPasswordError(t.profile.currentPasswordRequired);
                 return;
-
             }
             if (
                 !passwordData.newPassword
             ) {
-
-                setPasswordError(
-                    t.profile
-                        .newPasswordRequired
-                );
-
+                setPasswordError(t.profile.newPasswordRequired);
                 return;
-
             }
             if (
-                passwordData.newPassword
-                    .length < 6
+                passwordData.newPassword.length < 6
             ) {
-
                 setPasswordError(
                     t.profile
                         .passwordMinLength
                 );
-
                 return;
-
             }
             if (
                 passwordData.newPassword !==
                 passwordData.confirmPassword
             ) {
-
                 setPasswordError(
                     t.profile
                         .passwordMismatch
                 );
-
                 return;
-
             }
             try {
-
                 setPasswordLoading(true);
                 await changePassword({
-
-                    currentPassword:
-                        passwordData
-                            .currentPassword,
-
-                    newPassword:
-                        passwordData
-                            .newPassword,
-
+                    currentPassword: passwordData.currentPassword,
+                    newPassword: passwordData.newPassword,
                 });
                 setPasswordData({
-
                     currentPassword: "",
-
                     newPassword: "",
-
                     confirmPassword: "",
-
                 });
                 setPasswordMessage(
                     t.profile
                         .passwordChangeSuccess
                 );
-
             } catch (error) {
-
                 console.error(
                     "Error changing password:",
                     error
                 );
-
-
                 setPasswordError(
                     error.response?.data?.error ||
                     t.profile.failedToChange
                 );
-
             } finally {
-
                 setPasswordLoading(false);
-
             }
-
         };
-
-
     if (loading) {
         return (
             <div className="p-8 text-center text-slate-500 dark:text-slate-400">
-
                 {t.profile.loading}
-
             </div>
         );
 
     }
-
     return (
         <div className="min-h-screen bg-slate-50 p-6 dark:bg-slate-900">
             <div className="mx-auto max-w-4xl space-y-6">
@@ -450,37 +357,25 @@ const ProfilePage = () => {
                 </div>
 
                 <form
-                    onSubmit={
-                        handleProfileSubmit
-                    }
+                    onSubmit={handleProfileSubmit}
                     className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800"
                 >
-
                     <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-
                         {
                             t.profile
                                 .personalInfo
                         }
-
                     </h2>
-
                     <div className="mt-6 space-y-5">
-
                         <div>
-
                             <label className="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
 
                                 {t.profile.avatar}
 
                             </label>
-
-
                             <div className="flex items-center gap-4">
-
                                 {avatarPreview ||
                                 profile.avatar ? (
-
                                     <img
                                         src={
                                             avatarPreview ||
@@ -491,20 +386,15 @@ const ProfilePage = () => {
                                         }
                                         className="h-16 w-16 rounded-full object-cover"
                                     />
-
                                 ) : (
-
                                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 text-xl font-semibold text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300">
-
                                         {
                                             profile.name
                                                 ?.charAt(0)
                                                 .toUpperCase() ||
                                             "U"
                                         }
-
                                     </div>
-
                                 )}
                                 <div className="flex-1">
                                     <input
@@ -521,7 +411,6 @@ const ProfilePage = () => {
                                                 .selectAvatar
                                         }
                                     </p>
-
                                     {avatarFile && (
                                         <div className="mt-3">
 
@@ -535,26 +424,22 @@ const ProfilePage = () => {
                                                 }
                                                 className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
                                             >
-
                                                 {avatarLoading
                                                     ? t.profile
                                                         .uploading
                                                     : t.profile
                                                         .uploadAvatar}
-
                                             </button>
                                             {avatarMessage && (
                                                 <p className="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
                                                     {avatarMessage}
                                                 </p>
-
                                             )}
                                             {avatarError && (
                                                 <p className="mt-2 text-sm font-medium text-red-600 dark:text-red-400">
                                                     {avatarError}
                                                 </p>
                                             )}
-
                                         </div>
                                     )}
                                 </div>
@@ -562,9 +447,7 @@ const ProfilePage = () => {
                         </div>
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-
                                 {t.profile.name}
-
                             </label>
                             <input
                                 type="text"
@@ -585,11 +468,8 @@ const ProfilePage = () => {
                         </div>
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-
                                 {t.profile.email}
-
                             </label>
-
                             <input
                                 type="email"
                                 value={
@@ -618,7 +498,6 @@ const ProfilePage = () => {
                                     : t.profile.save}
 
                             </button>
-
                             {profileMessage && (
                                 <span className="text-sm font-medium text-green-600 dark:text-green-400">
                                     {profileMessage}
@@ -632,26 +511,16 @@ const ProfilePage = () => {
                         </div>
                     </div>
                 </form>
-                <form
-                    onSubmit={
-                        handlePasswordSubmit
-                    }
+                <form onSubmit={handlePasswordSubmit}
                     className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800"
                 >
                     <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                        {
-                            t.profile
-                                .changePassword
-                        }
+                        {t.profile.changePassword}
                     </h2>
-
                     <div className="mt-6 space-y-5">
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                                {
-                                    t.profile
-                                        .currentPassword
-                                }
+                                {t.profile.currentPassword}
                             </label>
                             <input
                                 type="password"
@@ -662,7 +531,6 @@ const ProfilePage = () => {
                                 onChange={(e) =>
                                     setPasswordData({
                                         ...passwordData,
-
                                         currentPassword:
                                             e.target
                                                 .value,
@@ -673,12 +541,10 @@ const ProfilePage = () => {
                         </div>
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-
                                 {
                                     t.profile
                                         .newPassword
                                 }
-
                             </label>
                             <input
                                 type="password"
@@ -700,19 +566,11 @@ const ProfilePage = () => {
                         </div>
                         <div>
                             <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
-
-                                {
-                                    t.profile
-                                        .confirmPassword
-                                }
-
+                                {t.profile.confirmPassword}
                             </label>
                             <input
                                 type="password"
-                                value={
-                                    passwordData
-                                        .confirmPassword
-                                }
+                                value={passwordData.confirmPassword}
                                 onChange={(e) =>
                                     setPasswordData({
                                         ...passwordData,
@@ -733,19 +591,15 @@ const ProfilePage = () => {
                                 }
                                 className="rounded-lg bg-slate-800 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-slate-700 dark:hover:bg-slate-600"
                             >
-
                                 {passwordLoading
                                     ? t.profile.changing
                                     : t.profile
                                         .changePassword}
-
                             </button>
                             {passwordMessage && (
 
                                 <span className="text-sm font-medium text-green-600 dark:text-green-400">
-                                    ✓ {
-                                        passwordMessage
-                                    }
+                                    ✓ {passwordMessage}
                                 </span>
                             )}
                             {passwordError && (
@@ -753,24 +607,13 @@ const ProfilePage = () => {
                                     {
                                         passwordError
                                     }
-
                                 </span>
-
                             )}
-
                         </div>
-
                     </div>
-
                 </form>
-
             </div>
-
         </div>
-
     );
-
 };
-
-
 export default ProfilePage;
