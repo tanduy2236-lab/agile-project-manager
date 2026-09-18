@@ -39,7 +39,6 @@ const ProjectCard = ({
                             ? t.projects.completed
                             : t.projects.active}
                     </div>
-
                     <h3 className="mt-3 text-xl font-semibold text-slate-800 dark:text-white">
                         {project.name}
                     </h3>
