@@ -1,16 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { applyTheme } from "../utils/theme";
-import {
-    getTranslations,
-    applyLanguage,
-} from "../utils/language";
-
-import {
-    getSettings,
-    updateSettings,
-} from "../api/settings.api";
+import {getTranslations,applyLanguage,} from "../utils/language";
+import {getSettings,updateSettings,} from "../api/settings.api";
 
 
 const DEFAULT_SETTINGS = {

@@ -20,7 +20,12 @@ import {
     FileText,
     FileSpreadsheet,
     Archive,
+    BarChart3,
+    FolderOpen,
+    MessageCircle,
+    Clock3,
 } from "lucide-react";
+
 const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState("");
@@ -356,7 +361,7 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
                     <div className="space-y-8">
                         <section>
                             <div className="mb-3 flex items-center gap-2">
-                                <span className="text-lg">📝</span>
+                                <FileText className="h-5 w-5" />
 
                                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                                     Description
@@ -371,7 +376,7 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
 
                         <section>
                             <div className="mb-3 flex items-center gap-2">
-                                <span className="text-lg">📊</span>
+                                <BarChart3 className="h-5 w-5" />
 
                                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                                     Task Information
@@ -431,7 +436,7 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
 
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-lg">📎</span>
+                                        <Paperclip className="h-5 w-5" />
 
                                         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                                             Attachments
@@ -468,8 +473,9 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
 
                             ) : attachments.length === 0 ? (
 
-                                <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-8 text-center text-sm text-slate-500 dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-400">
-                                    📂 No attachments yet.
+                                <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50/50 p-8 text-center text-sm text-slate-500 dark:border-slate-600 dark:bg-slate-900/50 dark:text-slate-400">
+                                    <FolderOpen className="mb-2 h-8 w-8" />
+                                    <span>No attachments yet.</span>
                                 </div>
 
                             ) : (
@@ -595,7 +601,7 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
                             <div className="mb-4 flex items-center justify-between">
 
                                 <div className="flex items-center gap-2">
-                                    <span className="text-lg">💬</span>
+                                    <MessageCircle className="h-5 w-5" />
 
                                     <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                                         Comments
@@ -805,7 +811,7 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
                         <section className="border-t border-slate-200 pt-6 dark:border-slate-700">
 
                             <div className="mb-4 flex items-center gap-2">
-                                <span className="text-lg">🕒</span>
+                                <Clock3 className="h-5 w-5" />
 
                                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                                     History

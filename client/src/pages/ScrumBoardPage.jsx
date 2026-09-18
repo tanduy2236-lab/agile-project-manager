@@ -2,6 +2,7 @@ import Board from "../components/scrum-board/Board";
 import { useState } from "react";
 import { getTranslations, getSavedLanguage } from "../utils/language";
 import { getUser } from "../utils/auth";
+import { ClipboardList } from "lucide-react";
 const ScrumBoardPage = () => {
     const language = getSavedLanguage();
     const t = getTranslations(language);
@@ -33,7 +34,6 @@ const ScrumBoardPage = () => {
                 >
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
 
-                        {/* Left */}
                         <div>
                             <div
                                 className="
@@ -52,10 +52,9 @@ const ScrumBoardPage = () => {
                                     dark:text-indigo-300
                                 "
                             >
-                                <span className="mr-2 text-base">
-                                    📋
-                                </span>
-
+                                <div className="flex items-center">
+                                    <ClipboardList className="mr-2 h-5 w-5" />
+                                </div>
                                 {t.board.sprintBoard}
                             </div>
 
