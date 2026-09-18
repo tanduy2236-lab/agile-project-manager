@@ -1,5 +1,5 @@
 import DocumentActions from "./DocumentActions";
-
+import { FileText } from "lucide-react";
 const DocumentItem = ({
     t,
     document,
@@ -141,7 +141,8 @@ const DocumentItem = ({
                                 text-slate-900
                                 dark:text-slate-100
                             ">
-                                📄 {document.name}
+                                <FileText className="h-5 w-5 shrink-0" />
+                                <span className="truncate">{document.name}</span>
                             </h2>
 
                             <span className="

@@ -27,7 +27,6 @@ const DocumentVersionsModal = ({
                     dark:bg-slate-800
                 "
             >
-                {/* HEADER */}
                 <div className="mb-5 flex items-center justify-between">
                     <div>
                         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
@@ -55,7 +54,7 @@ const DocumentVersionsModal = ({
                             dark:hover:text-slate-200
                         "
                     >
-                        ✕
+                        x
                     </button>
                 </div>
 

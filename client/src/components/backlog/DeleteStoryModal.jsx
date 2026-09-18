@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { deleteStory } from "../../api/backlog.api";
 import {getTranslations,getSavedLanguage,} from "../../utils/language";
+import { AlertTriangle } from "lucide-react";
 const DeleteStoryModal = ({story,onClose,onConfirm,}) => {
     const language = getSavedLanguage();
     const t = getTranslations(language);
@@ -64,21 +65,8 @@ const DeleteStoryModal = ({story,onClose,onConfirm,}) => {
             >
                 <div className="flex items-center gap-3">
                     <div
-                        className="
-                            flex
-                            h-10
-                            w-10
-                            items-center
-                            justify-center
-                            rounded-full
-                            bg-red-100
-                            text-red-600
-
-                            dark:bg-red-950/60
-                            dark:text-red-400
-                        "
-                    >
-                        ⚠
+                        className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-red-600 dark:bg-red-950/60 dark:text-red-400">
+                       <AlertTriangle className="h-5 w-5" />
                     </div>
 
                     <div>

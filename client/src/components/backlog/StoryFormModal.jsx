@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { createStory, updateStory } from "../../api/backlog.api";
-import {
-    getTranslations,
-    getSavedLanguage,
-} from "../../utils/language";
-
+import {getTranslations,getSavedLanguage,} from "../../utils/language";
+import { FilePlus, Pencil } from "lucide-react";
 const StoryFormModal = ({
     mode,
     story,
@@ -154,18 +151,12 @@ const StoryFormModal = ({
                     <h2 className="flex items-center gap-3 text-3xl font-bold text-white">
                         {mode === "create" ? (
                             <>
-                                <span className="text-4xl">
-                                    📝
-                                </span>
-
+                                <FilePlus className="h-9 w-9" />
                                 {t.backlog.createUserStory}
                             </>
                         ) : (
                             <>
-                                <span className="text-4xl">
-                                    ✏️
-                                </span>
-
+                                <Pencil className="h-9 w-9" />
                                 {t.backlog.editUserStory}
                             </>
                         )}
@@ -361,15 +352,15 @@ const StoryFormModal = ({
                                 `}
                             >
                                 <option value="Low">
-                                    🟢 {t.backlog.low}
+                                    {t.backlog.low}
                                 </option>
 
                                 <option value="Medium">
-                                    🟡 {t.backlog.medium}
+                                    {t.backlog.medium}
                                 </option>
 
                                 <option value="High">
-                                    🔴 {t.backlog.high}
+                                    {t.backlog.high}
                                 </option>
                             </select>
                         </div>

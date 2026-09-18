@@ -1,10 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { logout } from "../api/auth.api";
 import { clearAuth } from "../utils/auth";
 import { getDashboard } from "../api/dashboard.api";
-
 import DashboardHeader from "../components/dashboard/DashboardHeader";
 import { getTranslations, getSavedLanguage } from "../utils/language";
 
@@ -48,17 +46,13 @@ const Dashboard = () => {
             );
 
             setError(
-                error.response?.data?.message ||
-                "Failed to load dashboard data."
-            );
+                error.response?.data?.message || "Failed to load dashboard data.");
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        loadDashboard();
-    }, []);
+    useEffect(() => {loadDashboard();}, []);
 
     if (loading) {
         return (

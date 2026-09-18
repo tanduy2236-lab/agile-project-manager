@@ -345,10 +345,6 @@ const DocumentsPage = () => {
         );
     };
 
-    // =========================
-    // DOWNLOAD
-    // =========================
-
     const handleDownload = async (version) => {
         try {
             const url =

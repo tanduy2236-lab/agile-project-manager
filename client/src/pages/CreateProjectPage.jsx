@@ -8,17 +8,11 @@ const CreateProjectPage = () => {
     const navigate = useNavigate();
     const language = getSavedLanguage();
     const t = getTranslations(language);
-    const [projectData, setProjectData] = useState({
-        name: "",
-        description: "",
-    });
+    const [projectData, setProjectData] = useState({name: "",description: "",});
 
     const [isCreating, setIsCreating] = useState(false);
 
-    const [feedback, setFeedback] = useState({
-        type: "",
-        message: "",
-    });
+    const [feedback, setFeedback] = useState({type: "",message: "",});
 
     const handleProjectChange = (e) => {
         const { name, value } = e.target;

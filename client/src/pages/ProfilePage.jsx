@@ -107,17 +107,13 @@ const ProfilePage = () => {
             !file.type.startsWith("image/")
         ) {
 
-            setAvatarError(
-                t.profile.selectImage
-            );
+            setAvatarError(t.profile.selectImage);
 
             return;
 
         }
         if (file.size > 10 * 1024 * 1024) {
-            setAvatarError(
-                t.profile.avatarTooLarge
-            );
+            setAvatarError(t.profile.avatarTooLarge);
             return;
         }
 

@@ -5,6 +5,7 @@ import AddMemberModal from "../components/project-member/AddMemberModal";
 import EditMemberRoleModal from "../components/project-member/EditMemberRoleModal";
 import ConfirmDeleteModal from "../components/project-member/ConfirmDeleteModal";
 import {getTranslations,getSavedLanguage,} from "../utils/language";
+import { Users } from "lucide-react";
 const ProjectMembersPage = () => {
     const { id } = useParams();
 
@@ -121,7 +122,7 @@ const ProjectMembersPage = () => {
                         <div>
                             <div className="mb-3 inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
                                 <span className="mr-2">
-                                    👥
+                                   <Users className="mr-2 h-5 w-5" />
                                 </span>
                                 Project Team
                             </div>
@@ -147,8 +148,8 @@ const ProjectMembersPage = () => {
                 </div>
                 {members.length === 0 ? (
                     <div className="rounded-3xl border border-dashed border-slate-300 bg-white/70 p-12 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
-                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-100 text-2xl dark:bg-indigo-900/40">
-                            👥
+                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400">
+                            <Users className="h-7 w-7" />
                         </div>
                         <p className="text-lg font-semibold text-slate-800 dark:text-white">
                             {t.members.noMembers}

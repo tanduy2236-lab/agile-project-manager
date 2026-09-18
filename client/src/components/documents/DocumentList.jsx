@@ -1,6 +1,6 @@
 import DocumentItem from "./DocumentItem";
 import DocumentFolder from "./DocumentFolder";
-
+import { FileText, Folder } from "lucide-react";
 const DocumentList = ({
     t,
     documents,
@@ -129,8 +129,9 @@ const DocumentList = ({
                             dark:border-slate-700
                         "
                     >
-                        <h2 className="font-semibold text-slate-900 dark:text-white">
-                            📄 {docT.unfiledDocuments || "Unfiled Documents"}
+                        <h2 className="flex items-center gap-2 font-semibold text-slate-900 dark:text-white">
+                            <FileText className="h-5 w-5 shrink-0" />
+                            {docT.unfiledDocuments || "Unfiled Documents"}
                         </h2>
 
                         <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -183,8 +184,8 @@ const DocumentList = ({
                             dark:bg-slate-800
                         "
                     >
-                        <div className="mb-2 text-4xl">
-                            📁
+                        <div className="mb-2 flex justify-center">
+                            <Folder className="h-10 w-10" />
                         </div>
 
                         <h3 className="font-semibold text-slate-800 dark:text-white">

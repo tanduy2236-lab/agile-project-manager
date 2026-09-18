@@ -65,7 +65,7 @@ const DocumentUploadModal = ({
                             dark:hover:text-slate-200
                         "
                     >
-                        ✕
+                        x
                     </button>
                 </div>
 

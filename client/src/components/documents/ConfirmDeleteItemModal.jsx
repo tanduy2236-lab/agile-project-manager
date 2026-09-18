@@ -1,3 +1,4 @@
+import { AlertTriangle } from "lucide-react";
 const ConfirmDeleteItemModal = ({
     t,
     item,
@@ -52,8 +53,9 @@ const ConfirmDeleteItemModal = ({
 
                 {itemType === "folder" &&
                     documentCount > 0 && (
-                        <p className="mt-2 text-center text-sm text-orange-600 dark:text-orange-400">
-                            ⚠️ {(
+                        <p className="mt-2 flex items-center justify-center gap-1 text-center text-sm text-orange-600 dark:text-orange-400">
+                            <AlertTriangle className="h-4 w-4 shrink-0" />
+                            {(
                                 docT.folderContainsDocuments ||
                                 "This folder contains {count} document(s). Deleting may also remove its documents."
                             ).replace(
@@ -65,7 +67,7 @@ const ConfirmDeleteItemModal = ({
 
                 {itemType === "document" && (
                     <p className="mt-2 text-center text-sm text-orange-600 dark:text-orange-400">
-                        ⚠️{" "}
+                        <AlertTriangle className="h-4 w-4 shrink-0" />
                         {docT.documentWillDeleteVersions ||
                             "This will delete the document and all of its versions."}
                     </p>

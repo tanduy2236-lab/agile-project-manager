@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {getSprints,addStoryToSprint,} from "../../api/sprint.api";
 import {getTranslations,getSavedLanguage,} from "../../utils/language";
-
+import { X } from "lucide-react";
 const AddToSprintModal = ({story,projectId,onClose,onSuccess,}) => {
     const language = getSavedLanguage();
     const t = getTranslations(language);
@@ -94,9 +94,9 @@ const AddToSprintModal = ({story,projectId,onClose,onSuccess,}) => {
                         type="button"
                         onClick={onClose}
                         disabled={submitting}
-                        className="rounded-lg px-3 py-2 text-slate-500 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
+                        className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
                     >
-                        ✕
+                        <X className="h-5 w-5" />
                     </button>
                 </div>
                 <form onSubmit={handleSubmit}>

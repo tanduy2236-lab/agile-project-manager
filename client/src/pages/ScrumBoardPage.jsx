@@ -123,7 +123,6 @@ const ScrumBoardPage = () => {
                                     {t.board.shipClear}
                                 </p>
                             </div>
-
                         </div>
 
                     </div>

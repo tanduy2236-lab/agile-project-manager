@@ -1,12 +1,6 @@
 import {getTranslations,getSavedLanguage,} from "../../utils/language";
-const CompleteProjectModal = ({
-    isOpen,
-    project,
-    loading,
-    onCancel,
-    onConfirm,
-}) => {
-
+import { Check } from "lucide-react";
+const CompleteProjectModal = ({isOpen,project,loading,onCancel,onConfirm,}) => {
     const language = getSavedLanguage();
 
     const t = getTranslations(language);
@@ -21,8 +15,8 @@ const CompleteProjectModal = ({
 
                 <div className="flex items-start gap-4">
 
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-100 text-xl dark:bg-green-900/30">
-                        ✓
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+                        <Check className="h-6 w-6" />
                     </div>
 
                     <div>
