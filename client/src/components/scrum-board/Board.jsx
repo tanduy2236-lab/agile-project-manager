@@ -206,13 +206,10 @@ const Board = ({
                 );
 
             } catch (error) {
-
                 console.log(error);
 
                 loadBoard();
-
             }
-
 
             return;
 
@@ -786,11 +783,8 @@ const Board = ({
                     )}
 
                 </div>
-
             </DndContext>
-
         </>
-
     );
 
 };

@@ -12,6 +12,15 @@ import {
     deleteAttachment,
     downloadAttachment,
 } from "../../api/attachment.api";
+import {
+    Paperclip,
+    Image,
+    Video,
+    Music,
+    FileText,
+    FileSpreadsheet,
+    Archive,
+} from "lucide-react";
 const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState("");
@@ -254,37 +263,37 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     }
 };
     const getFileIcon = (fileType) => {
-    if (!fileType) return "📎";
+        if (!fileType) return Paperclip;
 
-    if (fileType.startsWith("image/")) return "🖼️";
-    if (fileType.startsWith("video/")) return "🎥";
-    if (fileType.startsWith("audio/")) return "🎵";
+        if (fileType.startsWith("image/")) return Image;
+        if (fileType.startsWith("video/")) return Video;
+        if (fileType.startsWith("audio/")) return Music;
 
-    if (fileType.includes("pdf")) return "📕";
+        if (fileType.includes("pdf")) return FileText;
 
-    if (
-        fileType.includes("word") ||
-        fileType.includes("document")
-    ) {
-        return "📘";
-    }
+        if (
+            fileType.includes("word") ||
+            fileType.includes("document")
+        ) {
+            return FileText;
+        }
 
-    if (
-        fileType.includes("excel") ||
-        fileType.includes("spreadsheet")
-    ) {
-        return "📗";
-    }
+        if (
+            fileType.includes("excel") ||
+            fileType.includes("spreadsheet")
+        ) {
+            return FileSpreadsheet;
+        }
 
-    if (
-        fileType.includes("zip") ||
-        fileType.includes("rar")
-    ) {
-        return "🗜️";
-    }
+        if (
+            fileType.includes("zip") ||
+            fileType.includes("rar")
+        ) {
+            return Archive;
+        }
 
-    return "📎";
-};
+        return Paperclip;
+    };
     const handleDownloadAttachment = async (attachment) => {
     try {
         const response = await downloadAttachment(attachment.id);
@@ -338,7 +347,7 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
                         onClick={onClose}
                         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white"
                     >
-                        ✕
+                        X
                     </button>
                 </div>
 

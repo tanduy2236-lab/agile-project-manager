@@ -1,5 +1,5 @@
 import {getTranslations,getSavedLanguage,} from "../../utils/language";
-
+import { Check } from "lucide-react";
 const ProjectCard = ({
     project,
     onOpen,
@@ -108,7 +108,7 @@ const ProjectCard = ({
                         }
                         className="flex-1 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-700"
                     >
-                        ✓ {t.projects.complete}
+                        <Check className="h-6 w-6" /> {t.projects.complete}
                     </button>
                 )}
 

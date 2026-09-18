@@ -11,9 +11,7 @@ const Column = ({
 
     const taskCount = column.tasks?.length || 0;
 
-    const taskIds = (column.tasks ?? []).map(
-        (task) => task.id
-    );
+    const taskIds = (column.tasks ?? []).map((task) => task.id);
 
     const { setNodeRef } = useDroppable({
         id: `column-${column.id}`,

@@ -1,5 +1,13 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import {
+    AlertTriangle,
+    Calendar,
+    Check,
+    CircleAlert,
+    GripVertical,
+    Trash2,
+} from "lucide-react";
 import { getDueDateStatus } from "../../utils/deadline";
 
 const TaskCard = ({ task, onOpen, onDelete }) => {
@@ -48,7 +56,6 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
     };
 
     const renderDueDate = () => {
-
         if (dueDateStatus === "none") {
             return (
                 <span className="text-slate-400 dark:text-slate-500">
@@ -59,44 +66,40 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
 
         if (dueDateStatus === "completed") {
             return (
-                <span className="font-medium text-emerald-600 dark:text-emerald-400">
-                    ✓ Completed
+                <span className="flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+                    <Check className="h-4 w-4" />
+                    Completed
                 </span>
             );
         }
 
         if (dueDateStatus === "overdue") {
             return (
-                <span className="font-semibold text-red-600 dark:text-red-400">
-                    🔴 Overdue ·{" "}
-                    {new Date(
-                        task.dueDate
-                    ).toLocaleDateString("vi-VN")}
+                <span className="flex items-center gap-1 font-semibold text-red-600 dark:text-red-400">
+                    <CircleAlert className="h-4 w-4" />
+                    Overdue ·{" "}
+                    {new Date(task.dueDate).toLocaleDateString("vi-VN")}
                 </span>
             );
         }
 
         if (dueDateStatus === "warning") {
             return (
-                <span className="font-semibold text-amber-600 dark:text-amber-400">
-                    ⚠️ Due soon ·{" "}
-                    {new Date(
-                        task.dueDate
-                    ).toLocaleDateString("vi-VN")}
+                <span className="flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400">
+                    <AlertTriangle className="h-4 w-4" />
+                    Due soon ·{" "}
+                    {new Date(task.dueDate).toLocaleDateString("vi-VN")}
                 </span>
             );
         }
 
         return (
-            <span className="text-slate-500 dark:text-slate-400">
-                📅{" "}
-                {new Date(
-                    task.dueDate
-                ).toLocaleDateString("vi-VN")}
+            <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                <Calendar className="h-4 w-4" />
+                {new Date(task.dueDate).toLocaleDateString("vi-VN")}
             </span>
         );
     };
-
     return (
         <div
             ref={setNodeRef}
@@ -158,7 +161,7 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
                         "
                         title="Drag task"
                     >
-                        ☰
+                        <GripVertical className="h-4 w-4" />
                     </button>
                     <span
                         className={`
