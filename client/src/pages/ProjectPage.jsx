@@ -159,16 +159,19 @@ const ProjectPage = () => {
 
     return (
         <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#f8fafc,_#f1f5f9_55%,_#e2e8f0)] dark:bg-[radial-gradient(circle_at_top,_#1e293b,_#0f172a_55%,_#020617)]">
-            <main className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-               <section className="overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-700 text-white shadow-2xl">
+            <main className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8 animate-fade-in">
+                
+                <section animate-dashboard-item className="overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-700 text-white shadow-2xl">
                     <div className="flex flex-col gap-8 p-8 lg:flex-row lg:items-end lg:justify-between lg:p-10">
-                        <div className="max-w-2xl">
+                        <div  className="max-w-2xl">
                             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-300 dark:text-slate-400">
                                 {t.projects.workspaceOverview}
                             </p>
+
                             <h1 className="mt-3 text-3xl font-semibold sm:text-4xl dark:text-white">
                                 {t.projects.keepMoving}
                             </h1>
+
                             <p className="mt-4 text-sm leading-6 text-slate-300 dark:text-slate-300 sm:text-base">
                                 {t.projects.organizeWork}
                             </p>
@@ -176,16 +179,30 @@ const ProjectPage = () => {
 
                         <div className="grid gap-3 sm:grid-cols-3">
                             <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 backdrop-blur dark:border-slate-600/30 dark:bg-slate-900/30">
-                                <p className="text-sm text-slate-200 dark:text-slate-300">{t.projects.projects}</p>
-                                <p className="mt-1 text-xl font-semibold dark:text-white">{projects.length}</p>
+                                <p className="text-sm text-slate-200 dark:text-slate-300">
+                                    {t.projects.projects}
+                                </p>
+                                <p className="mt-1 text-xl font-semibold dark:text-white">
+                                    {projects.length}
+                                </p>
                             </div>
+
                             <div className="rounded-2xl border border-white/10 dark:border-white/5 bg-white/10 dark:bg-white/5 px-4 py-3 backdrop-blur">
-                                <p className="text-sm text-slate-200 dark:text-slate-300">{t.projects.focus}</p>
-                                <p className="mt-1 text-xl font-semibold dark:text-white">{t.projects.clear}</p>
+                                <p className="text-sm text-slate-200 dark:text-slate-300">
+                                    {t.projects.focus}
+                                </p>
+                                <p className="mt-1 text-xl font-semibold dark:text-white">
+                                    {t.projects.clear}
+                                </p>
                             </div>
+
                             <div className="rounded-2xl border border-white/10 dark:border-white/5 bg-white/10 dark:bg-white/5 px-4 py-3 backdrop-blur">
-                                <p className="text-sm text-slate-200 dark:text-slate-300">{t.projects.status}</p>
-                                <p className="mt-1 text-xl font-semibold dark:text-white">{t.projects.onTrack}</p>
+                                <p className="text-sm text-slate-200 dark:text-slate-300">
+                                    {t.projects.status}
+                                </p>
+                                <p className="mt-1 text-xl font-semibold dark:text-white">
+                                    {t.projects.onTrack}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -214,6 +231,7 @@ const ProjectPage = () => {
                     onComplete={handleCompleteProject}
                 />
             </main>
+
             <DeleteProjectModal
                 t={t}
                 isOpen={showDeleteModal}

@@ -8,7 +8,7 @@ export const checkTaskDeadlines = async () => {
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(23, 59, 59, 999);
 
-        const tasks = await prisma.task.findMany({
+    const tasks = await prisma.task.findMany({
         where: {
             dueDate: {
                 not: null,
@@ -40,11 +40,12 @@ export const checkTaskDeadlines = async () => {
             if (!existingNotification) {
                 await createUserNotification(
                     task.assigneeId,
-                    `🔴 Task "${task.title}" đã quá deadline (${dueDate.toLocaleDateString("vi-VN")}).`,
+                    `Task "${task.title}" đã quá deadline (${dueDate.toLocaleDateString("vi-VN")}).`,
                     "DEADLINE_OVERDUE",
                     task.id
                 );
             }
+
             continue;
         }
 
@@ -61,7 +62,7 @@ export const checkTaskDeadlines = async () => {
             if (!existingNotification) {
                 await createUserNotification(
                     task.assigneeId,
-                    `⚠️ Task "${task.title}" sắp đến deadline (${dueDate.toLocaleDateString("vi-VN")}).`,
+                    `Task "${task.title}" sắp đến deadline (${dueDate.toLocaleDateString("vi-VN")}).`,
                     "DEADLINE_WARNING",
                     task.id
                 );

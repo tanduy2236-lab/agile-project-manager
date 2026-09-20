@@ -1,10 +1,5 @@
 import prisma from "../config/prisma.js";
-import {
-    getAttachmentsByTaskId,
-    getAttachmentById,
-    createAttachment,
-    deleteAttachment,
-} from "../repositories/attachment.repository.js";
+import {getAttachmentsByTaskId,getAttachmentById,createAttachment,deleteAttachment,} from "../repositories/attachment.repository.js";
 import { createUserNotification } from "./notification.service.js";
 export const getTaskAttachments = async (taskId) => {
     return getAttachmentsByTaskId(taskId);

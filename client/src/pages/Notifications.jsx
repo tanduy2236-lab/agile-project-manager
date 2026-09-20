@@ -290,7 +290,7 @@ const Notifications = () => {
                             <div className="p-12 text-center">
 
                                 <div className="mb-3 text-4xl">
-                                    🔔
+                                    <Bell className="h-10 w-10 text-slate-400 dark:text-slate-500" />
                                 </div>
 
 
@@ -352,9 +352,7 @@ const Notifications = () => {
                                                         : "bg-indigo-100 dark:bg-indigo-900"
                                                 }`}
                                             >
-                                                <span className="text-lg">
-                                                    <Bell className="h-5 w-5 text-slate-600 dark:text-slate-300" />
-                                                </span>
+                                                <Bell className="h-5 w-5 text-slate-600 dark:text-slate-300" />
                                             </div>
 
                                             <div className="min-w-0 flex-1">

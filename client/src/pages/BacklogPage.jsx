@@ -9,22 +9,16 @@ import {
 const BacklogPage = () => {
     const language = getSavedLanguage();
 
-    const t =
-        getTranslations(language);
+    const t = getTranslations(language);
 
-    const [search, setSearch] =
-        useState("");
+    const [search, setSearch] = useState("");
 
-    const [
-        priorityFilter,
-        setPriorityFilter
-    ] = useState("ALL");
+    const [priorityFilter,setPriorityFilter] = useState("ALL");
 
     return (
         <div className="min-h-screen bg-slate-100 p-6 dark:bg-slate-900">
             <div className="mx-auto max-w-7xl">
 
-                {/* Header */}
                 <div className="mb-6 rounded-3xl bg-white p-6 shadow dark:bg-slate-800">
 
                     <h1 className="text-3xl font-bold dark:text-white">

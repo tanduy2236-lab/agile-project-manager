@@ -103,9 +103,9 @@ const Dashboard = () => {
                 onLogout={handleLogout}
             />
 
-            <main className="mx-auto max-w-7xl space-y-8 p-8">
+            <main className="mx-auto max-w-7xl space-y-8 p-8 animate-fade-in">
 
-                <section>
+                <section className="animate-dashboard-item">
                     <div className="rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 p-6 text-white shadow">
                         <p className="text-sm uppercase tracking-wide text-blue-100">
                             {t.dashboard.overview}
@@ -130,7 +130,7 @@ const Dashboard = () => {
                     </div>
                 </section>
 
-                <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 animate-dashboard-item animation-delay-100">
 
                     <div className="rounded-2xl bg-white p-5 shadow dark:bg-slate-800">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -190,7 +190,7 @@ const Dashboard = () => {
 
                 </section>
 
-                <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+                <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] animate-dashboard-item animation-delay-200">
 
                     <div className="rounded-2xl bg-white p-6 shadow dark:bg-slate-800">
 
