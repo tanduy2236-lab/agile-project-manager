@@ -27,22 +27,60 @@ const ProjectDetail = () => {
 
     if (!project) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,_#f8fafc,_#f1f5f9_55%,_#e2e8f0)] dark:bg-slate-950">
-                <div className="rounded-2xl border border-slate-200 bg-white px-8 py-6 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                    <p className="text-lg font-semibold text-slate-800 dark:text-white">
-                        {t.common.loading}
-                    </p>
+            <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#f8fafc,_#f1f5f9_55%,_#e2e8f0)] dark:bg-slate-950">
+                <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+                    <div className="animate-pulse overflow-hidden rounded-3xl bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 shadow-2xl dark:from-slate-800 dark:via-slate-700 dark:to-slate-800">
+                        <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-end lg:justify-between lg:p-10">
+                            <div className="w-full max-w-2xl space-y-4">
+                                <div className="h-3 w-28 rounded-full bg-slate-300 dark:bg-slate-600" />
+                                <div className="h-10 w-3/4 rounded-xl bg-slate-300 dark:bg-slate-600" />
+                                <div className="h-4 w-full rounded-lg bg-slate-300 dark:bg-slate-600" />
+                                <div className="h-4 w-5/6 rounded-lg bg-slate-300 dark:bg-slate-600" />
+                            </div>
 
-                    <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                        {t.projects.loadingMessage}
-                    </p>
-                </div>
+                            <div className="flex w-full max-w-xl flex-col items-end gap-4">
+                                <div className="flex flex-wrap justify-end gap-3">
+                                    <div className="h-12 w-36 rounded-xl bg-slate-300 dark:bg-slate-600" />
+                                    <div className="h-12 w-36 rounded-xl bg-slate-300 dark:bg-slate-600" />
+                                    <div className="h-12 w-36 rounded-xl bg-slate-300 dark:bg-slate-600" />
+                                    <div className="h-12 w-36 rounded-xl bg-slate-300 dark:bg-slate-600" />
+                                </div>
+                                <div className="grid w-full gap-3 sm:grid-cols-3">
+                                    <div className="h-24 rounded-2xl bg-slate-300/90 dark:bg-slate-600/80" />
+                                    <div className="h-24 rounded-2xl bg-slate-300/90 dark:bg-slate-600/80" />
+                                    <div className="h-24 rounded-2xl bg-slate-300/90 dark:bg-slate-600/80" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+                        <div className="animate-pulse rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                            <div className="h-4 w-28 rounded-full bg-slate-200 dark:bg-slate-700" />
+                            <div className="mt-4 h-7 w-52 rounded-xl bg-slate-200 dark:bg-slate-700" />
+                            <div className="mt-6 space-y-4">
+                                <div className="h-4 w-full rounded-lg bg-slate-200 dark:bg-slate-700" />
+                                <div className="h-4 w-5/6 rounded-lg bg-slate-200 dark:bg-slate-700" />
+                                <div className="h-4 w-full rounded-lg bg-slate-200 dark:bg-slate-700" />
+                            </div>
+                        </div>
+
+                        <div className="animate-pulse rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                            <div className="h-4 w-28 rounded-full bg-slate-200 dark:bg-slate-700" />
+                            <div className="mt-6 space-y-4">
+                                <div className="h-20 rounded-2xl bg-slate-200 dark:bg-slate-700" />
+                                <div className="h-20 rounded-2xl bg-slate-200 dark:bg-slate-700" />
+                                <div className="h-20 rounded-2xl bg-slate-200 dark:bg-slate-700" />
+                            </div>
+                        </div>
+                    </div>
+                </main>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#f8fafc,_#f1f5f9_55%,_#e2e8f0)] dark:bg-none dark:bg-slate-950">  
+        <div className="animate-fade-in min-h-screen bg-[radial-gradient(circle_at_top,_#f8fafc,_#f1f5f9_55%,_#e2e8f0)] dark:bg-none dark:bg-slate-950">
             <main className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
                 <section className="overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-2xl dark:from-slate-800 dark:to-slate-950">
                     <div className="flex flex-col gap-6 p-8 lg:flex-row lg:items-end lg:justify-between lg:p-10">

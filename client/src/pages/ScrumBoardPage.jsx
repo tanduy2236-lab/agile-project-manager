@@ -16,24 +16,9 @@ const ScrumBoardPage = () => {
     const [assignees, setAssignees] = useState([]);
     return (
         <div className="min-h-screen bg-slate-100 dark:bg-slate-900 px-4 py-6 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-               <div
-                    className="
-                        mb-6
-                        rounded-3xl
-                        border border-slate-200
-                        bg-white/90
-                        p-6
-                        shadow-sm
-                        backdrop-blur
-
-                        dark:border-slate-600
-                        dark:bg-slate-800/95
-                        dark:shadow-black/20
-                    "
-                >
+            <div className="mx-auto max-w-7xl animate-dashboard-item">
+               <div className="mb-6 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm backdrop-blur dark:border-slate-600 dark:bg-slate-800/95 dark:shadow-black/20">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-
                         <div>
                             <div
                                 className="
@@ -126,7 +111,7 @@ const ScrumBoardPage = () => {
 
                     </div>
                 </div>
-                <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 animate-dashboard-item animation-delay-100">
                     <input 
                             type="text"
                             placeholder={t.board.searchTask}
@@ -152,7 +137,7 @@ const ScrumBoardPage = () => {
                             "
                         />
                 </div>
-               <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+               <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800 animate-dashboard-item animation-delay-100">
 
                    <select
                     value={priorityFilter}

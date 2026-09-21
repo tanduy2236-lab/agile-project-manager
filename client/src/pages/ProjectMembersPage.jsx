@@ -116,7 +116,7 @@ const ProjectMembersPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-100 px-4 py-6 dark:bg-slate-900 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl">
+            <div className="mx-auto max-w-7xl animate-dashboard-item">
                 <div className="mb-6 rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-slate-800/80">
                     <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                         <div>
@@ -147,7 +147,7 @@ const ProjectMembersPage = () => {
                     </div>
                 </div>
                 {members.length === 0 ? (
-                    <div className="rounded-3xl border border-dashed border-slate-300 bg-white/70 p-12 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800/70">
+                    <div className="rounded-3xl border border-dashed border-slate-300 bg-white/70 p-12 text-center shadow-sm dark:border-slate-700 dark:bg-slate-800/70 animate-dashboard-item animation-delay-100">
                         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-900/40 dark:text-indigo-400">
                             <Users className="h-7 w-7" />
                         </div>
@@ -160,7 +160,7 @@ const ProjectMembersPage = () => {
                         </p>
                     </div>
                 ) : (
-                    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800 animate-dashboard-item animation-delay-200">
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead className="border-b border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-900/60">

@@ -89,7 +89,7 @@ const SprintPage = () => {
     }
     return (
         <div className="space-y-6 p-6 dark:bg-slate-900 dark:text-white">
-            <div className="flex items-start justify-between">
+            <div className="flex items-start justify-between animate-dashboard-item">
             <div>
                 <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                     {t.sprints.title}
@@ -107,7 +107,7 @@ const SprintPage = () => {
                 </button>
             </div>
             {sprints.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center">
+                <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-10 text-center animate-dashboard-item animation-delay-100">
                      <p className="font-medium text-slate-700">
                         {t.sprints.noSprints}
                     </p>
@@ -117,7 +117,7 @@ const SprintPage = () => {
                     </p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-4 animate-dashboard-item animation-delay-200">
                     <div className="lg:col-span-1">
                         <SprintList
                             sprints={sprints}

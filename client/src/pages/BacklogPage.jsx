@@ -19,7 +19,8 @@ const BacklogPage = () => {
         <div className="min-h-screen bg-slate-100 p-6 dark:bg-slate-900">
             <div className="mx-auto max-w-7xl">
 
-                <div className="mb-6 rounded-3xl bg-white p-6 shadow dark:bg-slate-800">
+                {/* Header */}
+                <div className="mb-6 rounded-3xl bg-white p-6 shadow animate-dashboard-item dark:bg-slate-800">
 
                     <h1 className="text-3xl font-bold dark:text-white">
                         {t.backlog.title}
@@ -31,38 +32,45 @@ const BacklogPage = () => {
 
                 </div>
 
-                <div className="mb-6 flex flex-wrap gap-3 rounded-2xl bg-white p-4 shadow dark:bg-slate-800">
+                <div className="mb-6 flex flex-wrap gap-3 rounded-2xl bg-white p-4 shadow animate-dashboard-item animation-delay-100 dark:bg-slate-800">
+
                     <input
                         type="text"
-                        placeholder={
-                            t.backlog.searchStory
-                        }
+                        placeholder={t.backlog.searchStory}
                         value={search}
-                        onChange={(e) =>
-                            setSearch(e.target.value)
-                        }
+                        onChange={(e) => setSearch(e.target.value)}
                         className="w-72 rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     />
 
                     <select
                         value={priorityFilter}
-                        onChange={(e) =>
-                            setPriorityFilter(
-                                e.target.value
-                            )
-                        }
+                        onChange={(e) => setPriorityFilter(e.target.value)}
                         className="rounded-lg border border-slate-300 p-2 dark:border-slate-600 dark:bg-slate-700 dark:text-white"
                     >
+                        <option value="ALL">
+                            {t.backlog.allPriority}
+                        </option>
 
-                        <option value="ALL"> {t.backlog.allPriority} </option>
-                        <option value="High">{t.backlog.high}</option>
-                        <option value="Medium">{t.backlog.medium}</option>
-                        <option value="Low">{t.backlog.low}</option>
+                        <option value="High">
+                            {t.backlog.high}
+                        </option>
+
+                        <option value="Medium">
+                            {t.backlog.medium}
+                        </option>
+
+                        <option value="Low">
+                            {t.backlog.low}
+                        </option>
                     </select>
 
                 </div>
-
-                <Backlog search={search} priorityFilter={priorityFilter}/>
+                <div className="animate-dashboard-item animation-delay-200">
+                    <Backlog
+                        search={search}
+                        priorityFilter={priorityFilter}
+                    />
+                </div>
 
             </div>
         </div>
