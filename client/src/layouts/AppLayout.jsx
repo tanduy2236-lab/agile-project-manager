@@ -7,17 +7,21 @@ import {
     KanbanSquare,
     LayoutGrid,
     LogOut,
+    PanelLeftClose,
+    PanelLeftOpen,
     Settings,
     User,
     Users,
     ClipboardList,
 } from "lucide-react";
+import { useState } from "react";
 import { logout } from "../api/auth.api";
 import { clearAuth } from "../utils/auth";
 
 const AppLayout = () => {
     const navigate = useNavigate();
     const { id } = useParams();
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
     const projectNavItems = id
         ? [
@@ -53,17 +57,37 @@ const AppLayout = () => {
     return (
         <div className="min-h-screen bg-slate-100 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
             <div className="mx-auto flex max-w-[1800px]">
-                <aside className="sticky top-0 hidden h-screen w-72 shrink-0 flex-col border-r border-slate-200 bg-slate-900 p-5 text-slate-100 shadow-xl lg:flex">
-                    <div className="mb-8 flex items-center gap-3">
+                <aside
+                    className={`sticky top-0 hidden h-screen shrink-0 flex-col border-r border-slate-200 bg-slate-900 p-3 text-slate-100 shadow-xl transition-all duration-300 lg:flex ${
+                        isSidebarCollapsed ? "w-20" : "w-72"
+                    }`}
+                >
+                    <div className={`mb-6 flex items-center ${isSidebarCollapsed ? "justify-center" : "justify-between gap-3"}`}>
                         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 shadow-lg shadow-blue-600/20">
                             <LayoutGrid className="h-5 w-5" />
                         </div>
-                        <div>
-                            <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">
-                                Agile
-                            </p>
-                            <h1 className="text-lg font-bold text-white">Task Manager</h1>
-                        </div>
+
+                        {!isSidebarCollapsed && (
+                            <div>
+                                <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400">
+                                    Agile
+                                </p>
+                                <h1 className="text-lg font-bold text-white">Task Manager</h1>
+                            </div>
+                        )}
+
+                        <button
+                            type="button"
+                            onClick={() => setIsSidebarCollapsed((prev) => !prev)}
+                            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 text-slate-200 transition hover:bg-slate-700 hover:text-white"
+                            aria-label={isSidebarCollapsed ? "Mở sidebar" : "Đóng sidebar"}
+                        >
+                            {isSidebarCollapsed ? (
+                                <PanelLeftOpen className="h-4 w-4" />
+                            ) : (
+                                <PanelLeftClose className="h-4 w-4" />
+                            )}
+                        </button>
                     </div>
 
                     <nav className="flex-1 space-y-2">
@@ -77,11 +101,12 @@ const AppLayout = () => {
                                         isActive
                                             ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
                                             : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                                    }`
+                                    } ${isSidebarCollapsed ? "justify-center px-2" : ""}`
                                 }
+                                title={isSidebarCollapsed ? label : undefined}
                             >
-                                <Icon className="h-4 w-4" />
-                                <span>{label}</span>
+                                <Icon className="h-4 w-4 shrink-0" />
+                                {!isSidebarCollapsed && <span>{label}</span>}
                             </NavLink>
                         ))}
                     </nav>
@@ -89,10 +114,13 @@ const AppLayout = () => {
                     <button
                         type="button"
                         onClick={handleLogout}
-                        className="mt-6 flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800 px-3 py-3 text-sm font-medium text-slate-200 transition hover:bg-slate-700 hover:text-white"
+                        className={`mt-6 flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800 px-3 py-3 text-sm font-medium text-slate-200 transition hover:bg-slate-700 hover:text-white ${
+                            isSidebarCollapsed ? "px-2" : ""
+                        }`}
+                        title={isSidebarCollapsed ? "Logout" : undefined}
                     >
                         <LogOut className="h-4 w-4" />
-                        Logout
+                        {!isSidebarCollapsed && "Logout"}
                     </button>
                 </aside>
 
