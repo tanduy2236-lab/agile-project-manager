@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from '../layouts/AuthLayout';
+import AppLayout from '../layouts/AppLayout';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import Dashboard from '../pages/Dashboard';
@@ -28,20 +29,22 @@ const AppRoutes = () => {
                         <Route path="/register" element={<Register />} /> 
                     </Route>
                 </Route>
-                <Route element={<ProtectedRoute/>}>
-                    <Route path="/dashboard" element={<Dashboard/>}/>
-                    <Route path="/projects" element={<ProjectPage />} />
-                    <Route path="/projects/create" element={<CreateProjectPage />} />
-                    <Route path="/projects/:id" element={<ProjectDetail />}/>
-                    <Route path="/projects/:id/edit" element={<EditProjectPage />}/>
-                    <Route path="/projects/:id/board" element={<ScrumBoardPage />} />
-                    <Route path="/projects/:id/backlog" element={<BacklogPage />} />
-                    <Route path="/projects/:id/sprints" element={<SprintPage />}/>
-                    <Route path="/projects/:id/members" element={<ProjectMembersPage />}/>
-                    <Route path="/profile" element={<ProfilePage />}/>
-                    <Route path="/settings" element={<SettingsPage />}/>
-                    <Route path="/notifications" element={<Notifications />}/>
-                    <Route path="/projects/:id/documents"element={<DocumentsPage />}/>
+                <Route element={<ProtectedRoute />}>
+                    <Route element={<AppLayout />}>
+                        <Route path="/dashboard" element={<Dashboard/>}/>
+                        <Route path="/projects" element={<ProjectPage />} />
+                        <Route path="/projects/create" element={<CreateProjectPage />} />
+                        <Route path="/projects/:id" element={<ProjectDetail />}/>
+                        <Route path="/projects/:id/edit" element={<EditProjectPage />}/>
+                        <Route path="/projects/:id/board" element={<ScrumBoardPage />} />
+                        <Route path="/projects/:id/backlog" element={<BacklogPage />} />
+                        <Route path="/projects/:id/sprints" element={<SprintPage />}/>
+                        <Route path="/projects/:id/members" element={<ProjectMembersPage />}/>
+                        <Route path="/profile" element={<ProfilePage />}/>
+                        <Route path="/settings" element={<SettingsPage />}/>
+                        <Route path="/notifications" element={<Notifications />}/>
+                        <Route path="/projects/:id/documents" element={<DocumentsPage />}/>
+                    </Route>
                 </Route>
             </Routes>
         </BrowserRouter>
