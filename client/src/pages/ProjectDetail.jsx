@@ -121,31 +121,31 @@ const ProjectDetail = () => {
                                 <div className="flex flex-wrap justify-start gap-2 xl:justify-end">
                                     <button
                                         onClick={() => navigate(`/projects/${id}/board`)}
-                                        className="rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-50"
+                                        className="rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(79,70,229,0.25)] transition hover:opacity-95"
                                     >
                                         {t.projects.openScrumBoard}
                                     </button>
                                     <button
                                         onClick={() => navigate(`/projects/${id}/backlog`)}
-                                        className="rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/15"
+                                        className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
                                     >
                                         {t.projects.goToBacklog}
                                     </button>
                                     <button
                                         onClick={() => navigate(`/projects/${id}/sprints`)}
-                                        className="rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-400"
+                                        className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200 dark:hover:bg-emerald-500/20"
                                     >
                                         {t.projects.goToSprints}
                                     </button>
                                     <button
                                         onClick={() => navigate(`/projects/${id}/members`)}
-                                        className="rounded-xl bg-violet-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-400"
+                                        className="rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-sm font-semibold text-violet-700 transition hover:bg-violet-100 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-200 dark:hover:bg-violet-500/20"
                                     >
                                         {t.projects.projectMembers}
                                     </button>
                                     <button
                                         onClick={() => navigate(`/projects/${project.id}/documents`)}
-                                        className="rounded-xl bg-red-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-400"
+                                        className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-200 dark:hover:bg-rose-500/20"
                                     >
                                         Documents
                                     </button>
