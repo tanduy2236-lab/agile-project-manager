@@ -143,7 +143,7 @@ const SettingsPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-100 p-6 dark:bg-slate-900">
-            <div className="mx-auto max-w-4xl space-y-6">
+            <div className="mx-auto max-w-4xl space-y-6 animate-dashboard-item">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                         {t.settings.title}

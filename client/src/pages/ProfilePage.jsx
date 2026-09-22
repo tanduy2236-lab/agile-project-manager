@@ -342,7 +342,7 @@ const ProfilePage = () => {
     }
     return (
         <div className="min-h-screen bg-slate-50 p-6 dark:bg-slate-900">
-            <div className="mx-auto max-w-4xl space-y-6">
+            <div className="mx-auto max-w-4xl space-y-6 animate-dashboard-item">
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
                         {t.profile.title}
@@ -362,7 +362,7 @@ const ProfilePage = () => {
                                 .personalInfo
                         }
                     </h2>
-                    <div className="mt-6 space-y-5">
+                    <div className="mt-6 space-y-5 animate-dashboard-item animation-delay-100">
                         <div>
                             <label className="mb-3 block text-sm font-medium text-slate-700 dark:text-slate-300">
 

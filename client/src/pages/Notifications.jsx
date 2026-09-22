@@ -170,7 +170,7 @@ const Notifications = () => {
 
         <div className="min-h-screen bg-slate-50 p-6 dark:bg-slate-900">
 
-            <div className="mx-auto max-w-4xl">
+            <div className="mx-auto max-w-4xl animate-dashboard-item">
 
                 <div className="mb-6 flex items-center justify-between">
 
@@ -202,7 +202,7 @@ const Notifications = () => {
 
                 </div>
 
-                <div className="mb-4 flex items-center gap-2">
+                <div className="mb-4 flex items-center gap-2 animate-dashboard-item animation-delay-100">
 
 
                     <button
