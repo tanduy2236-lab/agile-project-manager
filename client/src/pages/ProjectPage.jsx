@@ -158,59 +158,44 @@ const ProjectPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[radial-gradient(circle_at_top,_#f8fafc,_#f1f5f9_55%,_#e2e8f0)] dark:bg-[radial-gradient(circle_at_top,_#1e293b,_#0f172a_55%,_#020617)]">
+        <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
             <main className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8 animate-fade-in">
-                
-                <section animate-dashboard-item className="overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-700 text-white shadow-2xl">
+                <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 text-white shadow-[0_20px_45px_rgba(79,70,229,0.25)]">
                     <div className="flex flex-col gap-8 p-8 lg:flex-row lg:items-end lg:justify-between lg:p-10">
-                        <div  className="max-w-2xl">
-                            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-300 dark:text-slate-400">
+                        <div className="max-w-2xl">
+                            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-100">
                                 {t.projects.workspaceOverview}
                             </p>
 
-                            <h1 className="mt-3 text-3xl font-semibold sm:text-4xl dark:text-white">
+                            <h1 className="mt-3 text-3xl font-bold sm:text-4xl">
                                 {t.projects.keepMoving}
                             </h1>
 
-                            <p className="mt-4 text-sm leading-6 text-slate-300 dark:text-slate-300 sm:text-base">
+                            <p className="mt-4 text-sm leading-6 text-blue-100 sm:text-base">
                                 {t.projects.organizeWork}
                             </p>
                         </div>
 
                         <div className="grid gap-3 sm:grid-cols-3">
-                            <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 backdrop-blur dark:border-slate-600/30 dark:bg-slate-900/30">
-                                <p className="text-sm text-slate-200 dark:text-slate-300">
-                                    {t.projects.projects}
-                                </p>
-                                <p className="mt-1 text-xl font-semibold dark:text-white">
-                                    {projects.length}
-                                </p>
+                            <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                                <p className="text-sm text-blue-100">{t.projects.projects}</p>
+                                <p className="mt-1 text-xl font-semibold text-white">{projects.length}</p>
                             </div>
 
-                            <div className="rounded-2xl border border-white/10 dark:border-white/5 bg-white/10 dark:bg-white/5 px-4 py-3 backdrop-blur">
-                                <p className="text-sm text-slate-200 dark:text-slate-300">
-                                    {t.projects.focus}
-                                </p>
-                                <p className="mt-1 text-xl font-semibold dark:text-white">
-                                    {t.projects.clear}
-                                </p>
+                            <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                                <p className="text-sm text-blue-100">{t.projects.focus}</p>
+                                <p className="mt-1 text-xl font-semibold text-white">{t.projects.clear}</p>
                             </div>
 
-                            <div className="rounded-2xl border border-white/10 dark:border-white/5 bg-white/10 dark:bg-white/5 px-4 py-3 backdrop-blur">
-                                <p className="text-sm text-slate-200 dark:text-slate-300">
-                                    {t.projects.status}
-                                </p>
-                                <p className="mt-1 text-xl font-semibold dark:text-white">
-                                    {t.projects.onTrack}
-                                </p>
+                            <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
+                                <p className="text-sm text-blue-100">{t.projects.status}</p>
+                                <p className="mt-1 text-xl font-semibold text-white">{t.projects.onTrack}</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <ProjectHeader
-                    t={t}
-                />
+                <ProjectHeader t={t} />
 
                 <ProjectToolbar
                     t={t}

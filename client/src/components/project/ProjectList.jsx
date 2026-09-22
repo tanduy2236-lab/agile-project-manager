@@ -18,8 +18,8 @@ const ProjectList = ({
     }
 
     return (
-        <div className="space-y-4">
-            <div className="flex items-center justify-between">
+        <div className="space-y-5">
+            <div className="flex items-center justify-between gap-3">
                 <div>
                     <h2 className="text-lg font-semibold text-slate-800 dark:text-white">
                         {t.projects.recentProjects}
@@ -30,7 +30,7 @@ const ProjectList = ({
                     </p>
                 </div>
 
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                <span className="rounded-full border border-slate-200 bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
                     {projects.length} {t.projects.projectCount}
                 </span>
             </div>

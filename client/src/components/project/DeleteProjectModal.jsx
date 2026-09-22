@@ -1,4 +1,5 @@
-import {getTranslations,getSavedLanguage,} from "../../utils/language";
+import { getTranslations, getSavedLanguage } from "../../utils/language";
+import { AlertTriangle } from "lucide-react";
 
 const DeleteProjectModal = ({
     isOpen,
@@ -7,9 +8,7 @@ const DeleteProjectModal = ({
     onConfirm,
     loading,
 }) => {
-
     const language = getSavedLanguage();
-
     const t = getTranslations(language);
 
     if (!isOpen) {
@@ -18,38 +17,43 @@ const DeleteProjectModal = ({
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm dark:bg-black/70"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/55 px-4 backdrop-blur-sm"
             onClick={onCancel}
         >
-
             <div
-                className="w-[420px] rounded-xl bg-white p-6 shadow-2xl dark:bg-slate-800"
-                onClick={(e) =>
-                    e.stopPropagation()
-                }
+                className="w-full max-w-md rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-[0_25px_80px_rgba(15,23,42,0.25)] dark:border-slate-700 dark:bg-slate-900/90"
+                onClick={(e) => e.stopPropagation()}
             >
+                <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-300">
+                        <AlertTriangle className="h-6 w-6" />
+                    </div>
 
-                <h2 className="text-xl font-bold dark:text-white">
-                    {t.projects.deleteProject}
-                </h2>
+                    <div>
+                        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+                            {t.projects.deleteProject}
+                        </h2>
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            {t.projects.deleteProjectConfirm}
+                        </p>
+                    </div>
+                </div>
 
-                <p className="mt-4 text-gray-600 dark:text-gray-400">
-                    {t.projects.deleteProjectConfirm}
-
-                    <span className="font-semibold">
-                        {" "}
+                <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/80">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
                         {project?.name}
-                    </span>
+                    </p>
+                </div>
 
-                    ?
+                <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                    {t.projects.deleteProjectConfirm} <span className="font-semibold text-slate-900 dark:text-white">{project?.name}</span>?
                 </p>
 
-                <div className="mt-8 flex justify-end gap-3">
-
+                <div className="mt-6 flex justify-end gap-3">
                     <button
                         onClick={onCancel}
                         disabled={loading}
-                        className="rounded border px-4 py-2 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700 disabled:opacity-50"
+                        className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
                     >
                         {t.common.cancel}
                     </button>
@@ -57,15 +61,11 @@ const DeleteProjectModal = ({
                     <button
                         onClick={onConfirm}
                         disabled={loading}
-                        className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:bg-red-400 dark:bg-red-700 dark:hover:bg-red-800 dark:disabled:bg-red-900"
+                        className="rounded-xl bg-gradient-to-r from-rose-600 to-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-red-500/20 transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                        {loading
-                            ? t.projects.deleting
-                            : t.common.delete}
+                        {loading ? t.projects.deleting : t.common.delete}
                     </button>
-
                 </div>
-
             </div>
         </div>
     );
