@@ -193,6 +193,8 @@ model Task {
   estimate Int?
 
   @@map("tasks")
+
+  version Int @default(0)
 }
 
 model TaskHistory {
