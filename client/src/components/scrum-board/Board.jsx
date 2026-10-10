@@ -6,7 +6,9 @@ import DeleteTaskModal from "./DeleteTaskModal";
 import TaskDetailModal from "./TaskDetailModal";
 import {DndContext,pointerWithin} from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
+import { io } from "socket.io-client";
 import {getBoard,moveTask} from "../../api/task.api";
+import { getToken } from "../../utils/auth";
 const Board = ({
     search,
     priorityFilter,
@@ -39,29 +41,18 @@ const Board = ({
         setSelectedColumnId(columnId);
         setShowCreateModal(true);
     };
-
-
     const handleOpenTask = (task) => {
         setSelectedTask(task);
     };
-
-
-    const handleDeleteTask = (task) => {
-        setDeletingTask(task);
-    };
-
-
+    const handleDeleteTask = (task) => {setDeletingTask(task);};
     const loadBoard = async () => {
-
         try {
-
             const data = await getBoard(id);
 
             const boardColumns = data.filter(
                 (column) =>
                     column.name.toLowerCase() !== "backlog"
             );
-
             setColumns(boardColumns);
 
             const assigneeMap = new Map();
@@ -76,14 +67,9 @@ const Board = ({
                             task.assignee.id,
                             task.assignee
                         );
-
                     }
-
                 });
-
             });
-
-
             if (onAssigneesChange) {
 
                 onAssigneesChange(
@@ -91,86 +77,51 @@ const Board = ({
                         assigneeMap.values()
                     )
                 );
-
             }
 
         } catch (error) {
-
-            console.error(
-                "Error loading board:",
-                error
-            );
-
+            console.error("Error loading board:",error);
         } finally {
-
             setLoading(false);
-
         }
 
     };
-
-
     const handleDragEnd = async (event) => {
-
-        const {
-            active,
-            over
-        } = event;
-
-
+        const {active,over} = event;
         if (!over) return;
-
-
         const taskId = active.id;
-
-
-        const fromColumnId =
-            active.data.current.columnId;
-
-
+        const fromColumnId = active.data.current.columnId;
         const toColumnId =
             over.data.current?.columnId ||
             over.data.current?.sortable?.containerId;
-
         if (fromColumnId === toColumnId) {
-
             const column =
                 columns.find(
                     (c) =>
                         c.id === fromColumnId
                 );
-
-
             const oldIndex =
                 column.tasks.findIndex(
                     (task) =>
                         task.id === active.id
                 );
-
-
             const newIndex =
                 column.tasks.findIndex(
                     (task) =>
                         task.id === over.id
                 );
-
-
             if (
                 oldIndex === -1 ||
                 newIndex === -1
             ) {
                 return;
             }
-
-
             const newTasks =
                 arrayMove(
                     column.tasks,
                     oldIndex,
                     newIndex
                 );
-
-
             setColumns((prev) =>
                 prev.map((col) =>
                     col.id === fromColumnId
@@ -181,102 +132,69 @@ const Board = ({
                         : col
                 )
             );
-
-
             try {
-
                 await Promise.all(
-
-                    newTasks.map(
-                        (task, index) =>
-
-                            moveTask(
-                                task.id,
-                                {
-                                    columnId:
-                                        fromColumnId,
-
-                                    position:
-                                        index
-                                }
-                            )
-
+                    newTasks.map((task, index) =>
+                        moveTask(task.id, {
+                            columnId: fromColumnId,
+                            position: index,
+                            version: task.version,
+                        })
                     )
-
                 );
 
+                await loadBoard();
             } catch (error) {
                 console.log(error);
 
                 loadBoard();
             }
-
             return;
-
         }
-
         const sourceColumn =
             columns.find(
                 (column) =>
                     column.id === fromColumnId
             );
-
-
         const targetColumn =
             columns.find(
                 (column) =>
                     column.id === toColumnId
             );
-
-
         if (
             !sourceColumn ||
             !targetColumn
         ) {
             return;
         }
-
-
         const originalTask =
             sourceColumn.tasks.find(
                 (task) =>
                     task.id === taskId
             );
-
-
         if (!originalTask) {
             return;
         }
-
-
         const movedTask = {
             ...originalTask,
             columnId: toColumnId
         };
-
-
         const newSourceTasks =
             sourceColumn.tasks.filter(
                 (task) =>
                     task.id !== taskId
             );
-
-
         let overIndex =
             targetColumn.tasks.findIndex(
                 (task) =>
                     task.id === over.id
             );
-
-
         if (overIndex === -1) {
 
             overIndex =
                 targetColumn.tasks.length;
 
         }
-
-
         const newTargetTasks = [
 
             ...targetColumn.tasks.slice(
@@ -291,8 +209,6 @@ const Board = ({
             )
 
         ];
-
-
         setColumns((prev) =>
             prev.map((column) => {
 
@@ -307,8 +223,6 @@ const Board = ({
                     };
 
                 }
-
-
                 if (
                     column.id === toColumnId
                 ) {
@@ -320,98 +234,74 @@ const Board = ({
                     };
 
                 }
-
-
                 return column;
 
             })
         );
-
-
         try {
-
             await Promise.all(
-
-                newTargetTasks.map(
-                    (task, index) =>
-
-                        moveTask(
-                            task.id,
-                            {
-                                columnId:
-                                    toColumnId,
-
-                                position:
-                                    index
-                            }
-                        )
-
+                newTargetTasks.map((task, index) =>
+                    moveTask(task.id, {
+                        columnId: toColumnId,
+                        position: index,
+                        version: task.version,
+                    })
                 )
-
             );
 
-
             await Promise.all(
-
-                newSourceTasks.map(
-                    (task, index) =>
-
-                        moveTask(
-                            task.id,
-                            {
-                                columnId:
-                                    fromColumnId,
-
-                                position:
-                                    index
-                            }
-                        )
-
+                newSourceTasks.map((task, index) =>
+                    moveTask(task.id, {
+                        columnId: fromColumnId,
+                        position: index,
+                        version: task.version,
+                    })
                 )
-
             );
-
 
             await loadBoard();
-
-
         } catch (error) {
-
             console.log(error);
-
             loadBoard();
 
         }
 
     };
 
-
     useEffect(() => {
-
         loadBoard();
 
+        const token = getToken();
+        if (!token) return undefined;
+
+        const socketUrl =
+            import.meta.env.VITE_API_URL?.replace(/\/api\/?$/, "") ||
+            window.location.origin;
+        const socket = io(socketUrl, {
+            auth: { token },
+        });
+        let refreshTimeout;
+
+        socket.on("connect", () => {
+            socket.emit("project:join", id);
+        });
+        socket.on("task:moved", (event) => {
+            if (Number(event.projectId) !== Number(id)) return;
+
+            clearTimeout(refreshTimeout);
+            refreshTimeout = setTimeout(loadBoard, 200);
+        });
+
+        return () => {
+            clearTimeout(refreshTimeout);
+            socket.emit("project:leave", id);
+            socket.disconnect();
+        };
     }, [id]);
 
-
     if (loading) {
-
         return (
-
-            <div
-                className="
-                    rounded-3xl
-                    border border-slate-200
-                    bg-white/80
-                    p-8
-                    text-center
-                    shadow-sm
-                    backdrop-blur
-
-                    dark:border-slate-700
-                    dark:bg-slate-800/80
-                "
-            >
-
+            <div className="rounded-3xl border border-slate-200 bg-white/80 p-8 text-center shadow-sm backdrop-blur dark:border-slate-700dark:bg-slate-800/80">
                 <div
                     className="
                         mx-auto
@@ -425,7 +315,6 @@ const Board = ({
                         dark:bg-slate-700
                     "
                 />
-
                 <p
                     className="
                         font-medium
@@ -436,7 +325,6 @@ const Board = ({
                 >
                     Loading Scrum Board...
                 </p>
-
                 <p
                     className="
                         mt-1
@@ -448,37 +336,27 @@ const Board = ({
                 >
                     Preparing your workflow view...
                 </p>
-
             </div>
-
         );
 
     }
-
     const filteredColumns =
         columns.map((column) => ({
-
             ...column,
-
             tasks:
                 column.tasks.filter(
                     (task) => {
-
                         const matchesSearch =
                             task.title
                                 ?.toLowerCase()
                                 .includes(
                                     search.toLowerCase()
                                 );
-
-
                         const matchesPriority =
-
                             priorityFilter === "ALL" ||
 
                             task.priority ===
                             priorityFilter;
-
 
                         const matchesAssignee =
 
@@ -488,14 +366,9 @@ const Board = ({
                             Number(
                                 assigneeFilter
                             );
-
-
                         return (
-
                             matchesSearch &&
-
                             matchesPriority &&
-
                             matchesAssignee
 
                         );
@@ -505,11 +378,8 @@ const Board = ({
 
         }));
 
-
     return (
-
         <>
-
             <DndContext
                 collisionDetection={
                     pointerWithin
@@ -518,9 +388,7 @@ const Board = ({
                     handleDragEnd
                 }
             >
-
-                <div
-                    className="
+                <div className="
                         rounded-2xl
                         border border-slate-200
                         bg-white/70
@@ -532,7 +400,6 @@ const Board = ({
                         dark:bg-slate-800/70
                     "
                 >
-
                     <div
                         className="
                             mb-4
@@ -544,20 +411,10 @@ const Board = ({
                         "
                     >
                         <div>
-
                             <p
-                                className="
-                                    text-sm
-                                    font-semibold
-                                    text-slate-900
-
-                                    dark:text-white
-                                "
-                            >
+                                className="text-sm font-semibold text-slate-900 dark:text-white">
                                 Workflow board
                             </p>
-
-
                             <p
                                 className="
                                     text-sm
@@ -590,10 +447,7 @@ const Board = ({
                         </div>
 
                     </div>
-
-
-                    <div
-                        className="
+                    <div className="
                             flex
                             gap-6
                             overflow-x-auto
@@ -729,21 +583,15 @@ const Board = ({
 
                     )}
                     {editingTask && (
-
                         <TaskFormModal
                             mode="edit"
-                            task={
-                                editingTask
-                            }
-
+                            task={editingTask}
                             projectId={id}
-
                             onClose={() =>
                                 setEditingTask(
                                     null
                                 )
                             }
-
                             onSuccess={() => {
 
                                 loadBoard();
@@ -751,24 +599,20 @@ const Board = ({
                                 setEditingTask(
                                     null
                                 );
-
                             }}
                         />
 
                     )}
                     {deletingTask && (
-
                         <DeleteTaskModal
                             task={
                                 deletingTask
                             }
-
                             onClose={() =>
                                 setDeletingTask(
                                     null
                                 )
                             }
-
                             onConfirm={() => {
 
                                 loadBoard();
@@ -779,14 +623,11 @@ const Board = ({
 
                             }}
                         />
-
                     )}
-
                 </div>
             </DndContext>
         </>
     );
-
 };
 
 

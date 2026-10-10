@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-    createTask,
-    updateTask
-} from "../../api/task.api";
+import {createTask,updateTask} from "../../api/task.api";
 import { getProjectMembers } from "../../api/project.api";
 const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
     const [members, setMembers] = useState([]);
@@ -46,9 +43,9 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
         : ""
 });
     const handleSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    const data = {
+        const data = {
         ...formData,
 
         assigneeId: formData.assigneeId
@@ -58,6 +55,9 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
         dueDate: formData.dueDate
             ? new Date(formData.dueDate).toISOString()
             : null,
+
+        
+        ...(mode === "edit" ? { version: task.version } : {}),
     };
 
     console.log("========== SUBMIT TASK ==========");
@@ -79,12 +79,26 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
         onClose();
 
     } catch (error) {
-        console.error("========== TASK ERROR ==========");
-        console.error("Status:", error.response?.status);
-        console.error("Response:", error.response?.data);
-        console.error("Request data:", data);
+    console.error("========== TASK ERROR ==========");
+    console.error("Status:", error.response?.status);
+    console.error("Response:", error.response?.data);
+    console.error("Request data:", data);
+
+    if (
+        error.response?.status === 409 ||
+        error.response?.data?.code === "TASK_VERSION_CONFLICT"
+    ) {
+        alert(
+            "Task đã được người khác cập nhật. " +
+            "Vui lòng đóng cửa sổ và tải lại dữ liệu trước khi sửa tiếp."
+        );
+    } else {
+        alert(
+            error.response?.data?.message ||
+            "Không thể lưu Task. Vui lòng thử lại."
+        );
     }
-};
+}
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
             <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-700 dark:bg-slate-800">
@@ -243,5 +257,5 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
         </div>
     );
 };
-
+}
 export default TaskFormModal;

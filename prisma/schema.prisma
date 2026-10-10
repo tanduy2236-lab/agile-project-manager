@@ -125,19 +125,21 @@ model Sprint {
 }
 
 model TaskColumn {
-  id Int @id @default(autoincrement())
-
-  projectId Int @map("project_id")
-
-  name String
-
-  position Int @default(0)
+  id        Int    @id @default(autoincrement())
+  projectId Int    @map("project_id")
+  name      String
+  statusKey String @map("status_key")
+  position  Int    @default(0)
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   tasks Task[]
 
+  outgoingTransitions TaskColumnTransition[] @relation("TransitionFrom")
+  incomingTransitions TaskColumnTransition[] @relation("TransitionTo")
+
   @@unique([projectId, name])
+  @@unique([projectId, statusKey])
   @@map("task_columns")
 }
 
@@ -342,4 +344,18 @@ model DocumentFolder {
   documents Document[]
 
   @@map("document_folders")
+}
+model TaskColumnTransition {
+  id           Int @id @default(autoincrement())
+  projectId    Int @map("project_id")
+  fromColumnId Int @map("from_column_id")
+  toColumnId   Int @map("to_column_id")
+
+  fromColumn TaskColumn @relation("TransitionFrom",fields: [fromColumnId],references: [id],onDelete: Cascade)
+
+  toColumn TaskColumn @relation("TransitionTo",fields: [toColumnId],references: [id],onDelete: Cascade)
+
+  @@unique([fromColumnId, toColumnId])
+  @@index([projectId])
+  @@map("task_column_transitions")
 }

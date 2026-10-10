@@ -3,6 +3,15 @@ import prisma from "../config/prisma.js";
 import { createUserNotification } from "./notification.service.js";
 import * as taskHistoryService from "./taskHistory.service.js";
 import * as projectMemberService from "./projectMember.service.js";
+const createConflictError = () => {
+    const error = new Error(
+        "Task đã được cập nhật bởi người khác. Vui lòng tải lại trang để xem thông tin mới nhất."
+    )
+    error.status = 409;
+    error.code = "TASK_VERSION_CONFLICT";
+
+    return error;
+}
 export const getBoardByProjectId = async (projectId, userId) => {
     await projectMemberService.requireRole(
         projectId,
@@ -80,13 +89,19 @@ export const createTask = async (taskData, userId) => {
     return newTask;
 };
 export const updateTask = async (taskId, data, changedById) => {
+    const { version, ...updateData } = data;
+    if (!Number.isInteger(version) || version < 0) {
+        const error = new Error("Invalid version number.");
+        error.status = 400;
+        throw error;
+    }
     const task = await taskRepository.findTaskById(taskId);
 
     if (!task) {
         throw new Error("Task not found.");
     }
 
-     await projectMemberService.requireRole(
+    await projectMemberService.requireRole(
         task.projectId,
         changedById,
         ["OWNER", "ADMIN", "MEMBER"]
@@ -94,98 +109,113 @@ export const updateTask = async (taskId, data, changedById) => {
 
     const updatedTask = await taskRepository.updateTask(
         taskId,
-        data
+        version,
+        updateData
     );
-
-    if (
-        data.title !== undefined &&
-        data.title !== task.title
-    ) {
-        await taskHistoryService.createTaskHistory({
-            taskId,
-            changedById,
-            field: "title",
-            oldValue: task.title,
-            newValue: data.title,
-        });
+    if (!updatedTask) {
+        throw createConflictError();
     }
+    const historyEntries = [
+        ["title", task.title, updateData.title],
+        ["description", task.description, updateData.description],
+        ["priority", task.priority, updateData.priority],
+    ];
+    for(const [field, oldValue, newValue] of historyEntries) {
+        if (
+            data.title !== undefined &&
+            data.title !== task.title
+        ) {
+            await taskHistoryService.createTaskHistory({
+                taskId,
+                changedById,
+                field: "title",
+                oldValue: task.title,
+                newValue: data.title,
+            });
+        }
 
-    if (
-        data.description !== undefined &&
-        data.description !== task.description
-    ) {
-        await taskHistoryService.createTaskHistory({
-            taskId,
-            changedById,
-            field: "description",
-            oldValue: task.description,
-            newValue: data.description,
-        });
+        if (
+            data.description !== undefined &&
+            data.description !== task.description
+        ) {
+            await taskHistoryService.createTaskHistory({
+                taskId,
+                changedById,
+                field: "description",
+                oldValue: task.description,
+                newValue: data.description,
+            });
+        }
+
+        if (
+            data.priority !== undefined &&
+            data.priority !== task.priority
+        ) {
+            await taskHistoryService.createTaskHistory({
+                taskId,
+                changedById,
+                field: "priority",
+                oldValue: task.priority,
+                newValue: data.priority,
+            });
+        }
+
+        if (
+            data.assigneeId !== undefined &&
+            Number(data.assigneeId) !== task.assigneeId
+        ) {
+            await taskHistoryService.createTaskHistory({
+                taskId,
+                changedById,
+                field: "assignee",
+                oldValue: task.assigneeId?.toString() || null,
+                newValue: data.assigneeId
+                    ? String(data.assigneeId)
+                    : null,
+            });
+        }
+
+        if (
+            data.dueDate !== undefined &&
+            String(data.dueDate) !== String(task.dueDate)
+        ) {
+            await taskHistoryService.createTaskHistory({
+                taskId,
+                changedById,
+                field: "dueDate",
+                oldValue: task.dueDate
+                    ? String(task.dueDate)
+                    : null,
+                newValue: data.dueDate
+                    ? String(data.dueDate)
+                    : null,
+            });
+        }
     }
-
-    if (
-        data.priority !== undefined &&
-        data.priority !== task.priority
-    ) {
-        await taskHistoryService.createTaskHistory({
-            taskId,
-            changedById,
-            field: "priority",
-            oldValue: task.priority,
-            newValue: data.priority,
-        });
-    }
-
-    if (
-        data.assigneeId !== undefined &&
-        Number(data.assigneeId) !== task.assigneeId
-    ) {
-        await taskHistoryService.createTaskHistory({
-            taskId,
-            changedById,
-            field: "assignee",
-            oldValue: task.assigneeId?.toString() || null,
-            newValue: data.assigneeId
-                ? String(data.assigneeId)
-                : null,
-        });
-    }
-
-    if (
-        data.dueDate !== undefined &&
-        String(data.dueDate) !== String(task.dueDate)
-    ) {
-        await taskHistoryService.createTaskHistory({
-            taskId,
-            changedById,
-            field: "dueDate",
-            oldValue: task.dueDate
-                ? String(task.dueDate)
-                : null,
-            newValue: data.dueDate
-                ? String(data.dueDate)
-                : null,
-        });
-    }
-
     if (
         data.assigneeId &&
         Number(data.assigneeId) !== task.assigneeId
     ) {
         await createUserNotification(
-            Number(data.assigneeId),
-            `Bạn được giao task "${updatedTask.title}"`
+        Number(data.assigneeId),
+        `Bạn được giao task "${updatedTask.title}"`
         );
     }
 
-    return updatedTask;
+        return updatedTask;
 };
 export const moveTask = async (
     taskId,
     columnId,
     position,
-    changedById
+    changedById,
+    version
 ) => {
+    if (!Number.isInteger(version) || version < 0) {
+    const error = new Error("Phiên bản Task không hợp lệ.");
+    error.status = 400;
+    throw error;
+}
     const task = await taskRepository.findTaskById(taskId);
 
     if (!task) {
@@ -239,12 +269,16 @@ export const moveTask = async (
             );
     }
 
-    const updatedTask = await taskRepository.moveTask(
+    const updatedTask = await taskRepository.moveTaskIfVersion(
         taskId,
+        version,
         columnId,
         position,
         newStatus
     );
+    if (!updatedTask) {
+        throw createConflictError();
+    }
 
     if (Number(oldColumnId) !== Number(columnId)) {
         const oldColumn = oldColumnId

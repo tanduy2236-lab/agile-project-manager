@@ -1,5 +1,13 @@
 import * as taskService from "../services/task.service.js";
+import { getIO } from "../socket.js";
+const handleError = (res, error, defaultStatus = 400) => {
+    console.error(error);
 
+    return res.status(error.status || defaultStatus).json({
+        message: error.message,
+        code: error.code || undefined,
+    });
+};
 export const getBoard = async (req, res) => {
     try {
         const projectId = Number(req.params.projectId);
@@ -11,30 +19,23 @@ export const getBoard = async (req, res) => {
 
         return res.json(board);
     } catch (error) {
-        console.error("Get board error:", error);
-
-        return res.status(403).json({
-            message: error.message
-        });
+        return handleError(res, error, 403);
     }
 };
-export const createTask = async(req,res) => {
-    try{
+export const createTask = async (req, res) => {
+    try {
         const task = await taskService.createTask(
             req.body,
             req.user.userId
         );
+
         return res.status(201).json(task);
-    }catch(error){
-        return res.status(400).json({
-            message: error.message
-        });
+    } catch (error) {
+        return handleError(res, error);
     }
 };
 export const updateTask = async (req, res) => {
     try {
-        const { id } = req.params;
-
         const task = await taskService.updateTask(
             req.params.id,
             req.body,
@@ -43,23 +44,19 @@ export const updateTask = async (req, res) => {
 
         return res.status(200).json(task);
     } catch (error) {
-        console.error("Update task error:", error);
-
-        return res.status(400).json({
-            message: error.message
-        });
+        return handleError(res, error);
     }
 };
 export const moveTask = async (req, res) => {
     try {
         const { id } = req.params;
-        const { columnId, position } = req.body;
+        const { columnId, position, version } = req.body;
 
         const oldTask = await taskService.getTaskById(id);
 
         if (!oldTask) {
             return res.status(404).json({
-                message: "Task not found."
+                message: "Task not found.",
             });
         }
 
@@ -69,41 +66,38 @@ export const moveTask = async (req, res) => {
             id,
             columnId,
             position,
-            req.user.userId
+            req.user.userId,
+            version
         );
 
+        getIO()
+            .to(`project:${oldTask.projectId}`)
+            .emit("task:moved", {
+                projectId: oldTask.projectId,
+                taskId: task.id,
+                columnId: task.columnId,
+                position: task.position,
+            });
+
         if (Number(oldColumnId) !== Number(columnId)) {
-            await taskService.notifyTaskMoved(
-                id,
-                columnId
-            );
+            await taskService.notifyTaskMoved(id, columnId);
         }
 
         return res.status(200).json(task);
-
     } catch (error) {
-        console.error("Move task error:", error);
-
-        return res.status(400).json({
-            message: error.message
-        });
+        return handleError(res, error);
     }
 };
+
 export const deleteTask = async (req, res) => {
     try {
-        const { id } = req.params;
-
         const result = await taskService.deleteTask(
-            id,
+            req.params.id,
             req.user.userId
         );
 
         return res.status(200).json(result);
     } catch (error) {
-        console.error("Delete task error:", error);
-
-        return res.status(400).json({
-            message: error.message
-        });
+        return handleError(res, error);
     }
-}
+};

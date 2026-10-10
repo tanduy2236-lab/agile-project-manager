@@ -6,7 +6,6 @@ import {
     Check,
     CircleAlert,
     GripVertical,
-    Trash2,
 } from "lucide-react";
 import { getDueDateStatus } from "../../utils/deadline";
 

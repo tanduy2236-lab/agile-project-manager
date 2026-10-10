@@ -72,6 +72,56 @@ export const findTaskById = async (taskId) => {
         }
     });
 };
+export const updateTaskIfVersion = async (
+    taskId,
+    version,
+    data
+) => {
+    const result = await prisma.task.updateMany({
+        where: {
+            id: Number(taskId),
+            version: Number(version),
+        },
+        data: {
+            ...data,
+            version: {
+                increment: 1,
+            },
+        },
+    });
+
+    if (result.count === 0) {
+        return null;
+    }
+
+    return await findTaskById(taskId);
+};
+export const moveTaskIfVersion = async (
+    taskId,
+    version,
+    columnId,
+    position,
+    status
+) => {
+    const result = await prisma.task.updateMany({
+        where: {
+            id: Number(taskId),
+            version: Number(version)
+        },
+        data: {
+            columnId: Number(columnId),
+            position: Number(position),
+            status,
+            version: {
+                increment: 1
+            },
+        },
+    });
+    if (result.count === 0) {
+        return null; 
+    }
+    return await findTaskById(taskId);
+}
 export const updateTask = async(taskId,data) => {
     return await prisma.task.update({
         where: {
