@@ -1,5 +1,5 @@
 import express from "express";
-import {getBoard,createTask,updateTask,moveTask,deleteTask} from "../controllers/task.controller.js";
+import {getBoard,createTask,updateTask,moveTask,deleteTask,createTaskColumn} from "../controllers/task.controller.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -7,6 +7,12 @@ router.get(
     "/projects/:projectId/board",
     authenticate,
     getBoard
+);
+
+router.post(
+    "/projects/:projectId/columns",
+    authenticate,
+    createTaskColumn
 );
 
 router.post(

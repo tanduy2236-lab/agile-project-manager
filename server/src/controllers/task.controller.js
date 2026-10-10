@@ -22,6 +22,20 @@ export const getBoard = async (req, res) => {
         return handleError(res, error, 403);
     }
 };
+export const createTaskColumn = async (req, res) => {
+    try {
+        const column = await taskService.createTaskColumn(
+            req.params.projectId,
+            req.body,
+            req.user.userId
+        );
+
+        return res.status(201).json(column);
+    } catch (error) {
+        return handleError(res, error);
+    }
+};
+
 export const createTask = async (req, res) => {
     try {
         const task = await taskService.createTask(

@@ -3,6 +3,7 @@ import prisma from "../config/prisma.js";
 import { createUserNotification } from "./notification.service.js";
 import * as taskHistoryService from "./taskHistory.service.js";
 import * as projectMemberService from "./projectMember.service.js";
+import { normalizeColumnName, createColumnStatusKey } from "../utils/column.utils.js";
 const createConflictError = () => {
     const error = new Error(
         "Task đã được cập nhật bởi người khác. Vui lòng tải lại trang để xem thông tin mới nhất."
@@ -21,18 +22,87 @@ export const getBoardByProjectId = async (projectId, userId) => {
 
     return await taskRepository.getBoardByProjectId(projectId);
 };
-export const createTask = async (taskData, userId) => {
-    const {
-        projectId,
-        columnId,
-        title,
-        description,
-        priority,
-        assigneeId,
-        dueDate,
-        position
-    } = taskData;
+export const createTaskColumn = async (projectId, columnData, userId) => {
+    const projectIdNumber = Number(projectId);
 
+    await projectMemberService.requireRole(
+        projectIdNumber,
+        userId,
+        ["OWNER", "ADMIN", "MEMBER"]
+    );
+
+    const name = normalizeColumnName(columnData?.name);
+
+    if (!name || name === "CUSTOM") {
+        const error = new Error("Tên cột không hợp lệ.");
+        error.status = 400;
+        throw error;
+    }
+
+    const existingColumns = await prisma.taskColumn.findMany({
+        where: { projectId: projectIdNumber },
+        select: { statusKey: true },
+    });
+
+    const duplicateName = await prisma.taskColumn.findFirst({
+        where: {
+            projectId: projectIdNumber,
+            name: {
+                equals: name,
+                mode: "insensitive",
+            },
+        },
+    });
+
+    if (duplicateName) {
+        const error = new Error("Tên cột đã tồn tại trong dự án.");
+        error.status = 409;
+        throw error;
+    }
+
+    const statusKey = createColumnStatusKey(
+        name,
+        new Set(existingColumns.map((column) => column.statusKey))
+    );
+
+    const lastColumn = await prisma.taskColumn.findFirst({
+        where: { projectId: projectIdNumber },
+        orderBy: { position: "desc" },
+    });
+
+    const column = await prisma.taskColumn.create({
+        data: {
+            projectId: projectIdNumber,
+            name,
+            statusKey,
+            position: (lastColumn?.position ?? 0) + 1,
+        },
+    });
+
+    if (lastColumn) {
+        const transitionExists = await prisma.taskColumnTransition.findFirst({
+            where: {
+                projectId: projectIdNumber,
+                fromColumnId: lastColumn.id,
+                toColumnId: column.id,
+            },
+        });
+
+        if (!transitionExists) {
+            await prisma.taskColumnTransition.create({
+                data: {
+                    projectId: projectIdNumber,
+                    fromColumnId: lastColumn.id,
+                    toColumnId: column.id,
+                },
+            });
+        }
+    }
+    return column;
+};
+
+export const createTask = async (taskData, userId) => {
+    const {projectId,columnId,title,description,priority,assigneeId,dueDate,position} = taskData;
     await projectMemberService.requireRole(
         projectId,
         userId,
@@ -49,6 +119,18 @@ export const createTask = async (taskData, userId) => {
 
     if (!title?.trim()) {
         throw new Error("Task title is required.");
+    }
+        const column = await prisma.taskColumn.findFirst({
+        where: {
+            id: Number(columnId),
+            projectId: Number(projectId),
+        },
+    });
+
+    if (!column) {
+        const error = new Error("Cột không tồn tại trong dự án này.");
+        error.status = 400;
+        throw error;
     }
 
     const activeSprint = await prisma.sprint.findFirst({
@@ -76,7 +158,8 @@ export const createTask = async (taskData, userId) => {
         dueDate: dueDate
             ? new Date(dueDate)
             : null,
-        position: position ?? 0
+        position: position ?? 0,
+        status: column.statusKey,
     });
 
     if (assigneeId) {
@@ -85,7 +168,6 @@ export const createTask = async (taskData, userId) => {
             `Bạn được giao task "${newTask.title}"`
         );
     }
-
     return newTask;
 };
 export const updateTask = async (taskId, data, changedById) => {
@@ -107,88 +189,62 @@ export const updateTask = async (taskId, data, changedById) => {
         ["OWNER", "ADMIN", "MEMBER"]
     );
 
-    const updatedTask = await taskRepository.updateTask(
+    
+    const updatedTask = await taskRepository.updateTaskIfVersion(
         taskId,
         version,
         updateData
     );
+
     if (!updatedTask) {
         throw createConflictError();
     }
+
     const historyEntries = [
         ["title", task.title, updateData.title],
         ["description", task.description, updateData.description],
         ["priority", task.priority, updateData.priority],
+        ["assigneeId", task.assigneeId, updateData.assigneeId],
+        ["dueDate", task.dueDate, updateData.dueDate],
     ];
-    for(const [field, oldValue, newValue] of historyEntries) {
-        if (
-            data.title !== undefined &&
-            data.title !== task.title
-        ) {
-            await taskHistoryService.createTaskHistory({
-                taskId,
-                changedById,
-                field: "title",
-                oldValue: task.title,
-                newValue: data.title,
-            });
+    for (const [field, oldValue, newValue] of historyEntries) {
+        if (newValue === undefined) continue;
+
+        let changed = false;
+
+        if (field === "dueDate") {
+            const oldDate = oldValue
+                ? new Date(oldValue).getTime()
+                : null;
+            const newDate = newValue
+                ? new Date(newValue).getTime()
+                : null;
+
+            changed = oldDate !== newDate;
+        } else if (field === "assigneeId") {
+            changed =
+                (oldValue ?? null) !==
+                (newValue ? Number(newValue) : null);
+        } else {
+            changed = oldValue !== newValue;
         }
 
-        if (
-            data.description !== undefined &&
-            data.description !== task.description
-        ) {
+        if (changed) {
             await taskHistoryService.createTaskHistory({
-                taskId,
-                changedById,
-                field: "description",
-                oldValue: task.description,
-                newValue: data.description,
-            });
-        }
-
-        if (
-            data.priority !== undefined &&
-            data.priority !== task.priority
-        ) {
-            await taskHistoryService.createTaskHistory({
-                taskId,
-                changedById,
-                field: "priority",
-                oldValue: task.priority,
-                newValue: data.priority,
-            });
-        }
-
-        if (
-            data.assigneeId !== undefined &&
-            Number(data.assigneeId) !== task.assigneeId
-        ) {
-            await taskHistoryService.createTaskHistory({
-                taskId,
-                changedById,
-                field: "assignee",
-                oldValue: task.assigneeId?.toString() || null,
-                newValue: data.assigneeId
-                    ? String(data.assigneeId)
-                    : null,
-            });
-        }
-
-        if (
-            data.dueDate !== undefined &&
-            String(data.dueDate) !== String(task.dueDate)
-        ) {
-            await taskHistoryService.createTaskHistory({
-                taskId,
-                changedById,
-                field: "dueDate",
-                oldValue: task.dueDate
-                    ? String(task.dueDate)
-                    : null,
-                newValue: data.dueDate
-                    ? String(data.dueDate)
-                    : null,
+                taskId: Number(taskId),
+                changedById: Number(changedById),
+                field:
+                    field === "assigneeId"
+                        ? "assignee"
+                        : field,
+                oldValue:
+                    oldValue === null || oldValue === undefined
+                        ? null
+                        : String(oldValue),
+                newValue:
+                    newValue === null || newValue === undefined
+                        ? null
+                        : String(newValue),
             });
         }
     }
@@ -204,6 +260,7 @@ export const updateTask = async (taskId, data, changedById) => {
 
         return updatedTask;
 };
+
 export const moveTask = async (
     taskId,
     columnId,
@@ -211,15 +268,17 @@ export const moveTask = async (
     changedById,
     version
 ) => {
-    if (!Number.isInteger(version) || version < 0) {
-    const error = new Error("Phiên bản Task không hợp lệ.");
-    error.status = 400;
-    throw error;
-}
+    if (!Number.isInteger(Number(version)) || Number(version) < 0) {
+        const error = new Error("Phiên bản Task không hợp lệ.");
+        error.status = 400;
+        throw error;
+    }
     const task = await taskRepository.findTaskById(taskId);
 
     if (!task) {
-        throw new Error("Task not found.");
+        const error = new Error("Không tìm thấy Task.");
+        error.status = 404;
+        throw error;
     }
 
     await projectMemberService.requireRole(
@@ -227,73 +286,70 @@ export const moveTask = async (
         changedById,
         ["OWNER", "ADMIN", "MEMBER"]
     );
-
-    const oldColumnId = task.columnId;
-
-    const newColumn = await prisma.taskColumn.findUnique({
+    const newColumn = await prisma.taskColumn.findFirst({
         where: {
             id: Number(columnId),
+            projectId: task.projectId,
         },
     });
-
     if (!newColumn) {
-        throw new Error("Column not found.");
+        const error = new Error(
+            "Cột đích không tồn tại trong dự án này."
+        );
+        error.status = 400;
+        throw error;
     }
+    const oldColumnId = task.columnId;
+    if (
+        oldColumnId !== null &&
+        Number(oldColumnId) !== Number(columnId)
+    ) {
+        const transition = await prisma.taskColumnTransition.findFirst({
+            where: {
+                projectId: task.projectId,
+                fromColumnId: Number(oldColumnId),
+                toColumnId: Number(columnId),
+            },
+        });
 
-    let newStatus = task.status;
-
-    switch (newColumn.name) {
-        case "To Do":
-            newStatus = "Todo";
-            break;
-
-        case "In Progress":
-            newStatus = "InProgress";
-            break;
-
-        case "Testing":
-            newStatus = "Testing";
-            break;
-
-        case "Done":
-            newStatus = "Done";
-            break;
-
-        case "Backlog":
-            newStatus = "Todo";
-            break;
-
-        default:
-            throw new Error(
-                `Unsupported task column: ${newColumn.name}`
+        if (!transition) {
+            console.warn(
+                `No workflow transition found from column ${oldColumnId} to ${columnId}. Allowing task move for custom column flow.`
             );
+        }
     }
 
-    const updatedTask = await taskRepository.moveTaskIfVersion(
-        taskId,
-        version,
-        columnId,
-        position,
-        newStatus
-    );
+    const updatedTask =
+        await taskRepository.moveTaskIfVersion(
+            taskId,
+            Number(version),
+            Number(columnId),
+            Number(position),
+            newColumn.statusKey
+        );
+
     if (!updatedTask) {
-        throw createConflictError();
+        const error = new Error(
+            "Task đã được cập nhật bởi người khác. Vui lòng tải lại trang."
+        );
+        error.status = 409;
+        error.code = "TASK_VERSION_CONFLICT";
+        throw error;
     }
 
-    if (Number(oldColumnId) !== Number(columnId)) {
-        const oldColumn = oldColumnId
-            ? await prisma.taskColumn.findUnique({
-                  where: {
-                      id: Number(oldColumnId),
-                  },
-              })
-            : null;
+    if (
+        oldColumnId !== null &&
+        Number(oldColumnId) !== Number(columnId)
+    ) {
+        const oldColumn = await prisma.taskColumn.findUnique({
+            where: {
+                id: Number(oldColumnId),
+            },
+        });
 
         await taskHistoryService.createTaskHistory({
             taskId: Number(taskId),
-            changedById: changedById
-                ? Number(changedById)
-                : null,
+            changedById: Number(changedById),
             field: "column",
             oldValue: oldColumn?.name || null,
             newValue: newColumn.name,
@@ -302,6 +358,7 @@ export const moveTask = async (
 
     return updatedTask;
 };
+
 export const deleteTask = async (taskId, userId) => {
     const task = await taskRepository.findTaskById(taskId);
 

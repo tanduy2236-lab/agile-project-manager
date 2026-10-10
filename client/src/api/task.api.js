@@ -5,6 +5,11 @@ export const getBoard = async (projectId) => {
     return response.data;
 };
 
+export const createColumn = async (projectId, data) => {
+    const response = await api.post(`/projects/${projectId}/columns`, data);
+    return response.data;
+};
+
 export const createTask = async (data) => {
     const response = await api.post("/tasks", data);
     return response.data;

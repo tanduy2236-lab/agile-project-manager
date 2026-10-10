@@ -1,56 +1,63 @@
 import prisma from "../config/prisma.js";
 
-export const createProjectTransaction = async (projectData,ownerId) => {
+
+export const createProjectTransaction = async (projectData, ownerId) => {
     return await prisma.$transaction(async (tx) => {
-        console.log("tx.project =", tx.project);
-        console.log("tx.projectMember =", tx.projectMember);
-        console.log("tx.taskColumn =", tx.taskColumn);
         const project = await tx.project.create({
             data: {
                 name: projectData.name,
                 description: projectData.description,
-                ownerId: ownerId
-            }
+                ownerId: Number(ownerId),
+            },
         });
+
         await tx.projectMember.create({
             data: {
                 projectId: project.id,
-                userId: ownerId,
-                role: "OWNER"
-            }
+                userId: Number(ownerId),
+                role: "OWNER",
+            },
         });
-        await tx.taskColumn.createMany({
-        data: [
-        {
-            projectId: project.id,
-            name: "Backlog",
-            position: 1
-        },
-        {
-            projectId: project.id,
-            name: "To Do",
-            position: 2
-        },
-        {
-            projectId: project.id,
-            name: "In Progress",
-            position: 3
-        },
-        {
-            projectId: project.id,
-            name: "Testing",
-            position: 4
-        },
-        {
-            projectId: project.id,
-            name: "Done",
-            position: 5
-        }
-        ]
+        const defaultColumns = [
+            { name: "Backlog", statusKey: "BACKLOG", position: 1 },
+            { name: "To Do", statusKey: "TODO", position: 2 },
+            { name: "In Progress", statusKey: "IN_PROGRESS", position: 3 },
+            { name: "Testing", statusKey: "TESTING", position: 4 },
+            { name: "Done", statusKey: "DONE", position: 5 },
+        ];
+
+        const columns = await Promise.all(
+            defaultColumns.map((column) =>
+                tx.taskColumn.create({
+                    data: {
+                        projectId: project.id,
+                        ...column,
+                    },
+                })
+            )
+        );
+        const transitions = [
+            ["TODO", "IN_PROGRESS"],
+            ["IN_PROGRESS", "TESTING"],
+            ["TESTING", "DONE"],
+        ];
+
+        const columnIdByStatus = Object.fromEntries(
+            columns.map((column) => [column.statusKey, column.id])
+        );
+
+        await tx.taskColumnTransition.createMany({
+            data: transitions.map(([fromStatus, toStatus]) => ({
+                projectId: project.id,
+                fromColumnId: columnIdByStatus[fromStatus],
+                toColumnId: columnIdByStatus[toStatus],
+            })),
         });
+
         return project;
     });
 };
+
 export const getProjectsByUserId = async (userId) => {
     const projects = await prisma.project.findMany({
         where: {

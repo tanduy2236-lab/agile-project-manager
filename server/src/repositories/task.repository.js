@@ -3,48 +3,51 @@ export const getBoardByProjectId = async (projectId) => {
     const activeSprint = await prisma.sprint.findFirst({
         where: {
             projectId: Number(projectId),
-            status: "Active"
+            status: "Active",
         },
         orderBy: {
-            id: "desc"
-        }
+            id: "desc",
+        },
     });
-
-    console.log("========== GET BOARD ==========");
-    console.log("Project ID:", projectId);
-    console.log("Active Sprint:", activeSprint);
-
-    return await prisma.taskColumn.findMany({
+    const columns = await prisma.taskColumn.findMany({
         where: {
-            projectId: Number(projectId)
+            projectId: Number(projectId),
         },
         orderBy: {
-            position: "asc"
+            position: "asc",
         },
         include: {
             tasks: {
                 where: activeSprint
-                    ? {
-                        sprintId: activeSprint.id
-                    }
-                    : {
-                        sprintId: null
-                    },
+                    ? { sprintId: activeSprint.id }
+                    : { sprintId: null },
                 orderBy: {
-                    position: "asc"
+                    position: "asc",
                 },
                 include: {
                     assignee: {
                         select: {
                             id: true,
                             name: true,
-                            avatar: true
-                        }
-                    }
-                }
-            }
-        }
+                            avatar: true,
+                        },
+                    },
+                },
+            },
+            outgoingTransitions: {
+                select: {
+                    toColumnId: true,
+                },
+            },
+        },
     });
+    return columns.map((column) => ({
+        ...column,
+        allowedNextColumnIds: column.outgoingTransitions.map(
+            (transition) => transition.toColumnId
+        ),
+        outgoingTransitions: undefined,
+    }));
 };
 export const createTask = async(data) => {
     return await prisma.task.create({

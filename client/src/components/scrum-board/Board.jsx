@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Column from "./Column";
 import TaskFormModal from "./TaskFormModal";
@@ -7,7 +7,7 @@ import TaskDetailModal from "./TaskDetailModal";
 import {DndContext,pointerWithin} from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
 import { io } from "socket.io-client";
-import {getBoard,moveTask} from "../../api/task.api";
+import {getBoard,moveTask,createColumn} from "../../api/task.api";
 import { getToken } from "../../utils/auth";
 const Board = ({
     search,
@@ -22,6 +22,15 @@ const Board = ({
     const [loading, setLoading] = useState(true);
 
     const [showCreateModal, setShowCreateModal] =
+        useState(false);
+
+    const [showCreateColumnModal, setShowCreateColumnModal] =
+        useState(false);
+
+    const [newColumnName, setNewColumnName] =
+        useState("");
+
+    const [creatingColumn, setCreatingColumn] =
         useState(false);
 
     const [selectedColumnId, setSelectedColumnId] =
@@ -41,11 +50,31 @@ const Board = ({
         setSelectedColumnId(columnId);
         setShowCreateModal(true);
     };
+
+    const handleCreateColumn = async () => {
+        const trimmedName = newColumnName.trim();
+
+        if (!trimmedName) return;
+
+        try {
+            setCreatingColumn(true);
+            await createColumn(id, { name: trimmedName });
+            setNewColumnName("");
+            setShowCreateColumnModal(false);
+            await loadBoard();
+        } catch (error) {
+            console.error("Error creating column:", error);
+            alert(error?.response?.data?.message || "Không thể tạo cột mới.");
+        } finally {
+            setCreatingColumn(false);
+        }
+    };
+
     const handleOpenTask = (task) => {
         setSelectedTask(task);
     };
     const handleDeleteTask = (task) => {setDeletingTask(task);};
-    const loadBoard = async () => {
+    const loadBoard = useCallback(async () => {
         try {
             const data = await getBoard(id);
 
@@ -85,15 +114,22 @@ const Board = ({
             setLoading(false);
         }
 
-    };
+    }, [id, onAssigneesChange]);
     const handleDragEnd = async (event) => {
         const {active,over} = event;
         if (!over) return;
         const taskId = active.id;
         const fromColumnId = active.data.current.columnId;
+        const overColumnId =
+            over.data.current?.columnId ??
+            over.data.current?.sortable?.containerId ??
+            over.id;
+
         const toColumnId =
-            over.data.current?.columnId ||
-            over.data.current?.sortable?.containerId;
+            typeof overColumnId === "string" &&
+            overColumnId.startsWith("column-")
+                ? Number(overColumnId.replace("column-", ""))
+                : Number(overColumnId);
         if (fromColumnId === toColumnId) {
             const column =
                 columns.find(
@@ -145,9 +181,18 @@ const Board = ({
 
                 await loadBoard();
             } catch (error) {
-                console.log(error);
+                console.error("========== MOVE TASK FAILED ==========");
+                console.error("HTTP status:", error.response?.status);
+                console.error("Backend message:", error.response?.data);
+                console.error("Request URL:", error.config?.url);
+                console.error("Request body:", error.config?.data);
 
-                loadBoard();
+                alert(
+                    error.response?.data?.message ||
+                    "Không thể di chuyển Task."
+                );
+
+                await loadBoard();
             }
             return;
         }
@@ -261,11 +306,19 @@ const Board = ({
 
             await loadBoard();
         } catch (error) {
-            console.log(error);
-            loadBoard();
+            console.error("========== MOVE TASK FAILED ==========");
+            console.error("HTTP status:", error.response?.status);
+            console.error("Backend response:", error.response?.data);
+            console.error("Request URL:", error.config?.url);
+            console.error("Request body:", error.config?.data);
 
+            alert(
+                error.response?.data?.message ||
+                "Không thể di chuyển Task."
+            );
+
+            await loadBoard();
         }
-
     };
 
     useEffect(() => {
@@ -297,7 +350,7 @@ const Board = ({
             socket.emit("project:leave", id);
             socket.disconnect();
         };
-    }, [id]);
+    }, [id, loadBoard]);
 
     if (loading) {
         return (
@@ -429,21 +482,36 @@ const Board = ({
 
                         </div>
 
-                        <div
-                            className="
-                                rounded-full
-                                bg-slate-100
-                                px-3
-                                py-1
-                                text-sm
-                                font-medium
-                                text-slate-600
+                        <div className="flex items-center gap-3">
+                            <div
+                                className="
+                                    rounded-full
+                                    bg-slate-100
+                                    px-3
+                                    py-1
+                                    text-sm
+                                    font-medium
+                                    text-slate-600
 
-                                dark:bg-slate-700
-                                dark:text-slate-300
-                            "
-                        >
-                            {columns.length} columns
+                                    dark:bg-slate-700
+                                    dark:text-slate-300
+                                "
+                            >
+                                {columns.length} columns
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => setShowCreateColumnModal(true)}
+                                className="
+                                    inline-flex items-center rounded-xl
+                                    bg-indigo-600 px-3 py-2 text-sm font-semibold
+                                    text-white shadow-sm transition hover:bg-indigo-700
+                                    dark:bg-indigo-500 dark:hover:bg-indigo-400
+                                "
+                            >
+                                + Add column
+                            </button>
                         </div>
 
                     </div>
@@ -514,6 +582,59 @@ const Board = ({
                         )}
 
                     </div>
+
+                    {showCreateColumnModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
+                            <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-700 dark:bg-slate-800">
+                                <div className="mb-4">
+                                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                                        Create new column
+                                    </h3>
+                                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                                        Add a custom stage to organize your workflow.
+                                    </p>
+                                </div>
+
+                                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                                    Column name
+                                </label>
+                                <input
+                                    type="text"
+                                    value={newColumnName}
+                                    onChange={(event) => setNewColumnName(event.target.value)}
+                                    placeholder="Example: Review"
+                                    className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder:text-slate-400 dark:focus:border-indigo-400 dark:focus:ring-indigo-900"
+                                    onKeyDown={(event) => {
+                                        if (event.key === "Enter") {
+                                            event.preventDefault();
+                                            handleCreateColumn();
+                                        }
+                                    }}
+                                />
+
+                                <div className="mt-6 flex justify-end gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowCreateColumnModal(false);
+                                            setNewColumnName("");
+                                        }}
+                                        className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={handleCreateColumn}
+                                        disabled={creatingColumn || !newColumnName.trim()}
+                                        className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+                                    >
+                                        {creatingColumn ? "Creating..." : "Create column"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {showCreateModal && (
 

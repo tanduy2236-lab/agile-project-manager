@@ -42,63 +42,64 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
         ? task.dueDate.substring(0, 10)
         : ""
 });
-    const handleSubmit = async (e) => {
+     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const data = {
-        ...formData,
-
-        assigneeId: formData.assigneeId
-            ? Number(formData.assigneeId)
-            : null,
-
-        dueDate: formData.dueDate
-            ? new Date(formData.dueDate).toISOString()
-            : null,
-
-        
-        ...(mode === "edit" ? { version: task.version } : {}),
-    };
-
-    console.log("========== SUBMIT TASK ==========");
-    console.log("Mode:", mode);
-    console.log("Request data:", data);
-
-    try {
-        if (mode === "create") {
-            await createTask({
-                ...data,
-                projectId: Number(projectId),
-                columnId: Number(columnId),
-            });
-        } else {
-            await updateTask(task.id, data);
+        if (!formData.title.trim()) {
+            alert("Vui lòng nhập tên Task.");
+            return;
         }
 
-        onSuccess();
-        onClose();
+        const data = {
+            ...formData,
+            title: formData.title.trim(),
+            assigneeId: formData.assigneeId
+                ? Number(formData.assigneeId)
+                : null,
+            dueDate: formData.dueDate
+                ? new Date(
+                    `${formData.dueDate}T00:00:00`
+                ).toISOString()
+                : null,
+            ...(mode === "edit"
+                ? { version: task.version }
+                : {}),
+        };
 
-    } catch (error) {
-    console.error("========== TASK ERROR ==========");
-    console.error("Status:", error.response?.status);
-    console.error("Response:", error.response?.data);
-    console.error("Request data:", data);
+        try {
+            if (mode === "create") {
+                await createTask({
+                    ...data,
+                    projectId: Number(projectId),
+                    columnId: Number(columnId),
+                });
+            } else {
+                await updateTask(task.id, data);
+            }
 
-    if (
-        error.response?.status === 409 ||
-        error.response?.data?.code === "TASK_VERSION_CONFLICT"
-    ) {
-        alert(
-            "Task đã được người khác cập nhật. " +
-            "Vui lòng đóng cửa sổ và tải lại dữ liệu trước khi sửa tiếp."
-        );
-    } else {
-        alert(
-            error.response?.data?.message ||
-            "Không thể lưu Task. Vui lòng thử lại."
-        );
-    }
-}
+            onSuccess();
+            onClose();
+        } catch (error) {
+            console.error("Error saving task:", error);
+            console.error("Status:", error.response?.status);
+            console.error("Response:", error.response?.data);
+
+            if (
+                error.response?.status === 409 ||
+                error.response?.data?.code === "TASK_VERSION_CONFLICT"
+            ) {
+                alert(
+                    "Task đã được người khác cập nhật. " +
+                    "Vui lòng tải lại dữ liệu trước khi sửa tiếp."
+                );
+            } else {
+                alert(
+                    error.response?.data?.message ||
+                    "Không thể lưu Task. Vui lòng thử lại."
+                );
+            }
+        }
+    };
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
             <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-700 dark:bg-slate-800">
@@ -257,5 +258,5 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
         </div>
     );
 };
-}
+
 export default TaskFormModal;
