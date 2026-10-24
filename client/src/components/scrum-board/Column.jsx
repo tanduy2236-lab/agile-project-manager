@@ -6,7 +6,9 @@ const Column = ({
     column,
     onCreateTask,
     onOpenTask,
-    onDeleteTask
+    onDeleteTask,
+    onEditColumn,
+    onDeleteColumn,
 }) => {
 
     const taskCount = column.tasks?.length || 0;
@@ -85,20 +87,42 @@ const Column = ({
                             </p>
                         </div>
 
-                        <span
-                            className="
-                                rounded-full
-                                bg-slate-100
-                                px-2.5 py-1
-                                text-xs font-semibold
-                                text-slate-600
+                        <div className="flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    onEditColumn?.(column);
+                                }}
+                                className="rounded-md px-2 py-1 text-xs font-medium text-indigo-600 transition hover:bg-indigo-100 dark:text-indigo-400 dark:hover:bg-indigo-500/10"
+                            >
+                                Edit
+                            </button>
+                            <button
+                                type="button"
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    onDeleteColumn?.(column);
+                                }}
+                                className="rounded-md px-2 py-1 text-xs font-medium text-red-600 transition hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-500/10"
+                            >
+                                Delete
+                            </button>
+                            <span
+                                className="
+                                    rounded-full
+                                    bg-slate-100
+                                    px-2.5 py-1
+                                    text-xs font-semibold
+                                    text-slate-600
 
-                                dark:bg-slate-700
-                                dark:text-slate-300
-                            "
-                        >
-                            {taskCount}
-                        </span>
+                                    dark:bg-slate-700
+                                    dark:text-slate-300
+                                "
+                            >
+                                {taskCount}
+                            </span>
+                        </div>
 
                     </div>
                 </div>

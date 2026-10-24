@@ -48,6 +48,33 @@ export const createTask = async (req, res) => {
         return handleError(res, error);
     }
 };
+export const updateTaskColumn = async (req, res) => {
+    try {
+        const column = await taskService.updateTaskColumn(
+            req.params.projectId,
+            req.params.columnId,
+            req.body,
+            req.user.userId
+        );
+
+        return res.status(200).json(column);
+    } catch (error) {
+        return handleError(res, error);
+    }
+};
+export const deleteTaskColumn = async (req, res) => {
+    try {
+        const result = await taskService.deleteTaskColumn(
+            req.params.projectId,
+            req.params.columnId,
+            req.user.userId
+        );
+
+        return res.status(200).json(result);
+    } catch (error) {
+        return handleError(res, error);
+    }
+};
 export const updateTask = async (req, res) => {
     try {
         const task = await taskService.updateTask(

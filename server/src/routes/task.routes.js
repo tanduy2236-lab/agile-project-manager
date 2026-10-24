@@ -1,5 +1,14 @@
 import express from "express";
-import {getBoard,createTask,updateTask,moveTask,deleteTask,createTaskColumn} from "../controllers/task.controller.js";
+import {
+    getBoard,
+    createTask,
+    updateTask,
+    moveTask,
+    deleteTask,
+    createTaskColumn,
+    updateTaskColumn,
+    deleteTaskColumn,
+} from "../controllers/task.controller.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -13,6 +22,18 @@ router.post(
     "/projects/:projectId/columns",
     authenticate,
     createTaskColumn
+);
+
+router.put(
+    "/projects/:projectId/columns/:columnId",
+    authenticate,
+    updateTaskColumn
+);
+
+router.delete(
+    "/projects/:projectId/columns/:columnId",
+    authenticate,
+    deleteTaskColumn
 );
 
 router.post(

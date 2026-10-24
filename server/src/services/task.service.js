@@ -101,6 +101,116 @@ export const createTaskColumn = async (projectId, columnData, userId) => {
     return column;
 };
 
+export const updateTaskColumn = async (projectId, columnId, columnData, userId) => {
+    const projectIdNumber = Number(projectId);
+    const columnIdNumber = Number(columnId);
+
+    await projectMemberService.requireRole(
+        projectIdNumber,
+        userId,
+        ["OWNER", "ADMIN", "MEMBER"]
+    );
+
+    const column = await prisma.taskColumn.findFirst({
+        where: {
+            id: columnIdNumber,
+            projectId: projectIdNumber,
+        },
+    });
+
+    if (!column) {
+        const error = new Error("Cột không tồn tại trong dự án này.");
+        error.status = 400;
+        throw error;
+    }
+
+    const name = normalizeColumnName(columnData?.name);
+
+    if (!name || name === "CUSTOM") {
+        const error = new Error("Tên cột không hợp lệ.");
+        error.status = 400;
+        throw error;
+    }
+
+    const duplicateName = await prisma.taskColumn.findFirst({
+        where: {
+            projectId: projectIdNumber,
+            name: {
+                equals: name,
+                mode: "insensitive",
+            },
+            id: {
+                not: columnIdNumber,
+            },
+        },
+    });
+
+    if (duplicateName) {
+        const error = new Error("Tên cột đã tồn tại trong dự án.");
+        error.status = 409;
+        throw error;
+    }
+
+    return await prisma.taskColumn.update({
+        where: {
+            id: columnIdNumber,
+        },
+        data: {
+            name,
+            statusKey: column.statusKey,
+        },
+    });
+};
+
+export const deleteTaskColumn = async (projectId, columnId, userId) => {
+    const projectIdNumber = Number(projectId);
+    const columnIdNumber = Number(columnId);
+
+    await projectMemberService.requireRole(
+        projectIdNumber,
+        userId,
+        ["OWNER", "ADMIN", "MEMBER"]
+    );
+
+    const column = await prisma.taskColumn.findFirst({
+        where: {
+            id: columnIdNumber,
+            projectId: projectIdNumber,
+        },
+        include: {
+            tasks: {
+                select: {
+                    id: true,
+                },
+            },
+        },
+    });
+
+    if (!column) {
+        const error = new Error("Cột không tồn tại trong dự án này.");
+        error.status = 400;
+        throw error;
+    }
+
+    if (column.tasks.length > 0) {
+        const error = new Error(
+            "Không thể xóa cột đang có task. Hãy di chuyển hoặc xóa các task trước."
+        );
+        error.status = 400;
+        throw error;
+    }
+
+    await prisma.taskColumn.delete({
+        where: {
+            id: columnIdNumber,
+        },
+    });
+
+    return {
+        message: "Task column deleted successfully.",
+    };
+};
+
 export const createTask = async (taskData, userId) => {
     const {projectId,columnId,title,description,priority,assigneeId,dueDate,position} = taskData;
     await projectMemberService.requireRole(

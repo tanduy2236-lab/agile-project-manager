@@ -4,6 +4,8 @@ import Column from "./Column";
 import TaskFormModal from "./TaskFormModal";
 import DeleteTaskModal from "./DeleteTaskModal";
 import TaskDetailModal from "./TaskDetailModal";
+import ColumnFormModal from "./ColumnFormModal";
+import DeleteColumnModal from "./DeleteColumnModal";
 import {DndContext,pointerWithin} from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
 import { io } from "socket.io-client";
@@ -42,6 +44,12 @@ const Board = ({
     const [deletingTask, setDeletingTask] =
         useState(null);
 
+    const [editingColumn, setEditingColumn] =
+        useState(null);
+
+    const [deletingColumn, setDeletingColumn] =
+        useState(null);
+
     const [selectedTask, setSelectedTask] =
         useState(null);
 
@@ -49,6 +57,14 @@ const Board = ({
     const handleCreateTask = (columnId) => {
         setSelectedColumnId(columnId);
         setShowCreateModal(true);
+    };
+
+    const handleEditColumn = (column) => {
+        setEditingColumn(column);
+    };
+
+    const handleDeleteColumn = (column) => {
+        setDeletingColumn(column);
     };
 
     const handleCreateColumn = async () => {
@@ -548,6 +564,14 @@ const Board = ({
                                         onDeleteTask={
                                             handleDeleteTask
                                         }
+
+                                        onEditColumn={
+                                            handleEditColumn
+                                        }
+
+                                        onDeleteColumn={
+                                            handleDeleteColumn
+                                        }
                                     />
 
                                 )
@@ -662,6 +686,30 @@ const Board = ({
                             }}
                         />
 
+                    )}
+
+                    {editingColumn && (
+                        <ColumnFormModal
+                            projectId={id}
+                            column={editingColumn}
+                            onClose={() => setEditingColumn(null)}
+                            onSuccess={async () => {
+                                await loadBoard();
+                                setEditingColumn(null);
+                            }}
+                        />
+                    )}
+
+                    {deletingColumn && (
+                        <DeleteColumnModal
+                            projectId={id}
+                            column={deletingColumn}
+                            onClose={() => setDeletingColumn(null)}
+                            onConfirm={async () => {
+                                await loadBoard();
+                                setDeletingColumn(null);
+                            }}
+                        />
                     )}
 
                     {selectedTask && (

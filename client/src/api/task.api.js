@@ -10,6 +10,16 @@ export const createColumn = async (projectId, data) => {
     return response.data;
 };
 
+export const updateColumn = async (projectId, columnId, data) => {
+    const response = await api.put(`/projects/${projectId}/columns/${columnId}`, data);
+    return response.data;
+};
+
+export const deleteColumn = async (projectId, columnId) => {
+    const response = await api.delete(`/projects/${projectId}/columns/${columnId}`);
+    return response.data;
+};
+
 export const createTask = async (data) => {
     const response = await api.post("/tasks", data);
     return response.data;
