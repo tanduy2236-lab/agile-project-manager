@@ -33,7 +33,8 @@ model User {
   uploadedDocumentVersions DocumentVersion[] @relation("DocumentVersionUploadedBy")
   createdDocumentFolders   DocumentFolder[]  @relation("DocumentFolderCreatedBy")
 
-  setting UserSetting?
+  setting                 UserSetting?
+  createdTaskDependencies TaskDependency[]
 
   @@map("users")
 }
@@ -192,11 +193,13 @@ model Task {
 
   acceptanceCriteria String? @map("acceptance_criteria")
 
-  estimate Int?
-
-  @@map("tasks")
+  estimate     Int?
+  dependencies TaskDependency[] @relation("TaskDependencies")
+  blockedTasks TaskDependency[] @relation("TaskBlockedBy")
 
   version Int @default(0)
+
+  @@map("tasks")
 }
 
 model TaskHistory {
@@ -345,17 +348,37 @@ model DocumentFolder {
 
   @@map("document_folders")
 }
+
 model TaskColumnTransition {
   id           Int @id @default(autoincrement())
   projectId    Int @map("project_id")
   fromColumnId Int @map("from_column_id")
   toColumnId   Int @map("to_column_id")
 
-  fromColumn TaskColumn @relation("TransitionFrom",fields: [fromColumnId],references: [id],onDelete: Cascade)
+  fromColumn TaskColumn @relation("TransitionFrom", fields: [fromColumnId], references: [id], onDelete: Cascade)
 
-  toColumn TaskColumn @relation("TransitionTo",fields: [toColumnId],references: [id],onDelete: Cascade)
+  toColumn TaskColumn @relation("TransitionTo", fields: [toColumnId], references: [id], onDelete: Cascade)
 
   @@unique([fromColumnId, toColumnId])
   @@index([projectId])
   @@map("task_column_transitions")
+}
+
+model TaskDependency {
+  id Int @id @default(autoincrement())
+
+  taskId          Int @map("task_id")
+  dependsOnTaskId Int @map("depends_on_task_id")
+  createdById     Int @map("created_by_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  task          Task @relation("TaskDependencies", fields: [taskId], references: [id], onDelete: Cascade)
+  dependsOnTask Task @relation("TaskBlockedBy", fields: [dependsOnTaskId], references: [id], onDelete: Cascade)
+  createdBy     User @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@unique([taskId, dependsOnTaskId])
+  @@index([taskId])
+  @@index([dependsOnTaskId])
+  @@map("task_dependencies")
 }

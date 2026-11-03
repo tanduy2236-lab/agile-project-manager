@@ -69,7 +69,8 @@ export const findTaskById = async (taskId) => {
             column: {
                 select: {
                     id: true,
-                    name: true
+                    name: true,
+                    statusKey: true
                 }
             }
         }
