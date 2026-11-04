@@ -9,6 +9,11 @@ import {
     updateTaskColumn,
     deleteTaskColumn,
 } from "../controllers/task.controller.js";
+import {
+    getTaskDependencies,
+    createTaskDependency,
+    deleteTaskDependency,
+} from "../controllers/taskDependency.controller.js";
 import { authenticate } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -58,5 +63,22 @@ router.delete(
     "/tasks/:id",
     authenticate,
     deleteTask
+);
+router.get(
+    "/tasks/:id/dependencies",
+    authenticate,
+    getTaskDependencies
+);
+
+router.post(
+    "/tasks/:id/dependencies",
+    authenticate,
+    createTaskDependency
+);
+
+router.delete(
+    "/tasks/:id/dependencies/:dependencyId",
+    authenticate,
+    deleteTaskDependency
 );
 export default router;

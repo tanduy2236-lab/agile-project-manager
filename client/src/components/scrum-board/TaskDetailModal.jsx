@@ -25,7 +25,7 @@ import {
     MessageCircle,
     Clock3,
 } from "lucide-react";
-
+import TaskDependencySection from "./TaskDependencySection";
 const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState("");
@@ -429,6 +429,10 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
 
                             </div>
                         </section>
+                        <TaskDependencySection
+                            taskId={task.id}
+                            projectId={task.projectId}
+                        />
 
                         <section className="border-t border-slate-200 pt-6 dark:border-slate-700">
 

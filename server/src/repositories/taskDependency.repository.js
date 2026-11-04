@@ -1,6 +1,5 @@
 import prisma from "../config/prisma.js";
 
-// Lấy thông tin Task
 export const findTaskById = async (taskId) => {
     return await prisma.task.findUnique({
         where: {
@@ -18,7 +17,6 @@ export const findTaskById = async (taskId) => {
     });
 };
 
-// Lấy danh sách Task phụ thuộc vào Task hiện tại
 export const findBlockedBy = async (taskId) => {
     return await prisma.taskDependency.findMany({
         where: {
@@ -55,7 +53,6 @@ export const findBlockedBy = async (taskId) => {
     });
 };
 
-// Lấy danh sách Task đang bị Task hiện tại chặn
 export const findBlocking = async (taskId) => {
     return await prisma.taskDependency.findMany({
         where: {
@@ -86,7 +83,6 @@ export const findBlocking = async (taskId) => {
     });
 };
 
-// Lấy tất cả quan hệ trong một dự án
 export const findProjectDependencies = async (projectId) => {
     return await prisma.taskDependency.findMany({
         where: {
@@ -101,7 +97,6 @@ export const findProjectDependencies = async (projectId) => {
     });
 };
 
-// Kiểm tra quan hệ đã tồn tại
 export const findExistingDependency = async (
     taskId,
     dependsOnTaskId
@@ -116,7 +111,6 @@ export const findExistingDependency = async (
     });
 };
 
-// Tạo quan hệ phụ thuộc
 export const createDependency = async (data) => {
     return await prisma.taskDependency.create({
         data,
@@ -137,7 +131,7 @@ export const createDependency = async (data) => {
     });
 };
 
-// Xóa quan hệ phụ thuộc
+
 export const deleteDependency = async (dependencyId) => {
     return await prisma.taskDependency.delete({
         where: {

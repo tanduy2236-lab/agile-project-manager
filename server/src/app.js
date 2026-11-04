@@ -18,7 +18,6 @@ import attachmentRoutes from "./routes/attachment.routes.js";
 import documentRoutes from "./routes/document.routes.js";
 import documentFolderRoutes from "./routes/documentFolder.routes.js";
 import settingsRoutes from "./routes/settings.routes.js";
-
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -58,7 +57,6 @@ app.use("/api", documentRoutes);
 app.use("/api", documentFolderRoutes);
 
 app.use("/api/settings", settingsRoutes);
-
 
 const clientDistPath = path.join(
     __dirname,
