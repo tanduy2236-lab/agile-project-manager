@@ -35,6 +35,7 @@ model User {
 
   setting                 UserSetting?
   createdTaskDependencies TaskDependency[]
+  projectActivities       ProjectActivity[]
 
   @@map("users")
 }
@@ -80,8 +81,9 @@ model Project {
   columns TaskColumn[]
   tasks   Task[]
 
-  documents       Document[]
-  documentFolders DocumentFolder[]
+  documents         Document[]
+  documentFolders   DocumentFolder[]
+  projectActivities ProjectActivity[]
 
   @@map("projects")
 }
@@ -194,8 +196,9 @@ model Task {
   acceptanceCriteria String? @map("acceptance_criteria")
 
   estimate     Int?
-  dependencies TaskDependency[] @relation("TaskDependencies")
-  blockedTasks TaskDependency[] @relation("TaskBlockedBy")
+  dependencies TaskDependency[]  @relation("TaskDependencies")
+  blockedTasks TaskDependency[]  @relation("TaskBlockedBy")
+  activities   ProjectActivity[]
 
   version Int @default(0)
 
@@ -381,4 +384,26 @@ model TaskDependency {
   @@index([taskId])
   @@index([dependsOnTaskId])
   @@map("task_dependencies")
+}
+
+model ProjectActivity {
+  id        Int  @id @default(autoincrement())
+  projectId Int  @map("project_id")
+  userId    Int? @map("user_id")
+  taskId    Int? @map("task_id")
+
+  action      String
+  description String
+  metadata    Json?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  task    Task?   @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, createdAt])
+  @@index([userId])
+  @@index([taskId])
+  @@map("project_activities")
 }
