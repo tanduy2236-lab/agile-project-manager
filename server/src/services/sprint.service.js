@@ -1,5 +1,13 @@
 import sprintRepository from "../repositories/sprint.repository.js";
 import * as projectMemberService from "./projectMember.service.js";
+import { recordActivity } from "./activity.service.js";
+const safeRecordActivity = async (data) => {
+    try {
+        await recordActivity(data);
+    } catch (error) {
+        console.error("Record Sprint Activity Error:", error);
+    }
+};
 const getSprintsByProjectId = async (projectId, userId) => {
     await projectMemberService.requireRole(
         projectId,
@@ -38,7 +46,20 @@ const startSprint = async (sprintId, userId) => {
         ["OWNER", "ADMIN"]
     );
 
-    return await sprintRepository.startSprint(sprintId);
+    const startedSprint = await sprintRepository.startSprint(sprintId);
+
+    await safeRecordActivity({
+        projectId: startedSprint.projectId,
+        userId,
+        action: "SPRINT_STARTED",
+        description: `đã bắt đầu Sprint "${startedSprint.name}"`,
+        metadata: {
+            sprintId: startedSprint.id,
+            sprintName: startedSprint.name,
+        },
+    });
+
+    return startedSprint;
 };
 const completeSprint = async (sprintId, userId) => {
     const sprint = await sprintRepository.getSprintById(sprintId);
@@ -58,7 +79,20 @@ const completeSprint = async (sprintId, userId) => {
         );
     }
 
-    return await sprintRepository.completeSprint(sprintId);
+   const completedSprint = await sprintRepository.completeSprint(sprintId);
+
+    await safeRecordActivity({
+        projectId: completedSprint.projectId,
+        userId,
+        action: "SPRINT_COMPLETED",
+        description: `đã hoàn thành Sprint "${completedSprint.name}"`,
+        metadata: {
+            sprintId: completedSprint.id,
+            sprintName: completedSprint.name,
+        },
+    });
+
+    return completedSprint;
 };
 const createSprint = async (data, userId) => {
     if (!data.projectId) {
@@ -85,7 +119,20 @@ const createSprint = async (data, userId) => {
         );
     }
 
-    return await sprintRepository.createSprint(data);
+    const newSprint = await sprintRepository.createSprint(data);
+
+    await safeRecordActivity({
+        projectId: newSprint.projectId,
+        userId,
+        action: "SPRINT_CREATED",
+        description: `đã tạo Sprint "${newSprint.name}"`,
+        metadata: {
+            sprintId: newSprint.id,
+            sprintName: newSprint.name,
+        },
+    });
+
+    return newSprint;
 };
 const updateSprint = async (sprintId, data, userId) => {
     const sprint = await sprintRepository.getSprintById(sprintId);
@@ -104,10 +151,24 @@ const updateSprint = async (sprintId, data, userId) => {
         throw new Error("Sprint name is required");
     }
 
-    return await sprintRepository.updateSprint(
+    const updatedSprint = await sprintRepository.updateSprint(
         sprintId,
         data
     );
+
+    await safeRecordActivity({
+        projectId: updatedSprint.projectId,
+        userId,
+        action: "SPRINT_UPDATED",
+        description: `đã cập nhật Sprint "${updatedSprint.name}"`,
+        metadata: {
+            sprintId: updatedSprint.id,
+            sprintName: updatedSprint.name,
+            changedFields: Object.keys(data),
+        },
+    });
+
+    return updatedSprint;
 };
 const deleteSprint = async (sprintId, userId) => {
     const sprint = await sprintRepository.getSprintById(sprintId);
@@ -126,7 +187,20 @@ const deleteSprint = async (sprintId, userId) => {
         throw new Error("Cannot delete an active sprint");
     }
 
-    return await sprintRepository.deleteSprint(sprintId);
+    const deletedSprint = await sprintRepository.deleteSprint(sprintId);
+
+    await safeRecordActivity({
+        projectId: sprint.projectId,
+        userId,
+        action: "SPRINT_DELETED",
+        description: `đã xóa Sprint "${sprint.name}"`,
+        metadata: {
+            sprintId: sprint.id,
+            sprintName: sprint.name,
+        },
+    });
+
+    return deletedSprint;
 };
 export default {
     getSprintsByProjectId,

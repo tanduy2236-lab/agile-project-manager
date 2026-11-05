@@ -4,6 +4,14 @@ import { createUserNotification } from "./notification.service.js";
 import * as taskHistoryService from "./taskHistory.service.js";
 import * as projectMemberService from "./projectMember.service.js";
 import { normalizeColumnName, createColumnStatusKey } from "../utils/column.utils.js";
+import { recordActivity } from "./activity.service.js";
+const safeRecordActivity = async (data) => {
+    try {
+        await recordActivity(data);
+    } catch (error) {
+        console.error("Record Activity Error:", error);
+    }
+};
 const createConflictError = () => {
     const error = new Error(
         "Task đã được cập nhật bởi người khác. Vui lòng tải lại trang để xem thông tin mới nhất."
@@ -271,7 +279,18 @@ export const createTask = async (taskData, userId) => {
         position: position ?? 0,
         status: column.statusKey,
     });
-
+    await safeRecordActivity({
+        projectId: newTask.projectId,
+        userId,
+        taskId: newTask.id,
+        action: "TASK_CREATED",
+        description: `đã tạo công việc "${newTask.title}"`,
+        metadata: {
+            taskTitle: newTask.title,
+            priority: newTask.priority,
+            assigneeId: newTask.assigneeId,
+        },
+    });
     if (assigneeId) {
         await createUserNotification(
             Number(assigneeId),
@@ -317,6 +336,8 @@ export const updateTask = async (taskId, data, changedById) => {
         ["assigneeId", task.assigneeId, updateData.assigneeId],
         ["dueDate", task.dueDate, updateData.dueDate],
     ];
+    const changedFields = [];
+    let assigneeChanged = false;
     for (const [field, oldValue, newValue] of historyEntries) {
         if (newValue === undefined) continue;
 
@@ -357,6 +378,49 @@ export const updateTask = async (taskId, data, changedById) => {
                         : String(newValue),
             });
         }
+        if (changed) {
+            changedFields.push(field);
+
+            if (field === "assigneeId") {
+                assigneeChanged = true;
+            }
+        }
+    }
+    // Ghi nhận hoạt động cập nhật Task
+    const updatedFields = changedFields.filter(
+        (field) => field !== "assigneeId"
+    );
+
+    if (updatedFields.length > 0) {
+        await safeRecordActivity({
+            projectId: updatedTask.projectId,
+            userId: changedById,
+            taskId: updatedTask.id,
+            action: "TASK_UPDATED",
+            description: `đã cập nhật công việc "${updatedTask.title}"`,
+            metadata: {
+                changedFields: updatedFields,
+            },
+        });
+    }
+
+    // Ghi nhận hoạt động giao người thực hiện
+    if (assigneeChanged) {
+        const assigneeName = updatedTask.assignee?.name;
+
+        await safeRecordActivity({
+            projectId: updatedTask.projectId,
+            userId: changedById,
+            taskId: updatedTask.id,
+            action: "TASK_ASSIGNED",
+            description: updatedTask.assigneeId
+                ? `đã giao công việc "${updatedTask.title}" cho ${assigneeName}`
+                : `đã bỏ phân công công việc "${updatedTask.title}"`,
+            metadata: {
+                oldAssigneeId: task.assigneeId,
+                newAssigneeId: updatedTask.assigneeId,
+            },
+        });
     }
     if (
         data.assigneeId &&
@@ -465,6 +529,19 @@ export const moveTask = async (
             newValue: newColumn.name,
         });
     }
+    await safeRecordActivity({
+        projectId: updatedTask.projectId,
+        userId: changedById,
+        taskId: updatedTask.id,
+        action: "TASK_MOVED",
+        description: `đã chuyển công việc "${updatedTask.title}" từ "${oldColumn?.name || "Không xác định"}" sang "${newColumn.name}"`,
+        metadata: {
+            oldColumnId: oldColumnId,
+            oldColumnName: oldColumn?.name || null,
+            newColumnId: newColumn.id,
+            newColumnName: newColumn.name,
+        },
+    });
 
     return updatedTask;
 };
@@ -482,7 +559,21 @@ export const deleteTask = async (taskId, userId) => {
         ["OWNER", "ADMIN"]
     );
 
+    // Xóa Task trước
     await taskRepository.deleteTask(taskId);
+
+    // Ghi nhận hoạt động sau khi xóa thành công
+    await safeRecordActivity({
+        projectId: task.projectId,
+        userId,
+        taskId: null,
+        action: "TASK_DELETED",
+        description: `đã xóa công việc "${task.title}"`,
+        metadata: {
+            deletedTaskId: task.id,
+            taskTitle: task.title,
+        },
+    });
 
     return {
         message: "Task deleted successfully."

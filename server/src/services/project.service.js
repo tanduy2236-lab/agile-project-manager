@@ -1,4 +1,14 @@
+
 import * as projectRepository from "../repositories/project.repository.js";
+import { recordActivity } from "./activity.service.js";
+
+const safeRecordActivity = async (data) => {
+    try {
+        await recordActivity(data);
+    } catch (error) {
+        console.error("Record Project Activity Error:", error);
+    }
+};
 
 export const createProject = async (data, userId) => {
     const { name, description } = data;
@@ -7,13 +17,25 @@ export const createProject = async (data, userId) => {
         throw new Error("Project name is required");
     }
 
-    return await projectRepository.createProjectTransaction(
+    const newProject = await projectRepository.createProjectTransaction(
         {
             name: name.trim(),
             description: description?.trim() || null,
         },
         userId
     );
+
+    await safeRecordActivity({
+        projectId: newProject.id,
+        userId,
+        action: "PROJECT_CREATED",
+        description: `đã tạo dự án "${newProject.name}"`,
+        metadata: {
+            projectName: newProject.name,
+        },
+    });
+
+    return newProject;
 };
 
 export const getProjects = async (userId) => {
@@ -33,10 +55,37 @@ export const updateProject = async (id, data, userId) => {
         throw new Error("Project name is required.");
     }
 
-    return await projectRepository.updateProject(id, {
+    const updateData = {
         name: name.trim(),
         description: description?.trim() || null,
-    });
+    };
+
+    const updatedFields = [];
+
+    if (project.name !== updateData.name) {
+        updatedFields.push("name");
+    }
+
+    if ((project.description ?? null) !== updateData.description) {
+        updatedFields.push("description");
+    }
+
+    const updatedProject = await projectRepository.updateProject(id, updateData);
+
+    if (updatedFields.length > 0) {
+        await safeRecordActivity({
+            projectId: updatedProject.id,
+            userId,
+            action: "PROJECT_UPDATED",
+            description: `đã cập nhật thông tin dự án "${updatedProject.name}"`,
+            metadata: {
+                projectName: updatedProject.name,
+                changedFields: updatedFields,
+            },
+        });
+    }
+
+    return updatedProject;
 };
 
 export const deleteProject = async (id, userId) => {
@@ -48,9 +97,11 @@ export const deleteProject = async (id, userId) => {
 
     return await projectRepository.deleteProject(id);
 };
+
 export const getProjectById = async (projectId, userId) => {
     return await projectRepository.findProjectById(projectId, userId);
 };
+
 export const completeProject = async (id, userId) => {
     const project = await projectRepository.findProjectById(
         id,
@@ -70,6 +121,7 @@ export const completeProject = async (id, userId) => {
     if (project.status === "COMPLETED") {
         throw new Error("Project is already completed.");
     }
+
     const sprints = await projectRepository.getProjectSprints(id);
 
     const unfinishedSprints = sprints.filter(
@@ -82,5 +134,17 @@ export const completeProject = async (id, userId) => {
         );
     }
 
-    return await projectRepository.completeProject(id);
+    const completedProject = await projectRepository.completeProject(id);
+
+    await safeRecordActivity({
+        projectId: completedProject.id,
+        userId,
+        action: "PROJECT_COMPLETED",
+        description: `đã hoàn thành dự án "${completedProject.name}"`,
+        metadata: {
+            projectName: completedProject.name,
+        },
+    });
+
+    return completedProject;
 };

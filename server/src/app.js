@@ -18,6 +18,7 @@ import attachmentRoutes from "./routes/attachment.routes.js";
 import documentRoutes from "./routes/document.routes.js";
 import documentFolderRoutes from "./routes/documentFolder.routes.js";
 import settingsRoutes from "./routes/settings.routes.js";
+import activityRoutes from "./routes/activity.route.js";
 const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
