@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProjectById } from "../api/project.api";
 import {getTranslations,getSavedLanguage} from "../utils/language";
+import ActivityTimeline from "../components/project/ActivityTimeline";
 
 const ProjectDetail = () => {
     const { id } = useParams();
@@ -259,6 +260,12 @@ const ProjectDetail = () => {
                         </div>
                     </div>
                 </section>
+
+                <ActivityTimeline
+                    projectId={project.id}
+                    language={language}
+                    translations={t.projectActivity}
+                />
             </main>
         </div>
     );

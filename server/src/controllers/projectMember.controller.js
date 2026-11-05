@@ -1,3 +1,4 @@
+
 import * as projectMemberService from "../services/projectMember.service.js";
 
 export const getMembers = async (req, res) => {
@@ -20,7 +21,8 @@ export const addMember = async (req, res) => {
     try {
         const member = await projectMemberService.addMember(
             Number(req.params.projectId),
-            req.body
+            req.body,
+            req.user.id
         );
 
         return res.status(201).json({
@@ -44,7 +46,8 @@ export const updateMemberRole = async (req, res) => {
         const member = await projectMemberService.updateMemberRole(
             Number(projectId),
             Number(userId),
-            role
+            role,
+            req.user.id
         );
 
         return res.json({
@@ -67,7 +70,8 @@ export const removeMember = async (req, res) => {
         await projectMemberService.removeMember(
             Number(projectId),
             Number(userId),
-            req.projectRole
+            req.projectRole,
+            req.user.id
         );
 
         return res.json({

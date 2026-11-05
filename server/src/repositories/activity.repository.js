@@ -1,7 +1,8 @@
-import prisma from "../config/prisma.js"
+
+import prisma from "../config/prisma.js";
 
 export const createActivity = async (data) => {
-     return await prisma.projectActivity.create({
+    return await prisma.projectActivity.create({
         data,
         include: {
             user: {
@@ -18,16 +19,26 @@ export const createActivity = async (data) => {
                 },
             },
         },
-     });
+    });
 };
-export const getActivitiesByProjectId = async (projectId,options = {}) => {
-    const {limit = 10,action,} = options;
+
+export const getActivitiesByProjectId = async (
+    projectId,
+    options = {}
+) => {
+    const {
+        page = 1,
+        limit = 10,
+        action,
+    } = options;
+
     const where = {
         projectId: Number(projectId),
         ...(action && { action }),
     };
+
     const [activities, total] = await Promise.all([
-                prisma.projectActivity.findMany({
+        prisma.projectActivity.findMany({
             where,
             orderBy: [
                 {
@@ -60,11 +71,13 @@ export const getActivitiesByProjectId = async (projectId,options = {}) => {
             where,
         }),
     ]);
+
     return {
         activities,
         total,
     };
 };
+
 export const findActivityById = async (activityId) => {
     return await prisma.projectActivity.findUnique({
         where: {

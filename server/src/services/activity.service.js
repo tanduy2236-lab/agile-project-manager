@@ -1,4 +1,4 @@
-import prisma from "../config/prisma";
+import prisma from "../config/prisma.js";
 import {createActivity,getActivitiesByProjectId,} from "../repositories/activity.repository.js";
 const checkProjectMember = async (projectId, userId) => {
     const member = await prisma.projectMember.findUnique({

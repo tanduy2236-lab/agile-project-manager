@@ -435,6 +435,7 @@ export const updateTask = async (taskId, data, changedById) => {
         return updatedTask;
 };
 
+
 export const moveTask = async (
     taskId,
     columnId,
@@ -447,6 +448,7 @@ export const moveTask = async (
         error.status = 400;
         throw error;
     }
+
     const task = await taskRepository.findTaskById(taskId);
 
     if (!task) {
@@ -460,12 +462,14 @@ export const moveTask = async (
         changedById,
         ["OWNER", "ADMIN", "MEMBER"]
     );
+
     const newColumn = await prisma.taskColumn.findFirst({
         where: {
             id: Number(columnId),
             projectId: task.projectId,
         },
     });
+
     if (!newColumn) {
         const error = new Error(
             "Cột đích không tồn tại trong dự án này."
@@ -473,7 +477,19 @@ export const moveTask = async (
         error.status = 400;
         throw error;
     }
+
     const oldColumnId = task.columnId;
+
+    // Lấy thông tin cột cũ
+    const oldColumn = oldColumnId !== null
+        ? await prisma.taskColumn.findUnique({
+            where: {
+                id: Number(oldColumnId),
+            },
+        })
+        : null;
+
+    // Kiểm tra workflow transition
     if (
         oldColumnId !== null &&
         Number(oldColumnId) !== Number(columnId)
@@ -493,6 +509,7 @@ export const moveTask = async (
         }
     }
 
+    // Cập nhật vị trí Task
     const updatedTask =
         await taskRepository.moveTaskIfVersion(
             taskId,
@@ -511,16 +528,11 @@ export const moveTask = async (
         throw error;
     }
 
+    // Ghi Task History khi chuyển sang cột khác
     if (
         oldColumnId !== null &&
         Number(oldColumnId) !== Number(columnId)
     ) {
-        const oldColumn = await prisma.taskColumn.findUnique({
-            where: {
-                id: Number(oldColumnId),
-            },
-        });
-
         await taskHistoryService.createTaskHistory({
             taskId: Number(taskId),
             changedById: Number(changedById),
@@ -528,23 +540,26 @@ export const moveTask = async (
             oldValue: oldColumn?.name || null,
             newValue: newColumn.name,
         });
+
+        // Ghi Activity Timeline
+        await safeRecordActivity({
+            projectId: updatedTask.projectId,
+            userId: changedById,
+            taskId: updatedTask.id,
+            action: "TASK_MOVED",
+            description: `đã chuyển công việc "${updatedTask.title}" từ "${oldColumn?.name || "Không xác định"}" sang "${newColumn.name}"`,
+            metadata: {
+                oldColumnId,
+                oldColumnName: oldColumn?.name || null,
+                newColumnId: newColumn.id,
+                newColumnName: newColumn.name,
+            },
+        });
     }
-    await safeRecordActivity({
-        projectId: updatedTask.projectId,
-        userId: changedById,
-        taskId: updatedTask.id,
-        action: "TASK_MOVED",
-        description: `đã chuyển công việc "${updatedTask.title}" từ "${oldColumn?.name || "Không xác định"}" sang "${newColumn.name}"`,
-        metadata: {
-            oldColumnId: oldColumnId,
-            oldColumnName: oldColumn?.name || null,
-            newColumnId: newColumn.id,
-            newColumnName: newColumn.name,
-        },
-    });
 
     return updatedTask;
 };
+
 
 export const deleteTask = async (taskId, userId) => {
     const task = await taskRepository.findTaskById(taskId);

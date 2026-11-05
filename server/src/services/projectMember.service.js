@@ -1,11 +1,28 @@
 import * as projectMemberRepository from "../repositories/projectMember.repository.js";
+import { recordActivity } from "./activity.service.js";
 
+// Ghi Activity an toàn, không làm gián đoạn nghiệp vụ chính
+const safeRecordActivity = async (data) => {
+    try {
+        await recordActivity(data);
+    } catch (error) {
+        console.error("Record Activity Error:", error);
+    }
+};
+
+// Lấy danh sách thành viên
 export const getMembers = async (projectId) => {
     return await projectMemberRepository.getMembersByProjectId(
         projectId
     );
 };
-export const addMember = async (projectId, data) => {
+
+// Thêm thành viên
+export const addMember = async (
+    projectId,
+    data,
+    performedByUserId
+) => {
     const { email, role } = data;
 
     if (!email?.trim()) {
@@ -13,7 +30,6 @@ export const addMember = async (projectId, data) => {
     }
 
     const allowedRoles = ["MEMBER", "ADMIN"];
-
     const memberRole = role || "MEMBER";
 
     if (!allowedRoles.includes(memberRole)) {
@@ -40,13 +56,36 @@ export const addMember = async (projectId, data) => {
         );
     }
 
-    return await projectMemberRepository.createMember(
+    // Thực hiện thêm thành viên
+    const member = await projectMemberRepository.createMember(
         projectId,
         user.id,
         memberRole
     );
+
+    // Ghi Activity
+    await safeRecordActivity({
+        projectId,
+        userId: performedByUserId,
+        action: "MEMBER_ADDED",
+        description: `Added ${user.email} to the project as ${memberRole}.`,
+        metadata: {
+            memberUserId: user.id,
+            memberEmail: user.email,
+            role: memberRole,
+        },
+    });
+
+    return member;
 };
-export const updateMemberRole = async (projectId, userId, role) => {
+
+// Cập nhật quyền thành viên
+export const updateMemberRole = async (
+    projectId,
+    userId,
+    role,
+    performedByUserId
+) => {
     if (!role) {
         throw new Error("Role is required.");
     }
@@ -57,16 +96,50 @@ export const updateMemberRole = async (projectId, userId, role) => {
         throw new Error("Invalid role.");
     }
 
-    return await projectMemberRepository.updateMemberRole(
+    // Lấy thông tin quyền hiện tại
+    const existingMember =
+        await projectMemberRepository.findMember(
+            projectId,
+            userId
+        );
+
+    if (!existingMember) {
+        throw new Error("Member not found.");
+    }
+
+    const oldRole = existingMember.role;
+
+    // Thực hiện cập nhật quyền
+    const member = await projectMemberRepository.updateMemberRole(
         projectId,
         userId,
         role
     );
+
+    // Chỉ ghi Activity khi quyền thực sự thay đổi
+    if (oldRole !== role) {
+        await safeRecordActivity({
+            projectId,
+            userId: performedByUserId,
+            action: "MEMBER_ROLE_UPDATED",
+            description: `Updated member role from ${oldRole} to ${role}.`,
+            metadata: {
+                memberUserId: Number(userId),
+                oldRole,
+                newRole: role,
+            },
+        });
+    }
+
+    return member;
 };
+
+// Xóa thành viên
 export const removeMember = async (
     projectId,
     userId,
-    requesterRole
+    requesterRole,
+    performedByUserId
 ) => {
     const member = await projectMemberRepository.findMember(
         projectId,
@@ -90,31 +163,44 @@ export const removeMember = async (
         );
     }
 
-    return await projectMemberRepository.removeMember(
+    const removedMember =
+        await projectMemberRepository.removeMember(
+            projectId,
+            userId
+        );
+
+    // Ghi Activity sau khi xóa thành công
+    await safeRecordActivity({
         projectId,
-        userId
-    );
+        userId: performedByUserId,
+        action: "MEMBER_REMOVED",
+        description: `Removed a ${member.role} from the project.`,
+        metadata: {
+            memberUserId: Number(userId),
+            memberRole: member.role,
+        },
+    });
+
+    return removedMember;
 };
+
+// Lấy quyền thành viên
 export const getMemberRole = async (projectId, userId) => {
-
-    console.log("========== GET MEMBER ROLE ==========");
-    console.log("projectId:", projectId);
-    console.log("userId:", userId);
-
     const member = await projectMemberRepository.findMember(
         projectId,
         userId
     );
 
-    console.log("member:", member);
-    console.log("=====================================");
-
     if (!member) {
-        throw new Error("User is not a member of this project.");
+        throw new Error(
+            "User is not a member of this project."
+        );
     }
 
     return member.role;
 };
+
+// Kiểm tra quyền
 export const requireRole = async (
     projectId,
     userId,

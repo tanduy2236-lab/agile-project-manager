@@ -52,6 +52,7 @@ app.use("/api", burndownRoutes);
 app.use("/api", taskHistoryRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api", activityRoutes);
 
 app.use("/api", attachmentRoutes);
 app.use("/api", documentRoutes);
