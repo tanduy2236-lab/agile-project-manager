@@ -30,6 +30,17 @@ export const findUserByEmail = async (email) => {
     });
 };
 export const findMember = async (projectId, userId) => {
+    console.log("========== FIND MEMBER ==========");
+    console.log("projectId:", projectId);
+    console.log("userId:", userId);
+    console.trace("findMember called from:");
+
+    if (!projectId || !userId) {
+        throw new Error(
+            `findMember thiếu tham số: projectId=${projectId}, userId=${userId}`
+        );
+    }
+
     return await prisma.projectMember.findUnique({
         where: {
             projectId_userId: {

@@ -1,7 +1,8 @@
 import express from "express";
 import { authenticate } from "../middlewares/auth.middleware.js";
 import sprintController from "../controllers/sprint.controller.js";
-
+import * as sprintAnalyticsController
+    from "../controllers/sprintAnalytics.controller.js";
 const router = express.Router();
 
 router.use(authenticate);
@@ -32,6 +33,10 @@ router.post(
 router.put(
     "/sprints/:id",
     sprintController.updateSprint
+);
+router.get(
+    "/projects/:projectId/sprints/:sprintId/analytics",
+    sprintAnalyticsController.getSprintAnalytics
 );
 router.delete("/sprints/:id", sprintController.deleteSprint);
 export default router;

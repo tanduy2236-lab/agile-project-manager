@@ -3,6 +3,7 @@ import {getSprintById,startSprint,completeSprint,deleteSprint,} from "../../api/
 import EditSprintModal from "./EditSprintModal";
 import DeleteSprintModal from "./DeleteSprintModal";
 import BurndownChart from "../BurndownChart";
+import SprintAnalytics from "./SprintAnalytics";
 import CompleteSprintModal from "./CompleteSprintModal";
 
 const SprintDetail = ({ sprint, onUpdate, t }) => {
@@ -301,6 +302,10 @@ const SprintDetail = ({ sprint, onUpdate, t }) => {
                 </div>
             </div>
             <BurndownChart
+                projectId={detail.projectId}
+                sprintId={detail.id}
+            />
+            <SprintAnalytics
                 projectId={detail.projectId}
                 sprintId={detail.id}
             />
