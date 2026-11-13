@@ -1,4 +1,5 @@
 import * as burndownRepository from "../repositories/burndown.repository.js";
+import { isTaskCompleted } from "../utils/task.utils.js";
 
 const normalizeDate = (date) => {
     const result = new Date(date);
@@ -6,10 +7,6 @@ const normalizeDate = (date) => {
     result.setHours(0, 0, 0, 0);
 
     return result;
-};
-
-const isDoneColumn = (value) => {
-    return value?.trim().toLowerCase() === "done";
 };
 
 export const getSprintBurndown = async (
@@ -71,34 +68,21 @@ export const getSprintBurndown = async (
                 continue;
             }
 
-            let isDone = false;
+            const histories = task.taskHistories || [];
+            let isDone = isTaskCompleted(task);
 
-            for (
-                const history of
-                task.taskHistories || []
-            ) {
+            for (let index = histories.length - 1; index >= 0; index -= 1) {
+                const history = histories[index];
                 const historyDate =
                     new Date(history.createdAt);
 
-                if (historyDate > day) {
+                if (historyDate <= day) {
                     break;
                 }
 
-                if (
-                    isDoneColumn(
-                        history.newValue
-                    )
-                ) {
-                    isDone = true;
-                }
-
-                if (
-                    isDoneColumn(
-                        history.oldValue
-                    )
-                ) {
-                    isDone = false;
-                }
+                isDone = isTaskCompleted({
+                    status: history.oldValue,
+                });
             }
 
             if (!isDone) {

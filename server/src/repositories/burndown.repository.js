@@ -15,6 +15,7 @@ export const getSprintBurndownData = async (
                     id: true,
                     title: true,
                     storyPoint: true,
+                    status: true,
                     columnId: true,
                     createdAt: true,
                     updatedAt: true,
@@ -23,6 +24,7 @@ export const getSprintBurndownData = async (
                         select: {
                             id: true,
                             name: true,
+                            statusKey: true,
                         },
                     },
 

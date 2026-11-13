@@ -37,6 +37,7 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
     title: task?.title || "",
     description: task?.description || "",
     priority: task?.priority || "MEDIUM",
+    storyPoint: task?.storyPoint ?? 0,
     assigneeId: task?.assigneeId || task?.assignee?.id || "",
     dueDate: task?.dueDate
         ? task.dueDate.substring(0, 10)
@@ -47,6 +48,16 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
 
         if (!formData.title.trim()) {
             alert("Vui lòng nhập tên Task.");
+            return;
+        }
+
+        if (
+            mode === "edit" &&
+            (!String(formData.storyPoint).trim() ||
+                !Number.isInteger(Number(formData.storyPoint)) ||
+                Number(formData.storyPoint) < 0)
+        ) {
+            alert("Story Point phải là số nguyên không âm.");
             return;
         }
 
@@ -62,7 +73,10 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                 ).toISOString()
                 : null,
             ...(mode === "edit"
-                ? { version: task.version }
+                ? {
+                    version: task.version,
+                    storyPoint: Number(formData.storyPoint),
+                }
                 : {}),
         };
 
@@ -178,6 +192,27 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                             </option>
                         </select>
                     </div>
+                    {mode === "edit" && (
+                        <div>
+                            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                                Story Points
+                            </label>
+
+                            <input
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={formData.storyPoint}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        storyPoint: e.target.value
+                                    })
+                                }
+                                className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:placeholder:text-slate-400 dark:focus:border-blue-500 dark:focus:ring-blue-900"
+                            />
+                        </div>
+                    )}
                     <div>
                         <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                             Assignee
