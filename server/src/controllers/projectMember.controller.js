@@ -22,7 +22,7 @@ export const addMember = async (req, res) => {
         const member = await projectMemberService.addMember(
             Number(req.params.projectId),
             req.body,
-            req.user.id
+            req.userId
         );
 
         return res.status(201).json({
@@ -47,7 +47,7 @@ export const updateMemberRole = async (req, res) => {
             Number(projectId),
             Number(userId),
             role,
-            req.user.id
+            req.UserId
         );
 
         return res.json({
@@ -71,7 +71,7 @@ export const removeMember = async (req, res) => {
             Number(projectId),
             Number(userId),
             req.projectRole,
-            req.user.id
+            req.UserId
         );
 
         return res.json({
