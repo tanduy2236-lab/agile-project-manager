@@ -32,6 +32,7 @@ model User {
   ownedDocuments           Document[]        @relation("DocumentCreatedBy")
   uploadedDocumentVersions DocumentVersion[] @relation("DocumentVersionUploadedBy")
   createdDocumentFolders   DocumentFolder[]  @relation("DocumentFolderCreatedBy")
+  createdAutomationRules   AutomationRule[]  @relation("AutomationRuleCreatedBy")
 
   setting                 UserSetting?
   createdTaskDependencies TaskDependency[]
@@ -84,6 +85,7 @@ model Project {
   documents         Document[]
   documentFolders   DocumentFolder[]
   projectActivities ProjectActivity[]
+  automationRules   AutomationRule[]
 
   @@map("projects")
 }
@@ -406,4 +408,60 @@ model ProjectActivity {
   @@index([userId])
   @@index([taskId])
   @@map("project_activities")
+}
+
+model AutomationRule {
+  id          Int @id @default(autoincrement())
+  projectId   Int @map("project_id")
+  createdById Int @map("created_by_id")
+
+  name        String
+  description String?
+
+  // Sự kiện kích hoạt
+  trigger String
+
+  // Điều kiện bổ sung, có thể để null
+  condition Json?
+
+  // Hành động cần thực hiện
+  action String
+
+  // Cấu hình bổ sung cho hành động
+  actionConfig Json? @map("action_config")
+
+  isActive Boolean @default(true) @map("is_active")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  creator User @relation("AutomationRuleCreatedBy", fields: [createdById], references: [id], onDelete: Cascade)
+
+  executions AutomationExecution[]
+
+  @@index([projectId, isActive])
+  @@map("automation_rules")
+}
+
+model AutomationExecution {
+  id     Int @id @default(autoincrement())
+  ruleId Int @map("rule_id")
+
+  // SUCCESS hoặc FAILED
+  status String
+
+  message String?
+  error   String?
+
+  // Lưu thông tin sự kiện đã kích hoạt quy tắc
+  context Json?
+
+  executedAt DateTime @default(now()) @map("executed_at")
+
+  rule AutomationRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([ruleId, executedAt])
+  @@map("automation_executions")
 }
