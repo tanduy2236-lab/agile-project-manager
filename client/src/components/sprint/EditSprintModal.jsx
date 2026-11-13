@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { updateSprint } from "../../api/sprint.api";
 import {getTranslations,getSavedLanguage,} from "../../utils/language";
+import ModalPortal from "../ModalPortal";
 const EditSprintModal = ({
     sprint,
     onClose,
@@ -80,6 +81,7 @@ const EditSprintModal = ({
     };
 
     return (
+        <ModalPortal>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 dark:bg-black/70">
 
             <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl dark:bg-slate-800">
@@ -204,6 +206,7 @@ const EditSprintModal = ({
             </div>
 
         </div>
+        </ModalPortal>
     );
 };
 

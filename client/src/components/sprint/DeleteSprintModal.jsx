@@ -1,3 +1,5 @@
+import ModalPortal from "../ModalPortal";
+
 const DeleteSprintModal = ({
     isOpen,
     sprint,
@@ -11,6 +13,7 @@ const DeleteSprintModal = ({
     if (!isOpen) return null;
 
     return (
+        <ModalPortal>
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm dark:bg-black/70"
             onClick={onCancel}
@@ -59,6 +62,7 @@ const DeleteSprintModal = ({
                 </div>
             </div>
         </div>
+        </ModalPortal>
     );
 };
 

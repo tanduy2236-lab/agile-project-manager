@@ -2,6 +2,7 @@ import { useState } from "react";
 import { deleteStory } from "../../api/backlog.api";
 import {getTranslations,getSavedLanguage,} from "../../utils/language";
 import { AlertTriangle } from "lucide-react";
+import ModalPortal from "../ModalPortal";
 const DeleteStoryModal = ({story,onClose,onConfirm,}) => {
     const language = getSavedLanguage();
     const t = getTranslations(language);
@@ -35,6 +36,7 @@ const DeleteStoryModal = ({story,onClose,onConfirm,}) => {
     };
 
     return (
+        <ModalPortal>
         <div
             className="
                 fixed
@@ -225,6 +227,7 @@ const DeleteStoryModal = ({story,onClose,onConfirm,}) => {
                 </div>
             </div>
         </div>
+        </ModalPortal>
     );
 };
 

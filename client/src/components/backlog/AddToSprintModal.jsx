@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {getSprints,addStoryToSprint,} from "../../api/sprint.api";
 import {getTranslations,getSavedLanguage,} from "../../utils/language";
 import { X } from "lucide-react";
+import ModalPortal from "../ModalPortal";
 const AddToSprintModal = ({story,projectId,onClose,onSuccess,}) => {
     const language = getSavedLanguage();
     const t = getTranslations(language);
@@ -78,6 +79,7 @@ const AddToSprintModal = ({story,projectId,onClose,onSuccess,}) => {
 
 
     return (
+        <ModalPortal>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
             <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-slate-800">
                 <div className="flex items-center justify-between border-b border-slate-200 p-6 dark:border-slate-700">
@@ -212,6 +214,7 @@ const AddToSprintModal = ({story,projectId,onClose,onSuccess,}) => {
             </div>
 
         </div>
+        </ModalPortal>
     );
 };
 

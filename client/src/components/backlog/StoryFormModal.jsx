@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { createStory, updateStory } from "../../api/backlog.api";
 import {getTranslations,getSavedLanguage,} from "../../utils/language";
 import { FilePlus, Pencil } from "lucide-react";
+import ModalPortal from "../ModalPortal";
 const StoryFormModal = ({
     mode,
     story,
@@ -133,6 +134,7 @@ const StoryFormModal = ({
     };
 
     return (
+        <ModalPortal>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
             <form
                 onSubmit={handleSubmit}
@@ -524,6 +526,7 @@ const StoryFormModal = ({
                 </div>
             </form>
         </div>
+        </ModalPortal>
     );
 };
 

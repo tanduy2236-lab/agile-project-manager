@@ -1,3 +1,5 @@
+import ModalPortal from "../ModalPortal";
+
 const CompleteSprintModal = ({
     isOpen,
     sprint,
@@ -11,6 +13,7 @@ const CompleteSprintModal = ({
     if (!isOpen) return null;
 
     return (
+        <ModalPortal>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 dark:bg-black/70">
             <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-slate-800">
 
@@ -81,6 +84,7 @@ const CompleteSprintModal = ({
                 </div>
             </div>
         </div>
+        </ModalPortal>
     );
 };
 
