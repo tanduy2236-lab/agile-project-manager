@@ -5,6 +5,7 @@ import * as taskHistoryService from "./taskHistory.service.js";
 import * as projectMemberService from "./projectMember.service.js";
 import { normalizeColumnName, createColumnStatusKey } from "../utils/column.utils.js";
 import { recordActivity } from "./activity.service.js";
+import { runAutomation } from "./automationEngine.service.js";
 const safeRecordActivity = async (data) => {
     try {
         await recordActivity(data);
@@ -555,6 +556,22 @@ export const moveTask = async (
                 newColumnName: newColumn.name,
             },
         });
+         // Chạy Workflow Automation
+        try {
+            await runAutomation({
+                projectId: updatedTask.projectId,
+                trigger: "TASK_STATUS_CHANGED",
+                task: updatedTask,
+                actorId: changedById,
+                fromStatus: oldColumn.name,
+                toStatus: newColumn.name,
+            });
+        } catch (error) {
+            console.error(
+                "Workflow Automation Error:",
+                error
+            );
+        }
     }
 
     return updatedTask;

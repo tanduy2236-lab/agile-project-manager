@@ -10,6 +10,7 @@ import {
     PanelLeftClose,
     PanelLeftOpen,
     Settings,
+    Workflow,
     User,
     Users,
     ClipboardList,
@@ -31,6 +32,7 @@ const AppLayout = () => {
               { label: "Sprints", to: `/projects/${id}/sprints`, icon: BarChart3 },
               { label: "Members", to: `/projects/${id}/members`, icon: Users },
               { label: "Documents", to: `/projects/${id}/documents`, icon: FileText },
+              { label: "Workflow", to: `/projects/${id}/automations`, icon: Workflow },
           ]
         : [];
 

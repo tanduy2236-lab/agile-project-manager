@@ -72,3 +72,29 @@ export const getAutomationExecutions = async (
         },
     };
 };
+// Lấy các Automation Rule đang bật theo Project và Trigger
+export const getActiveAutomationsByProjectAndTrigger = (
+    projectId,
+    trigger
+) => {
+    return prisma.automationRule.findMany({
+        where: {
+            projectId: Number(projectId),
+            trigger,
+            isActive: true,
+        },
+    });
+};
+
+// Lưu lịch sử thực thi Automation
+export const createAutomationExecution = (data) => {
+    return prisma.automationExecution.create({
+        data: {
+            ruleId: Number(data.ruleId),
+            status: data.status,
+            message: data.message ?? null,
+            error: data.error ?? null,
+            context: data.context ?? undefined,
+        },
+    });
+};

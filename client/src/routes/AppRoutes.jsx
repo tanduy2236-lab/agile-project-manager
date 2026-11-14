@@ -18,6 +18,7 @@ import ProfilePage from '../pages/ProfilePage';
 import SettingsPage from '../pages/SettingsPage';
 import Notifications from '../pages/Notifications';
 import DocumentsPage from '../pages/DocumentsPage';
+import WorkflowAutomationPage from '../pages/WorkflowAutomationPage';
 const AppRoutes = () => {
     return (
         <BrowserRouter>
@@ -44,6 +45,7 @@ const AppRoutes = () => {
                         <Route path="/settings" element={<SettingsPage />}/>
                         <Route path="/notifications" element={<Notifications />}/>
                         <Route path="/projects/:id/documents" element={<DocumentsPage />}/>
+                        <Route path="/projects/:id/automations" element={<WorkflowAutomationPage />} />
                     </Route>
                 </Route>
             </Routes>
