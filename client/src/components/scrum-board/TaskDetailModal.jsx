@@ -230,14 +230,18 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
         );
 
         setAttachments((prev) => [
-            ...prev,
             newAttachment,
+            ...prev,
         ]);
 
     } catch (error) {
         console.error(
             "Error uploading attachment:",
             error.response?.data || error
+        );
+        window.alert(
+            error.response?.data?.message ||
+            "Failed to upload attachment."
         );
     } finally {
         setUploadingAttachment(false);
@@ -486,19 +490,21 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
 
                                 <div className="space-y-3">
 
-                                    {attachments.map((attachment) => (
+                                    {attachments.map((attachment) => {
+                                        const FileIcon = getFileIcon(
+                                            attachment.fileType
+                                        );
 
-                                        <div
-                                            key={attachment.id}
-                                            className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-indigo-800 sm:flex-row sm:items-center sm:justify-between"
-                                        >
+                                        return (
+                                            <div
+                                                key={attachment.id}
+                                                className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-indigo-800 sm:flex-row sm:items-center sm:justify-between"
+                                            >
 
                                             <div className="flex min-w-0 items-center gap-3">
 
                                                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-xl dark:bg-indigo-900/40">
-                                                    {getFileIcon(
-                                                        attachment.fileType
-                                                    )}
+                                                    <FileIcon className="h-5 w-5" />
                                                 </div>
 
 
@@ -590,9 +596,9 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
 
                                             </div>
 
-                                        </div>
-
-                                    ))}
+                                            </div>
+                                        );
+                                    })}
 
                                 </div>
 

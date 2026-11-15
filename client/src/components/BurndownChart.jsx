@@ -12,14 +12,27 @@ import {
 
 import { getSprintBurndown } from "../api/burndown.api";
 
+const formatChartDate = (date) => {
+    const [year, month, day] = String(date)
+        .slice(0, 10)
+        .split("-")
+        .map(Number);
+
+    return new Date(year, month - 1, day).toLocaleDateString();
+};
+
 const BurndownChart = ({ projectId, sprintId }) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
     useEffect(() => {
+        let isCurrentRequest = true;
+
         const loadBurndown = async () => {
             if (!projectId || !sprintId) {
+                setData(null);
+                setError("");
                 setLoading(false);
                 return;
             }
@@ -27,35 +40,40 @@ const BurndownChart = ({ projectId, sprintId }) => {
             try {
                 setLoading(true);
                 setError("");
+                setData(null);
 
                 const result = await getSprintBurndown(
                     projectId,
                     sprintId
                 );
 
-                console.log("========== BURNDOWN DATA ==========");
-                console.log("Project ID:", projectId);
-                console.log("Sprint ID:", sprintId);
-                console.log("Burndown result:", result);
-                console.log("Chart data:", result?.chartData);
-
-                setData(result);
+                if (isCurrentRequest) {
+                    setData(result);
+                }
             } catch (error) {
                 console.error(
                     "Error loading burndown:",
                     error
                 );
 
-                setError(
-                    error.response?.data?.message ||
-                    "Failed to load burndown chart."
-                );
+                if (isCurrentRequest) {
+                    setError(
+                        error.response?.data?.message ||
+                        "Failed to load burndown chart."
+                    );
+                }
             } finally {
-                setLoading(false);
+                if (isCurrentRequest) {
+                    setLoading(false);
+                }
             }
         };
 
         loadBurndown();
+
+        return () => {
+            isCurrentRequest = false;
+        };
     }, [projectId, sprintId]);
 
     if (loading) {
@@ -168,9 +186,7 @@ const BurndownChart = ({ projectId, sprintId }) => {
 
                             <XAxis
                                 dataKey="date"
-                                tickFormatter={(date) =>
-                                    new Date(date).toLocaleDateString()
-                                }
+                                tickFormatter={formatChartDate}
                                 tick={{
                                     fill: "#64748b",
                                 }}
@@ -185,9 +201,7 @@ const BurndownChart = ({ projectId, sprintId }) => {
                             />
 
                             <Tooltip
-                                labelFormatter={(date) =>
-                                    new Date(date).toLocaleDateString()
-                                }
+                                labelFormatter={formatChartDate}
                                 contentStyle={{
                                     backgroundColor: "#1e293b",
                                     border: "1px solid #475569",

@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import { fileURLToPath } from "url";
 import {
     getTaskAttachments,
     getTaskAttachmentById,
@@ -8,6 +9,11 @@ import {
 } from "../services/attachment.service.js";
 
 import * as taskHistoryService from "../services/taskHistory.service.js";
+
+const uploadDir = path.resolve(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "../../uploads"
+);
 export const getAttachments = async (req, res) => {
     try {
         const taskId = Number(req.params.taskId);
@@ -131,7 +137,7 @@ export const downloadAttachment = async (req, res) => {
         }
 
         const filePath = path.resolve(
-            "uploads",
+            uploadDir,
             path.basename(attachment.fileUrl)
         );
 

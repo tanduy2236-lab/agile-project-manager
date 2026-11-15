@@ -7,7 +7,7 @@ import {
     downloadAttachment,
 } from "../controllers/attachment.controller.js";
 
-import upload from "../middlewares/upload.middleware.js";
+import upload, { handleUploadError } from "../middlewares/upload.middleware.js";
 import {authenticate} from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
@@ -22,6 +22,7 @@ router.post(
     "/tasks/:taskId/attachments",
     authenticate,
     upload.single("file"),
+    handleUploadError,
     uploadAttachment
 );
 

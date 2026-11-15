@@ -84,7 +84,17 @@ const ProjectDetail = () => {
     const statusTone = project.status === "COMPLETED"
         ? "bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200"
         : "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300";
-    const deliveryProgress = project.status === "COMPLETED" ? 100 : 82;
+    const {
+        totalTasks,
+        completedTasks,
+        memberCount,
+        totalSprints,
+        activeSprints,
+        completedSprints,
+    } = project.metrics;
+    const deliveryProgress = totalTasks
+        ? Math.round((completedTasks / totalTasks) * 100)
+        : 0;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
@@ -155,11 +165,12 @@ const ProjectDetail = () => {
                         </div>
                     </div>
 
-                    <div className="grid gap-4 border-t border-slate-200 bg-slate-50/80 p-5 dark:border-slate-700 dark:bg-slate-800/70 sm:grid-cols-3 lg:p-6">
+                    <div className="grid gap-4 border-t border-slate-200 bg-slate-50/80 p-5 dark:border-slate-700 dark:bg-slate-800/70 sm:grid-cols-2 lg:grid-cols-4 lg:p-6">
                         {[
                             { label: t.projects.status, value: statusLabel },
+                            { label: t.projects.delivery, value: `${deliveryProgress}%` },
                             { label: t.projects.created, value: new Date(project.createdAt).toLocaleDateString(language === "vi" ? "vi-VN" : "en-US") },
-                            { label: t.projects.focus, value: t.projects.delivery },
+                            { label: t.projects.teamMembers, value: memberCount },
                         ].map((item) => (
                             <div key={item.label} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
                                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
@@ -185,7 +196,7 @@ const ProjectDetail = () => {
                                 </h2>
                             </div>
                             <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-300">
-                                {t.projects.planning}
+                                {activeSprints} {t.projects.activeSprints}
                             </span>
                         </div>
 
@@ -196,7 +207,7 @@ const ProjectDetail = () => {
                                         {t.projects.delivery}
                                     </span>
                                     <span className="font-semibold text-slate-900 dark:text-white">
-                                        {deliveryProgress}%
+                                        {completedTasks} / {totalTasks}
                                     </span>
                                 </div>
                                 <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
@@ -210,18 +221,18 @@ const ProjectDetail = () => {
                             <div className="grid gap-4 sm:grid-cols-2">
                                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/80">
                                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                                        {t.projects.projectName}
+                                        {t.projects.tasks}
                                     </p>
                                     <p className="mt-2 text-base font-semibold text-slate-800 dark:text-white">
-                                        {project.name}
+                                        {completedTasks} / {totalTasks}
                                     </p>
                                 </div>
                                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/80">
                                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                                        {t.projects.createdOn}
+                                        {t.projects.sprints}
                                     </p>
                                     <p className="mt-2 text-base font-semibold text-slate-800 dark:text-white">
-                                        {new Date(project.createdAt).toLocaleString(language === "vi" ? "vi-VN" : "en-US")}
+                                        {completedSprints} / {totalSprints}
                                     </p>
                                 </div>
                             </div>
@@ -245,8 +256,8 @@ const ProjectDetail = () => {
                         <div className="mt-6 space-y-4">
                             {[
                                 { title: t.projects.status, value: statusLabel },
-                                { title: t.projects.projectName, value: project.name },
-                                { title: t.projects.description, value: project.description || t.projects.noDescriptionYet },
+                                { title: t.projects.teamMembers, value: memberCount },
+                                { title: t.projects.activeSprints, value: activeSprints },
                             ].map((item) => (
                                 <div key={item.title} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/80">
                                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400">

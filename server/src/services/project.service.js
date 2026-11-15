@@ -99,7 +99,21 @@ export const deleteProject = async (id, userId) => {
 };
 
 export const getProjectById = async (projectId, userId) => {
-    return await projectRepository.findProjectById(projectId, userId);
+    const project = await projectRepository.findProjectById(
+        projectId,
+        userId
+    );
+
+    if (!project) {
+        return null;
+    }
+
+    const metrics = await projectRepository.getProjectMetrics(project.id);
+
+    return {
+        ...project,
+        metrics,
+    };
 };
 
 export const completeProject = async (id, userId) => {

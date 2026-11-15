@@ -1,4 +1,5 @@
 import * as burndownRepository from "../repositories/burndown.repository.js";
+import * as projectMemberService from "./projectMember.service.js";
 import { isTaskCompleted } from "../utils/task.utils.js";
 
 const normalizeDate = (date) => {
@@ -11,8 +12,15 @@ const normalizeDate = (date) => {
 
 export const getSprintBurndown = async (
     projectId,
-    sprintId
+    sprintId,
+    userId
 ) => {
+    await projectMemberService.requireRole(
+        projectId,
+        userId,
+        ["OWNER", "ADMIN", "MEMBER"]
+    );
+
     const sprint =
         await burndownRepository.getSprintBurndownData(
             projectId,
@@ -92,9 +100,11 @@ export const getSprintBurndown = async (
         }
 
         dailyData.push({
-            date: currentDate
-                .toISOString()
-                .split("T")[0],
+            date: [
+                currentDate.getFullYear(),
+                String(currentDate.getMonth() + 1).padStart(2, "0"),
+                String(currentDate.getDate()).padStart(2, "0"),
+            ].join("-"),
 
             remaining:
                 remainingStoryPoints,

@@ -1,4 +1,5 @@
 import prisma from "../config/prisma.js";
+import { isTaskCompleted } from "../utils/task.utils.js";
 
 
 export const createProjectTransaction = async (projectData, ownerId) => {
@@ -129,6 +130,49 @@ export const findProjectById = async (projectId, userId) => {
             },
         },
     });
+};
+export const getProjectMetrics = async (projectId) => {
+    const [tasks, memberCount, sprints] = await Promise.all([
+        prisma.task.findMany({
+            where: {
+                projectId: Number(projectId),
+            },
+            select: {
+                status: true,
+                column: {
+                    select: {
+                        statusKey: true,
+                    },
+                },
+            },
+        }),
+        prisma.projectMember.count({
+            where: {
+                projectId: Number(projectId),
+            },
+        }),
+        prisma.sprint.findMany({
+            where: {
+                projectId: Number(projectId),
+            },
+            select: {
+                status: true,
+            },
+        }),
+    ]);
+
+    return {
+        totalTasks: tasks.length,
+        completedTasks: tasks.filter(isTaskCompleted).length,
+        memberCount,
+        totalSprints: sprints.length,
+        activeSprints: sprints.filter(
+            (sprint) => sprint.status === "Active"
+        ).length,
+        completedSprints: sprints.filter(
+            (sprint) => sprint.status === "Completed"
+        ).length,
+    };
 };
 export const getProjectMemberRole = async (projectId, userId) => {
     return await prisma.projectMember.findUnique({

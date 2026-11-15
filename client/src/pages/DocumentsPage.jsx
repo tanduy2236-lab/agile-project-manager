@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useParams } from "react-router-dom";
 import { getProjectMembers } from "../api/projectMember.api";
 import { moveDocument } from "../api/document.api";
@@ -445,123 +446,105 @@ const DocumentsPage = () => {
                 isPreviewable={isPreviewable}
                 getFileUrl={getFileUrl}
             />
-            {showCreateModal && (
-               <DocumentUploadModal
-                    t={t}
-                    documentName={documentName}
-                    setDocumentName={setDocumentName}
-                    file={file}
-                    setFile={setFile}
-                    changeNote={changeNote}
-                    setChangeNote={setChangeNote}
-                    folders={folders}
-                    selectedFolderId={selectedFolderId}
-                    setSelectedFolderId={setSelectedFolderId}
-                    submitting={submitting}
-                    onSubmit={() =>
-                        createDocumentHandler(
-                            selectedFolderId
-                        )
-                    }
-                    onClose={() =>
-                        setShowCreateModal(false)
-                    }
-                />
-            )}
+            {createPortal(
+                <>
+                    {showCreateModal && (
+                        <DocumentUploadModal
+                            t={t}
+                            documentName={documentName}
+                            setDocumentName={setDocumentName}
+                            file={file}
+                            setFile={setFile}
+                            changeNote={changeNote}
+                            setChangeNote={setChangeNote}
+                            folders={folders}
+                            selectedFolderId={selectedFolderId}
+                            setSelectedFolderId={setSelectedFolderId}
+                            submitting={submitting}
+                            onSubmit={() =>
+                                createDocumentHandler(selectedFolderId)
+                            }
+                            onClose={() => setShowCreateModal(false)}
+                        />
+                    )}
 
-            {showVersionModal && (
-                <DocumentVersionModal
-                    t={t}
-                    document={
-                        selectedDocument
-                    }
-                    file={file}
-                    setFile={setFile}
-                    changeNote={changeNote}
-                    setChangeNote={
-                        setChangeNote
-                    }
-                    submitting={submitting}
-                    onSubmit={createVersion}
-                    onClose={() =>
-                        setShowVersionModal(
-                            false
-                        )
-                    }
-                />
-            )}
+                    {showVersionModal && (
+                        <DocumentVersionModal
+                            t={t}
+                            document={selectedDocument}
+                            file={file}
+                            setFile={setFile}
+                            changeNote={changeNote}
+                            setChangeNote={setChangeNote}
+                            submitting={submitting}
+                            onSubmit={createVersion}
+                            onClose={() => setShowVersionModal(false)}
+                        />
+                    )}
 
-            {showVersionsModal && (
-                <DocumentVersionsModal
-                    t={t}
-                    document={
-                        selectedDocument
-                    }
-                    versions={versions}
-                    loading={
-                        loadingVersions
-                    }
-                    onDownload={
-                        handleDownload
-                    }
-                    getFileUrl={
-                        getFileUrl
-                    }
-                    isPreviewable={
-                        isPreviewable
-                    }
-                    onClose={() =>
-                        setShowVersionsModal(
-                            false
-                        )
-                    }
-                />
-            )}
-            {showMoveModal && (
-                <MoveDocumentModal
-                    t={t}
-                    document={movingDocument}
-                    folders={folders}
-                    selectedFolderId={moveFolderId}
-                    setSelectedFolderId={setMoveFolderId}
-                    submitting={submitting}
-                    onClose={closeMoveModal}
-                    onSubmit={handleMoveDocument}
-                />
-            )}
-            {showFolderModal && (
-                    <DocumentFolderModal
+                    {showVersionsModal && (
+                        <DocumentVersionsModal
+                            t={t}
+                            document={selectedDocument}
+                            versions={versions}
+                            loading={loadingVersions}
+                            onDownload={handleDownload}
+                            getFileUrl={getFileUrl}
+                            isPreviewable={isPreviewable}
+                            onClose={() => setShowVersionsModal(false)}
+                        />
+                    )}
+
+                    {showMoveModal && (
+                        <MoveDocumentModal
+                            t={t}
+                            document={movingDocument}
+                            folders={folders}
+                            selectedFolderId={moveFolderId}
+                            setSelectedFolderId={setMoveFolderId}
+                            submitting={submitting}
+                            onClose={closeMoveModal}
+                            onSubmit={handleMoveDocument}
+                        />
+                    )}
+
+                    {showFolderModal && (
+                        <DocumentFolderModal
+                            t={t}
+                            mode={editingFolderId ? "edit" : "create"}
+                            folder={
+                                editingFolderId
+                                    ? folders.find(
+                                          (folder) =>
+                                              folder.id === editingFolderId
+                                      )
+                                    : null
+                            }
+                            submitting={folderSubmitting}
+                            onClose={closeFolderModal}
+                            onSubmit={
+                                editingFolderId
+                                    ? updateFolderHandler
+                                    : createFolderHandler
+                            }
+                        />
+                    )}
+
+                    <ConfirmDeleteItemModal
                         t={t}
-                        mode={editingFolderId ? "edit" : "create"}
-                        folder={
-                            editingFolderId
-                                ? folders.find(
-                                    (folder) =>
-                                        folder.id === editingFolderId
-                                )
-                                : null
-                        }
-                        submitting={folderSubmitting}
-                        onClose={closeFolderModal}
-                        onSubmit={
-                            editingFolderId
-                                ? updateFolderHandler
-                                : createFolderHandler
-                        }
+                        item={itemToDelete}
+                        isOpen={!!itemToDelete}
+                        itemType={deleteItemType}
+                        isLoading={isDeleting}
+                        onConfirm={handleConfirmDelete}
+                        onClose={() => {
+                            setItemToDelete(null);
+                            setDeleteItemType(null);
+                        }}
                     />
-                )}
-            <ConfirmDeleteItemModal
-                t={t}
-                item={itemToDelete}
-                isOpen={!!itemToDelete}
-                itemType={deleteItemType}
-                isLoading={isDeleting}
-                onConfirm={handleConfirmDelete}
-                onClose={() => {
-                    setItemToDelete(null);
-                    setDeleteItemType(null);
-                }}
-            />
+                </>,
+                document.body
+            )}
         </div>
     );
 };
