@@ -10,6 +10,8 @@
     "recharts": "^3.10.1"
   },
   "devDependencies": {
-    "concurrently": "^9.0.0"
+    "@playwright/test": "^1.65.1",
+    "concurrently": "^9.0.0",
+    "dotenv": "^18.0.10"
   }
 }

@@ -116,6 +116,7 @@ const Login = () => {
                     <div>
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.login.email}</label>
                         <input
+                            data-testid="login-email"
                             ref={emailRef}
                             disabled={loading}
                             type="email"
@@ -133,6 +134,7 @@ const Login = () => {
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.login.password}</label>
                         <div className="relative">
                             <input
+                                data-testid="login-password"
                                 type={showPassword ? "text" : "password"}
                                 disabled={loading}
                                 name="password"
@@ -153,9 +155,16 @@ const Login = () => {
                         {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
                     </div>
 
-                    {serverError && <div className="rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400">{serverError}</div>}
-
+                    {serverError && (
+                        <div
+                            data-testid="login-error"
+                            className="rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400"
+                        >
+                            {serverError}
+                        </div>
+                    )}
                     <button
+                        data-testid="login-submit"
                         type="submit"
                         disabled={loading}
                         className="w-full rounded-xl bg-blue-600 dark:bg-blue-700 px-4 py-3 font-semibold text-white transition duration-300 hover:bg-blue-700 dark:hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-900"
