@@ -42,7 +42,10 @@ export const createTaskComment = async (taskId, userId, content) => {
     ) {
         await createUserNotification(
             Number(task.assigneeId),
-            `${comment.user.name} đã bình luận trong task "${task.title}"`
+            {
+                vi: `${comment.user.name} đã bình luận trong task "${task.title}"`,
+                en: `${comment.user.name} commented on the task "${task.title}"`,
+            }
         );
     }
 

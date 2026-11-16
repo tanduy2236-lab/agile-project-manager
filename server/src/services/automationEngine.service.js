@@ -48,7 +48,10 @@ const executeNotification = async (rule, context) => {
 
     const message =
         config.message ||
-        `Task "${context.task.title}" đã được chuyển sang ${context.toStatus}`;
+        {
+            vi: `Task "${context.task.title}" đã được chuyển sang ${context.toStatus}`,
+            en: `Task "${context.task.title}" was moved to ${context.toStatus}`,
+        };
 
     await createUserNotification(
         context.task.assigneeId,

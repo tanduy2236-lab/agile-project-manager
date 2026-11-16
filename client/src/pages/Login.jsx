@@ -3,13 +3,17 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login } from "../api/auth.api";
 import SuccessModal from "../components/SuccessModal";
 import { saveAuth } from "../utils/auth";
-import { getTranslations, getSavedLanguage } from "../utils/language";
+import {
+    getTranslations,
+    getSavedLanguage,
+    listenForLanguageChange,
+} from "../utils/language";
 
 const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const emailRef = useRef(null);
-    const language = getSavedLanguage();
+    const [language, setLanguage] = useState(getSavedLanguage());
     const t = getTranslations(language);
 
     useEffect(() => {
@@ -25,6 +29,14 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+    useEffect(() => {
+        return listenForLanguageChange((nextLanguage) => {
+            setLanguage(nextLanguage);
+            setErrors({});
+            setServerError("");
+        });
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

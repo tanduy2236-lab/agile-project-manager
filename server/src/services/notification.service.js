@@ -23,9 +23,22 @@ export const createUserNotification = async (
     relatedDocumentId = null,
     relatedDocumentVersionId = null
 ) => {
+    const contentFields =
+        typeof content === "string"
+            ? {
+                content,
+                contentVi: null,
+                contentEn: null,
+            }
+            : {
+                content: content.vi,
+                contentVi: content.vi,
+                contentEn: content.en,
+            };
+
     return createNotification({
         userId: Number(userId),
-        content,
+        ...contentFields,
         type,
 
         relatedTaskId: relatedTaskId

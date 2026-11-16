@@ -65,6 +65,7 @@ const DependencyList = ({
     type,
     onDelete,
     deletingId,
+    t,
 }) => {
     return (
         <div className="space-y-3">
@@ -83,7 +84,7 @@ const DependencyList = ({
 
             {items.length === 0 ? (
                 <div className="rounded-lg border border-dashed border-slate-300 p-4 text-center text-sm text-slate-500 dark:border-slate-600 dark:text-slate-400">
-                    Chưa có công việc nào.
+                    {t.noTasks}
                 </div>
             ) : (
                 <div className="space-y-2">
@@ -104,12 +105,12 @@ const DependencyList = ({
                                         {item.isCompleted ? (
                                             <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
                                                 <CheckCircle2 size={12} />
-                                                Hoàn thành
+                                                {t.completed}
                                             </span>
                                         ) : (
                                             <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
                                                 <Clock size={12} />
-                                                Chưa hoàn thành
+                                                {t.notCompleted}
                                             </span>
                                         )}
                                     </div>
@@ -119,7 +120,7 @@ const DependencyList = ({
                                     </p>
 
                                     <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-                                        {task.assignee?.name || "Chưa giao"}
+                                        {task.assignee?.name || t.unassigned}
                                         {task.column?.name
                                             ? ` · ${task.column.name}`
                                             : ""}
@@ -131,7 +132,7 @@ const DependencyList = ({
                                         type="button"
                                         onClick={() => onDelete(item)}
                                         disabled={deletingId === item.dependencyId}
-                                        title="Xóa quan hệ phụ thuộc"
+                                        title={t.removeRelationship}
                                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-red-500 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-red-950/30"
                                     >
                                         {deletingId === item.dependencyId ? (
@@ -150,7 +151,7 @@ const DependencyList = ({
     );
 };
 
-const TaskDependencySection = ({ taskId, projectId }) => {
+const TaskDependencySection = ({ taskId, projectId, t }) => {
     const [dependencies, setDependencies] = useState({
         blockedBy: [],
         blocking: [],
@@ -191,7 +192,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
             setError(
                 err.response?.data?.message ||
                 err.response?.data?.error ||
-                "Không thể tải danh sách phụ thuộc."
+                t.loadFailed
             );
         } finally {
             setLoading(false);
@@ -213,7 +214,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
             setError(
                 err.response?.data?.message ||
                 err.response?.data?.error ||
-                "Không thể tải danh sách công việc trong dự án."
+                t.loadTasksFailed
             );
         } finally {
             setLoadingTasks(false);
@@ -283,7 +284,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
     // Thêm quan hệ phụ thuộc
     const handleAddDependency = async () => {
         if (!selectedTask) {
-            setError("Vui lòng chọn công việc cần phụ thuộc.");
+            setError(t.selectTask);
             return;
         }
 
@@ -303,7 +304,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
             setError(
                 err.response?.data?.message ||
                 err.response?.data?.error ||
-                "Không thể thêm quan hệ phụ thuộc."
+                t.addFailed
             );
         } finally {
             setAdding(false);
@@ -332,7 +333,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
             setDeleteError(
                 err.response?.data?.message ||
                 err.response?.data?.error ||
-                "Không thể xóa quan hệ phụ thuộc."
+                t.deleteFailed
             );
         } finally {
             setDeletingId(null);
@@ -345,7 +346,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                 <Link2 className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
 
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                    Task Dependency
+                    {t.title}
                 </h3>
             </div>
 
@@ -356,12 +357,12 @@ const TaskDependencySection = ({ taskId, projectId }) => {
 
                     <div>
                         <p className="font-semibold">
-                            Công việc này đang bị chặn
+                            {t.blockedTitle}
                         </p>
 
                         <p className="mt-1">
-                            Còn {dependencies.incompleteDependencies.length} công việc
-                            cần hoàn thành trước.
+                            {t.incompleteCountLabel}{" "}
+                            {dependencies.incompleteDependencies.length}
                         </p>
                     </div>
                 </div>
@@ -378,26 +379,28 @@ const TaskDependencySection = ({ taskId, projectId }) => {
             {loading ? (
                 <div className="flex items-center justify-center gap-2 rounded-xl bg-slate-50 p-6 text-sm text-slate-500 dark:bg-slate-900 dark:text-slate-400">
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Đang tải quan hệ phụ thuộc...
+                    {t.loading}
                 </div>
             ) : (
                 <div className="space-y-6">
                     <DependencyList
-                        title="Phụ thuộc vào"
-                        description="Những công việc cần hoàn thành trước công việc hiện tại."
+                        title={t.blockedByTitle}
+                        description={t.blockedByDescription}
                         items={dependencies.blockedBy}
                         type="blockedBy"
                         onDelete={handleDeleteDependency}
                         deletingId={deletingId}
+                        t={t}
                     />
 
                     <DependencyList
-                        title="Đang chặn công việc khác"
-                        description="Những công việc đang chờ công việc hiện tại hoàn thành."
+                        title={t.blockingTitle}
+                        description={t.blockingDescription}
                         items={dependencies.blocking}
                         type="blocking"
                         onDelete={handleDeleteDependency}
                         deletingId={deletingId}
+                        t={t}
                     />
                 </div>
             )}
@@ -408,12 +411,12 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                     <Plus className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
 
                     <h4 className="font-semibold text-slate-800 dark:text-white">
-                        Thêm công việc phụ thuộc
+                        {t.addTitle}
                     </h4>
                 </div>
 
                 <p className="mb-3 text-sm text-slate-500 dark:text-slate-400">
-                    Chọn công việc cần hoàn thành trước công việc hiện tại.
+                    {t.addDescription}
                 </p>
 
                 <div className="relative">
@@ -436,8 +439,8 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                                 onFocus={() => setShowResults(true)}
                                 placeholder={
                                     loadingTasks
-                                        ? "Đang tải công việc..."
-                                        : "Tìm kiếm theo tên công việc..."
+                                        ? t.loadingTasks
+                                        : t.searchTasks
                                 }
                                 disabled={loadingTasks || adding}
                                 className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-10 pr-9 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 disabled:opacity-60 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
@@ -449,7 +452,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                                     onClick={() => {
                                         setSearchText("");
                                         setSelectedTask(null);
-                                        setShowResults(true);
+                                        setShowResults(true)
                                     }}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-white"
                                 >
@@ -470,7 +473,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                                 <Plus size={16} />
                             )}
 
-                            {adding ? "Đang thêm..." : "Thêm"}
+                            {adding ? t.adding : t.add}
                         </button>
                     </div>
 
@@ -479,7 +482,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                         <div className="absolute left-0 right-0 z-20 mt-2 max-h-60 overflow-y-auto rounded-lg border border-slate-200 bg-white shadow-lg dark:border-slate-700 dark:bg-slate-800">
                             {filteredTasks.length === 0 ? (
                                 <p className="p-4 text-center text-sm text-slate-500 dark:text-slate-400">
-                                    Không tìm thấy công việc phù hợp.
+                                    {t.noMatchingTask}
                                 </p>
                             ) : (
                                 filteredTasks.map((task) => (
@@ -498,9 +501,9 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                                         </span>
 
                                         <span className="text-xs text-slate-500 dark:text-slate-400">
-                                            {task.column?.name || "Chưa có cột"}
+                                            {task.column?.name || t.noColumn}
                                             {" · "}
-                                            {task.assignee?.name || "Chưa giao"}
+                                            {task.assignee?.name || t.unassigned}
                                         </span>
                                     </button>
                                 ))
@@ -512,7 +515,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                 {selectedTask && (
                     <div className="mt-3 rounded-lg border border-indigo-200 bg-indigo-50 p-3 dark:border-indigo-800 dark:bg-indigo-950/30">
                         <p className="text-xs text-indigo-600 dark:text-indigo-400">
-                            Công việc đã chọn
+                            {t.selectedTask}
                         </p>
 
                         <p className="mt-1 font-medium text-slate-800 dark:text-white">
@@ -553,13 +556,13 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                                     id="delete-dependency-title"
                                     className="text-lg font-semibold text-slate-900 dark:text-white"
                                 >
-                                    Xóa quan hệ phụ thuộc?
+                                    {t.deleteTitle}
                                 </h2>
                                 <p
                                     id="delete-dependency-description"
                                     className="mt-1 text-sm text-slate-600 dark:text-slate-400"
                                 >
-                                    Thao tác này chỉ gỡ liên kết phụ thuộc, không xóa công việc.
+                                    {t.deleteDescription}
                                 </p>
                             </div>
                         </div>
@@ -589,7 +592,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                                 disabled={Boolean(deletingId)}
                                 className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600"
                             >
-                                Hủy
+                                {t.cancel}
                             </button>
                             <button
                                 type="button"
@@ -602,7 +605,7 @@ const TaskDependencySection = ({ taskId, projectId }) => {
                                 ) : (
                                     <Trash2 size={16} />
                                 )}
-                                {deletingId ? "Đang xóa..." : "Xóa liên kết"}
+                                {deletingId ? t.deleting : t.deleteLink}
                             </button>
                         </div>
                     </div>

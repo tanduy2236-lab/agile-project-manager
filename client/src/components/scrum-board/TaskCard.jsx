@@ -248,16 +248,28 @@ const TaskCard = ({ task, onOpen, onDelete }) => {
                     {renderDueDate()}
                 </span>
 
-                <span
+                <button
+                    type="button"
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        if (!isDragging) {
+                            onOpen(task);
+                        }
+                    }}
                     className="
-                        font-medium
-                        text-slate-700
+                        rounded-md px-2 py-1 font-medium
+                        text-indigo-600 transition
+                        hover:bg-indigo-50 hover:text-indigo-700
+                        focus-visible:outline-none
+                        focus-visible:ring-2 focus-visible:ring-indigo-500
 
-                        dark:text-slate-300
+                        dark:text-indigo-400
+                        dark:hover:bg-indigo-500/10
+                        dark:hover:text-indigo-300
                     "
                 >
                     Open
-                </span>
+                </button>
             </div>
 
         </div>

@@ -55,6 +55,7 @@ model UserSetting {
   taskAssigned         Boolean @default(true) @map("task_assigned")
   taskUpdated          Boolean @default(true) @map("task_updated")
   projectNotifications Boolean @default(true) @map("project_notifications")
+  language             String  @default("vi")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -270,6 +271,8 @@ model Notification {
   userId Int @map("user_id")
 
   content String
+  contentVi String? @map("content_vi")
+  contentEn String? @map("content_en")
   type    String @default("GENERAL")
 
   relatedTaskId            Int? @map("related_task_id")

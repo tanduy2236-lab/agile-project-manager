@@ -25,6 +25,7 @@ export const updateSettings = async (userId, data) => {
             taskAssigned: data.taskAssigned,
             taskUpdated: data.taskUpdated,
             projectNotifications: data.projectNotifications,
+            language: data.language,
         },
 
         create: {
@@ -38,6 +39,8 @@ export const updateSettings = async (userId, data) => {
 
             projectNotifications:
                 data.projectNotifications ?? true,
+
+            language: data.language ?? "vi",
         },
     });
 };

@@ -49,8 +49,8 @@ export const listenForLanguageChange = (callback) => {
         return () => {};
     }
 
-    const handleLanguageChange = () => {
-        callback(getSavedLanguage());
+    const handleLanguageChange = (event) => {
+        callback(event.detail?.language || getSavedLanguage());
     };
 
     window.addEventListener(

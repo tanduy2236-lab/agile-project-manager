@@ -93,7 +93,10 @@ export const createDocument = async ({
 
         await createUserNotification(
             member.userId,
-            `Tài liệu "${document.name}" đã được tạo`,
+            {
+                vi: `Tài liệu "${document.name}" đã được tạo`,
+                en: `The document "${document.name}" was created`,
+            },
             "DOCUMENT_CREATED",
             null,
             document.id,
@@ -197,7 +200,10 @@ export const createDocumentVersion = async ({
 
         await createUserNotification(
             member.userId,
-            `Tài liệu "${document.name}" đã được cập nhật lên version ${nextVersion}`,
+            {
+                vi: `Tài liệu "${document.name}" đã được cập nhật lên version ${nextVersion}`,
+                en: `The document "${document.name}" was updated to version ${nextVersion}`,
+            },
             "DOCUMENT_VERSION",
             null,
             document.id,

@@ -2,12 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api/auth.api.js";
 import SuccessModal from "../components/SuccessModal";
-import { getTranslations, getSavedLanguage } from "../utils/language";
+import {
+    getTranslations,
+    getSavedLanguage,
+    listenForLanguageChange,
+} from "../utils/language";
 
 const Register = () => {
     const navigate = useNavigate();
     const nameRef = useRef(null);
-    const language = getSavedLanguage();
+    const [language, setLanguage] = useState(getSavedLanguage());
     const t = getTranslations(language);
 
     useEffect(() => {
@@ -26,6 +30,14 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+    useEffect(() => {
+        return listenForLanguageChange((nextLanguage) => {
+            setLanguage(nextLanguage);
+            setErrors({});
+            setServerError("");
+        });
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

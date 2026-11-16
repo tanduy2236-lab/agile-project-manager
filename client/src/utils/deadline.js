@@ -1,9 +1,18 @@
+const COMPLETED_STATUS_KEYS = new Set([
+    "DONE",
+    "COMPLETED",
+    "FINISHED",
+    "HON_THANH",
+    "HOAN_THANH",
+]);
+
 export const getDueDateStatus = (dueDate, status) => {
     if (!dueDate) {
         return "none";
     }
 
-    if (status === "Done") {
+    const statusKey = String(status ?? "").trim().toUpperCase();
+    if (COMPLETED_STATUS_KEYS.has(statusKey)) {
         return "completed";
     }
 

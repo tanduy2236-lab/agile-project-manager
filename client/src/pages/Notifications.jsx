@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import {getNotifications,markNotificationAsRead,markAllNotificationsAsRead,deleteNotification,} from "../api/notification.api";
-import {getTranslations,getSavedLanguage,} from "../utils/language";
+import {
+    getTranslations,
+    getSavedLanguage,
+    listenForLanguageChange,
+} from "../utils/language";
 import { Bell } from "lucide-react";
 
 const Notifications = () => {
 
-    const language = getSavedLanguage();
+    const [language, setLanguage] = useState(getSavedLanguage);
     const t = getTranslations(language);
 
     const [notifications, setNotifications] =
@@ -17,12 +21,16 @@ const Notifications = () => {
     const [loading, setLoading] =
         useState(true);
 
-    const [error, setError] =
-        useState("");
+    const [hasError, setHasError] =
+        useState(false);
 
 
     useEffect(() => {
         loadNotifications();
+    }, []);
+
+    useEffect(() => {
+        return listenForLanguageChange(setLanguage);
     }, []);
 
 
@@ -31,7 +39,7 @@ const Notifications = () => {
         try {
 
             setLoading(true);
-            setError("");
+            setHasError(false);
 
             const data =
                 await getNotifications();
@@ -45,9 +53,7 @@ const Notifications = () => {
                 err
             );
 
-            setError(
-                t.notifications.loadFailed
-            );
+            setHasError(true);
 
         } finally {
 
@@ -55,6 +61,7 @@ const Notifications = () => {
 
         }
     };
+
 
     const handleMarkAsRead = async (id) => {
 
@@ -146,24 +153,7 @@ const Notifications = () => {
         ).length;
 
 
-    const formatDate = (date) => {
-
-        const notificationDate =
-            new Date(date);
-
-        return notificationDate.toLocaleString(
-            language === "vi"
-                ? "vi-VN"
-                : "en-US",
-            {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-            }
-        );
-    };
+    const locale = language === "vi" ? "vi-VN" : "en-US";
 
 
     return (
@@ -260,12 +250,12 @@ const Notifications = () => {
                     )}
 
 
-                    {!loading && error && (
+                    {!loading && hasError && (
 
                         <div className="p-10 text-center">
 
                             <p className="mb-3 text-sm text-red-500 dark:text-red-400">
-                                {error}
+                                {t.notifications.loadFailed}
                             </p>
 
 
@@ -284,7 +274,7 @@ const Notifications = () => {
 
 
                     {!loading &&
-                        !error &&
+                        !hasError &&
                         filteredNotifications.length === 0 && (
 
                             <div className="p-12 text-center">
@@ -314,7 +304,7 @@ const Notifications = () => {
                         )}
 
                     {!loading &&
-                        !error &&
+                        !hasError &&
                         filteredNotifications.length > 0 && (
 
                             <div>
@@ -369,11 +359,15 @@ const Notifications = () => {
 
                                                 </p>
 
-                                                <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-                                                    {formatDate(
-                                                        notification.createdAt
-                                                    )}
-                                                </p>
+                                                <time
+                                                    dateTime={notification.createdAt}
+                                                    className="mt-1 block text-xs text-slate-400 dark:text-slate-500"
+                                                >
+                                                    {new Date(notification.createdAt).toLocaleString(locale, {
+                                                        dateStyle: "medium",
+                                                        timeStyle: "short",
+                                                    })}
+                                                </time>
                                             </div>
                                             <div className="flex shrink-0 items-center gap-2 opacity-0 transition group-hover:opacity-100">
                                                 {!notification.isRead && (

@@ -31,6 +31,10 @@ const SettingsPage = () => {
 
         try {
             const data = await getSettings();
+            const language =
+                savedSettings.language ??
+                data.language ??
+                DEFAULT_SETTINGS.language;
 
             setSettings({
                 ...DEFAULT_SETTINGS,
@@ -56,10 +60,24 @@ const SettingsPage = () => {
                     DEFAULT_SETTINGS.theme,
 
                 language:
-                    savedSettings.language ??
-                    DEFAULT_SETTINGS.language,
+                    language,
             });
 
+            if (
+                savedSettings.language &&
+                savedSettings.language !== data.language
+            ) {
+                try {
+                    await updateSettings({
+                        language: savedSettings.language,
+                    });
+                } catch (error) {
+                    console.error(
+                        "Error syncing saved language:",
+                        error
+                    );
+                }
+            }
         } catch (error) {
             console.error("Error loading settings:",error);
             setSettings({
@@ -104,6 +122,7 @@ const SettingsPage = () => {
             taskUpdated: settings.taskUpdated,
             projectNotifications:
                 settings.projectNotifications,
+            language: settings.language,
         });
 
         localStorage.setItem(

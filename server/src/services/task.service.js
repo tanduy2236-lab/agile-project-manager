@@ -3,7 +3,11 @@ import prisma from "../config/prisma.js";
 import { createUserNotification } from "./notification.service.js";
 import * as taskHistoryService from "./taskHistory.service.js";
 import * as projectMemberService from "./projectMember.service.js";
-import { normalizeColumnName, createColumnStatusKey } from "../utils/column.utils.js";
+import {
+    createColumnStatusKey,
+    getTaskStatusForColumn,
+    normalizeColumnName,
+} from "../utils/column.utils.js";
 import { recordActivity } from "./activity.service.js";
 import { runAutomation } from "./automationEngine.service.js";
 const safeRecordActivity = async (data) => {
@@ -295,7 +299,10 @@ export const createTask = async (taskData, userId) => {
     if (assigneeId) {
         await createUserNotification(
             Number(assigneeId),
-            `Bạn được giao task "${newTask.title}"`
+            {
+                vi: `Bạn được giao task "${newTask.title}"`,
+                en: `You were assigned the task "${newTask.title}"`,
+            }
         );
     }
     return newTask;
@@ -429,7 +436,10 @@ export const updateTask = async (taskId, data, changedById) => {
     ) {
         await createUserNotification(
         Number(data.assigneeId),
-        `Bạn được giao task "${updatedTask.title}"`
+        {
+            vi: `Bạn được giao task "${updatedTask.title}"`,
+            en: `You were assigned the task "${updatedTask.title}"`,
+        }
         );
     }
 
@@ -517,7 +527,7 @@ export const moveTask = async (
             Number(version),
             Number(columnId),
             Number(position),
-            newColumn.statusKey
+            getTaskStatusForColumn(newColumn)
         );
 
     if (!updatedTask) {
@@ -634,7 +644,10 @@ export const notifyTaskMoved = async (taskId, columnId) => {
 
     await createUserNotification(
         task.assigneeId,
-        `Task "${task.title}" đã được chuyển sang ${column.name}`
+        {
+            vi: `Task "${task.title}" đã được chuyển sang ${column.name}`,
+            en: `Task "${task.title}" was moved to ${column.name}`,
+        }
     );
 };
 export const getTaskById = async (taskId) => {

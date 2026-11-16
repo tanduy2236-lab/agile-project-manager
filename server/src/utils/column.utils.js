@@ -32,3 +32,11 @@ export const createColumnStatusKey = (columnName, existingKeys = new Set()) => {
 
   return key;
 };
+
+export const getTaskStatusForColumn = (column) => {
+  if (normalizeColumnName(column?.name).toUpperCase() === "DONE") {
+    return "DONE";
+  }
+
+  return column?.statusKey;
+};

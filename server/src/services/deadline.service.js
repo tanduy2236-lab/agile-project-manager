@@ -40,7 +40,10 @@ export const checkTaskDeadlines = async () => {
             if (!existingNotification) {
                 await createUserNotification(
                     task.assigneeId,
-                    `Task "${task.title}" đã quá deadline (${dueDate.toLocaleDateString("vi-VN")}).`,
+                    {
+                        vi: `Task "${task.title}" đã quá deadline (${dueDate.toLocaleDateString("vi-VN")}).`,
+                        en: `Task "${task.title}" is overdue (${dueDate.toLocaleDateString("en-US")}).`,
+                    },
                     "DEADLINE_OVERDUE",
                     task.id
                 );
@@ -62,7 +65,10 @@ export const checkTaskDeadlines = async () => {
             if (!existingNotification) {
                 await createUserNotification(
                     task.assigneeId,
-                    `Task "${task.title}" sắp đến deadline (${dueDate.toLocaleDateString("vi-VN")}).`,
+                    {
+                        vi: `Task "${task.title}" sắp đến deadline (${dueDate.toLocaleDateString("vi-VN")}).`,
+                        en: `Task "${task.title}" is due soon (${dueDate.toLocaleDateString("en-US")}).`,
+                    },
                     "DEADLINE_WARNING",
                     task.id
                 );

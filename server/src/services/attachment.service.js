@@ -35,7 +35,10 @@ export const uploadTaskAttachment = async ({taskId,userId,file,}) => {
     ) {
         await createUserNotification(
             task.assigneeId,
-            `Đã có file "${file.originalname}" được thêm vào task "${task.title}"`,
+            {
+                vi: `Đã có file "${file.originalname}" được thêm vào task "${task.title}"`,
+                en: `The file "${file.originalname}" was added to the task "${task.title}"`,
+            },
             "ATTACHMENT",
             task.id
         );

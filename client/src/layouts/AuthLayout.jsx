@@ -1,6 +1,19 @@
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import {
+    getSavedLanguage,
+    getTranslations,
+    listenForLanguageChange,
+} from "../utils/language";
 
 const AuthLayout = () => {
+    const [language, setLanguage] = useState(getSavedLanguage());
+    const t = getTranslations(language);
+
+    useEffect(() => {
+        return listenForLanguageChange(setLanguage);
+    }, []);
+
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-slate-900 flex items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
             <div className="w-full max-w-5xl overflow-hidden rounded-2xl bg-white dark:bg-slate-800 shadow-xl lg:grid lg:grid-cols-[1.05fr_0.95fr]">
@@ -9,24 +22,24 @@ const AuthLayout = () => {
                         Agile Task Manager
                     </p>
                     <h1 className="mt-4 text-3xl font-semibold sm:text-4xl dark:text-white">
-                        Quản lý việc làm một cách đơn giản
+                        {t.auth.layout.headline}
                     </h1>
                     <p className="mt-4 text-sm leading-6 text-blue-100 dark:text-blue-200 sm:text-base">
-                        Theo dõi công việc, chia sẻ tiến độ và luôn giữ mọi thứ rõ ràng trong một nơi.
+                        {t.auth.layout.description}
                     </p>
 
                     <div className="mt-8 space-y-3 text-sm sm:text-base">
                         <div className="flex items-start gap-2 rounded-lg bg-white/10 dark:bg-white/5 p-3">
                             <span className="mt-2 h-2.5 w-2.5 rounded-full bg-white" />
-                            <span>Theo dõi dự án theo từng bước dễ hiểu.</span>
+                            <span>{t.auth.layout.featureProjects}</span>
                         </div>
                         <div className="flex items-start gap-2 rounded-lg bg-white/10 dark:bg-white/5 p-3">
                             <span className="mt-2 h-2.5 w-2.5 rounded-full bg-white" />
-                            <span>Giữ mọi người luôn đồng bộ với nhau.</span>
+                            <span>{t.auth.layout.featureTeam}</span>
                         </div>
                         <div className="flex items-start gap-2 rounded-lg bg-white/10 dark:bg-white/5 p-3">
                             <span className="mt-2 h-2.5 w-2.5 rounded-full bg-white" />
-                            <span>Đăng nhập hoặc đăng ký để bắt đầu ngay.</span>
+                            <span>{t.auth.layout.featureStart}</span>
                         </div>
                     </div>
                 </div>
