@@ -25,6 +25,7 @@ const ProjectHeader = () => {
             </div>
 
             <button
+                data-testid="create-project-button"
                 onClick={() => navigate("/projects/create")}
                 className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:translate-y-[-1px] hover:shadow-blue-600/30"
             >

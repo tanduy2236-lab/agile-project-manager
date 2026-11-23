@@ -93,7 +93,10 @@ const Dashboard = () => {
         <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
             <DashboardHeader onLogout={handleLogout} />
 
-            <main className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8 animate-fade-in">
+           <main
+                data-testid="dashboard-content"
+                className="mx-auto max-w-7xl space-y-8 px-4 py-8 sm:px-6 lg:px-8 animate-fade-in"
+            >
                 <section className="animate-dashboard-item">
                     <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 p-6 text-white shadow-[0_20px_45px_rgba(79,70,229,0.2)] sm:p-8">
                         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -112,6 +115,7 @@ const Dashboard = () => {
                             </div>
 
                             <button
+                                data-testid="projects-link"
                                 onClick={() => navigate("/projects")}
                                 className="inline-flex items-center justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-blue-700 transition hover:bg-blue-50 hover:shadow-lg"
                             >

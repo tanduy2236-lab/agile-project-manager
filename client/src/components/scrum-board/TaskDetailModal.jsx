@@ -33,6 +33,7 @@ import {
     getTranslations,
     listenForLanguageChange,
 } from "../../utils/language";
+import { formatDateDDMMYYYY } from "../../utils/date";
 
 const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -707,7 +708,11 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
                                                         {new Date(
                                                             comment.createdAt
                                                         ).toLocaleString(
-                                                            dateLocale
+                                                            dateLocale,
+                                                            {
+                                                                dateStyle: "medium",
+                                                                timeStyle: "short",
+                                                            }
                                                         )}
                                                     </p>
 
@@ -909,7 +914,11 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
                                                     {new Date(
                                                         item.createdAt
                                                     ).toLocaleString(
-                                                        dateLocale
+                                                        dateLocale,
+                                                        {
+                                                            dateStyle: "medium",
+                                                            timeStyle: "short",
+                                                        }
                                                     )}
                                                 </div>
 
@@ -926,15 +935,17 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
                                                 {t.changedFrom}{" "}
 
                                                 <span className="font-medium text-slate-800 dark:text-white">
-                                                    {item.oldValue ||
-                                                        t.empty}
+                                                    {item.field === "dueDate" && item.oldValue
+                                                        ? formatDateDDMMYYYY(item.oldValue)
+                                                        : item.oldValue || t.empty}
                                                 </span>{" "}
 
                                                 {t.changedTo}{" "}
 
                                                 <span className="font-medium text-slate-800 dark:text-white">
-                                                    {item.newValue ||
-                                                        t.empty}
+                                                    {item.field === "dueDate" && item.newValue
+                                                        ? formatDateDDMMYYYY(item.newValue)
+                                                        : item.newValue || t.empty}
                                                 </span>
 
                                             </p>

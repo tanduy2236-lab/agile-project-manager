@@ -57,29 +57,35 @@ const CreateProjectForm = ({
 
                 <div>
 
-                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                    <label 
+                        htmlFor="project-name"
+                        className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                         {t.projects.projectName}
                     </label>
 
                     <input
+                        id="project-name"
+                        data-testid="project-name"
                         type="text"
                         name="name"
                         value={projectData.name}
                         onChange={onChange}
-                        placeholder={
-                            t.projects.enterProjectName
-                        }
+                        placeholder={t.projects.enterProjectName}
                         className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:bg-slate-600 dark:focus:ring-blue-900"
                     />
 
                 </div>
                 <div>
 
-                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                    <label 
+                        htmlFor="project-description"
+                        className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
                         {t.projects.description}
                     </label>
 
                     <textarea
+                        id="project-description"
+                        data-testid="project-description"
                         name="description"
                         rows={4}
                         value={projectData.description}
@@ -94,6 +100,7 @@ const CreateProjectForm = ({
 
                 <button
                     type="submit"
+                    data-testid="project-submit"
                     disabled={isCreating}
                     className="w-full rounded-xl bg-blue-600 px-4 py-3 font-medium text-white transition hover:bg-blue-700 disabled:bg-blue-400 dark:bg-blue-600 dark:hover:bg-blue-800 dark:disabled:bg-blue-900"
                 >
@@ -108,7 +115,6 @@ const CreateProjectForm = ({
                                   : t.projects.createProject
                           )}
                 </button>
-
             </form>
         </div>
     );

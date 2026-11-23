@@ -134,6 +134,7 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                         </label>
 
                         <input
+                            data-testid="task-title"
                             type="text"
                             value={formData.title}
                             onChange={(e) =>
@@ -277,6 +278,7 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                         </button>
 
                         <button
+                            data-testid="save-task"
                             type="submit"
                             className="rounded-lg bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
                         >

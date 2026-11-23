@@ -159,7 +159,9 @@ const ProjectPage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-            <main className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8 animate-fade-in">
+            <main 
+                data-testid="project-page"
+                className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8 animate-fade-in">
                 <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-600 text-white shadow-[0_20px_45px_rgba(79,70,229,0.25)]">
                     <div className="flex flex-col gap-8 p-8 lg:flex-row lg:items-end lg:justify-between lg:p-10">
                         <div className="max-w-2xl">
@@ -175,7 +177,6 @@ const ProjectPage = () => {
                                 {t.projects.organizeWork}
                             </p>
                         </div>
-
                         <div className="grid gap-3 sm:grid-cols-3">
                             <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-sm">
                                 <p className="text-sm text-blue-100">{t.projects.projects}</p>
@@ -194,7 +195,6 @@ const ProjectPage = () => {
                         </div>
                     </div>
                 </section>
-
                 <ProjectHeader t={t} />
 
                 <ProjectToolbar
@@ -206,7 +206,6 @@ const ProjectPage = () => {
                     sortBy={sortBy}
                     onSortChange={setSortBy}
                 />
-
                 <ProjectList
                     t={t}
                     projects={filteredProjects}
@@ -216,7 +215,6 @@ const ProjectPage = () => {
                     onComplete={handleCompleteProject}
                 />
             </main>
-
             <DeleteProjectModal
                 t={t}
                 isOpen={showDeleteModal}
@@ -225,7 +223,6 @@ const ProjectPage = () => {
                 onCancel={closeDeleteModal}
                 onConfirm={confirmDelete}
             />
-
             <CompleteProjectModal
                 t={t}
                 isOpen={showCompleteModal}
@@ -237,5 +234,4 @@ const ProjectPage = () => {
         </div>
     );
 }
-
 export default ProjectPage;

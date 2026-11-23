@@ -131,6 +131,7 @@ const ProjectDetail = () => {
 
                                 <div className="flex flex-wrap justify-start gap-2 xl:justify-end">
                                     <button
+                                        data-testid="open-scrum-board"
                                         onClick={() => navigate(`/projects/${id}/board`)}
                                         className="rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_25px_rgba(79,70,229,0.25)] transition hover:opacity-95"
                                     >

@@ -125,6 +125,7 @@ const Register = () => {
                     <div>
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.register.name}</label>
                         <input
+                            data-testid="register-name"
                             ref={nameRef}
                             disabled={loading}
                             type="text"
@@ -140,6 +141,7 @@ const Register = () => {
                     <div>
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.register.email}</label>
                         <input
+                            data-testid="register-email"
                             disabled={loading}
                             type="email"
                             name="email"
@@ -155,6 +157,7 @@ const Register = () => {
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.register.password}</label>
                         <div className="relative">
                             <input
+                                data-testid="register-password"
                                 type={showPassword ? "text" : "password"}
                                 disabled={loading}
                                 name="password"
@@ -178,6 +181,7 @@ const Register = () => {
                         <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{t.auth.register.confirmPassword}</label>
                         <div className="relative">
                             <input
+                                data-testid="register-confirm-password"
                                 type={showConfirmPassword ? "text" : "password"}
                                 disabled={loading}
                                 name="confirmPassword"
@@ -196,8 +200,11 @@ const Register = () => {
                         </div>
                         {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
                     </div>
-                    {serverError && <div className="rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400">{serverError}</div>}
+                    {serverError && <div 
+                                            data-testid="register-error"
+                                            className="rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950 px-3 py-2 text-sm text-red-600 dark:text-red-400">{serverError}</div>}
                     <button
+                        data-testid="register-submit"
                         type="submit"
                         disabled={loading}
                         className="w-full rounded-xl bg-blue-600 dark:bg-blue-700 px-4 py-3 font-semibold text-white transition duration-300 hover:bg-blue-700 dark:hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-blue-300 dark:disabled:bg-blue-900"

@@ -11,23 +11,12 @@ import {arrayMove} from "@dnd-kit/sortable";
 import { io } from "socket.io-client";
 import {getBoard,moveTask,createColumn} from "../../api/task.api";
 import { getToken } from "../../utils/auth";
-const Board = ({
-    search,
-    priorityFilter,
-    assigneeFilter,
-    onAssigneesChange
-}) => {
-
+const Board = ({search,priorityFilter,assigneeFilter,onAssigneesChange}) => {
     const { id } = useParams();
-
     const [columns, setColumns] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const [showCreateModal, setShowCreateModal] =
-        useState(false);
-
-    const [showCreateColumnModal, setShowCreateColumnModal] =
-        useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showCreateColumnModal, setShowCreateColumnModal] = useState(false);
 
     const [newColumnName, setNewColumnName] =
         useState("");
@@ -372,17 +361,13 @@ const Board = ({
         return (
             <div className="rounded-3xl border border-slate-200 bg-white/80 p-8 text-center shadow-sm backdrop-blur dark:border-slate-700dark:bg-slate-800/80">
                 <div
-                    className="
-                        mx-auto
-                        mb-3
-                        h-10
+                    className="mx-auto mb-3 h-10
                         w-10
                         animate-pulse
                         rounded-full
                         bg-slate-200
 
-                        dark:bg-slate-700
-                    "
+                        dark:bg-slate-700"
                 />
                 <p
                     className="
@@ -543,16 +528,9 @@ const Board = ({
 
                             filteredColumns.map(
                                 (column) => (
-
                                     <Column
-                                        key={
-                                            column.id
-                                        }
-
-                                        column={
-                                            column
-                                        }
-
+                                        key={column.id}
+                                        column={column}
                                         onCreateTask={
                                             handleCreateTask
                                         }
@@ -580,10 +558,7 @@ const Board = ({
                         ) : (
 
                             <div
-                                className="
-                                    w-full
-                                    rounded-2xl
-                                    border
+                                className="w-full rounded-2xl border
                                     border-dashed
                                     border-slate-300
                                     bg-slate-50
@@ -713,7 +688,6 @@ const Board = ({
                     )}
 
                     {selectedTask && (
-
                         <TaskDetailModal
                             task={
                                 selectedTask
@@ -798,6 +772,5 @@ const Board = ({
         </>
     );
 };
-
 
 export default Board;

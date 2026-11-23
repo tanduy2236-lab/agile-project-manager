@@ -10,7 +10,9 @@ const Column = ({
     onEditColumn,
     onDeleteColumn,
 }) => {
-
+    const columnTestId = `column-${column.name
+                                        .toLowerCase()
+                                        .replace(/\s+/g, "-")}`;
     const taskCount = column.tasks?.length || 0;
 
     const taskIds = (column.tasks ?? []).map((task) => task.id);
@@ -31,6 +33,7 @@ const Column = ({
 
     return (
         <div
+            data-testid={columnTestId}
             className="
                 flex min-h-[620px] w-80 flex-col
                 rounded-2xl
@@ -129,6 +132,9 @@ const Column = ({
             </div>
 
             <button
+                data-testid={`add-task-${column.name
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")}`}
                 onClick={() => onCreateTask(column.id)}
                 className="
                     mb-4 w-full
@@ -164,6 +170,7 @@ const Column = ({
             >
                 <div
                     ref={setNodeRef}
+                    data-testid={`${columnTestId}-dropzone`}
                     className="
                         flex-1
                         min-h-[300px]

@@ -63,6 +63,7 @@ const ProjectCard = ({
             <div className="mt-6 grid gap-2 sm:grid-cols-2">
                 <button
                     onClick={() => onOpen(project)}
+                    data-testid={`project-card-${project.id}`}
                     className="rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-3 py-2 text-sm font-semibold text-white transition hover:opacity-95"
                 >
                     {t.projects.open}
