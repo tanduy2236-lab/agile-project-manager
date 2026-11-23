@@ -74,8 +74,9 @@ Express Backend
       v
 Prisma ORM -> PostgreSQL
 ```
-
 ## 4. Cài đặt và chạy dự án
+![Dashboard](screenshots/dashboard.png)
+## 5. Cài đặt và chạy dự án
 
 ### Yêu cầu
 - Node.js 18 trở lên
@@ -148,7 +149,7 @@ Lệnh này chạy đồng thời backend và frontend:
 - Backend: `http://localhost:3000`
 - API: `http://localhost:3000/api`
 
-## 5. Biến môi trường
+## 6. Biến môi trường
 
 | Biến | Nơi cấu hình | Mô tả |
 |---|---|---|
@@ -159,7 +160,7 @@ Lệnh này chạy đồng thời backend và frontend:
 | `CLIENT_URL` | `server/.env` | Origin được phép truy cập qua Socket.IO |
 | `VITE_API_URL` | `client/.env` | URL gốc của REST API; ví dụ `http://localhost:3000/api` |
 
-## 6. Build và chạy production
+## 7. Build và chạy production
 
 ```bash
 npm run build
@@ -168,7 +169,7 @@ npm start
 
 Backend sẽ phục vụ các file frontend đã build trong `client/dist` và lắng nghe trên cổng được cấu hình bởi `PORT`.
 
-## 7. Cơ sở dữ liệu
+## 8. Cơ sở dữ liệu
 
 Dự án sử dụng PostgreSQL với Prisma ORM. Một số thực thể chính:
 
