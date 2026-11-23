@@ -74,7 +74,8 @@ Express Backend
       v
 Prisma ORM -> PostgreSQL
 ```
-## 4. Cài đặt và chạy dự án
+## 4. Hình ảnh minh họa
+### Dashboard
 ![Dashboard](screenshots/dashboard.png)
 ## 5. Cài đặt và chạy dự án
 
