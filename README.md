@@ -78,8 +78,20 @@ Prisma ORM -> PostgreSQL
 ### Dashboard
 ![Dashboard](screenshots/dashboard.png)
 
+### Scrum Board
+![Tổng quan Scrum Board](screenshots/scrum-board.png)
+
 ### Quản lý dự án
 ![Project Management](screenshots/project-management.png)
+
+### Product Backlog
+![Product Backlog](screenshots/product-backlog.png)
+
+### Sprint Analytics
+![Sprint Analytics](screenshots/sprint-analytics.png)
+
+### Activity Timeline
+![Activity Timeline](screenshots/activity-timeline.png)
 ## 5. Cài đặt và chạy dự án
 
 ### Yêu cầu
