@@ -77,6 +77,9 @@ Prisma ORM -> PostgreSQL
 ## 4. Hình ảnh minh họa
 ### Dashboard
 ![Dashboard](screenshots/dashboard.png)
+
+### Quản lý dự án
+![Project Management](screenshots/project-management.png)
 ## 5. Cài đặt và chạy dự án
 
 ### Yêu cầu
