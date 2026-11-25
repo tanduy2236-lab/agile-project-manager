@@ -11,6 +11,7 @@ import {arrayMove} from "@dnd-kit/sortable";
 import { io } from "socket.io-client";
 import {getBoard,moveTask,createColumn} from "../../api/task.api";
 import { getToken } from "../../utils/auth";
+import NotificationModal from "../NotificationModal";
 const Board = ({search,priorityFilter,assigneeFilter,onAssigneesChange}) => {
     const { id } = useParams();
     const [columns, setColumns] = useState([]);
@@ -41,6 +42,7 @@ const Board = ({search,priorityFilter,assigneeFilter,onAssigneesChange}) => {
 
     const [selectedTask, setSelectedTask] =
         useState(null);
+    const [notification, setNotification] = useState(null);
 
 
     const handleCreateTask = (columnId) => {
@@ -69,7 +71,10 @@ const Board = ({search,priorityFilter,assigneeFilter,onAssigneesChange}) => {
             await loadBoard();
         } catch (error) {
             console.error("Error creating column:", error);
-            alert(error?.response?.data?.message || "Không thể tạo cột mới.");
+            setNotification({
+                title: "Không thể tạo cột",
+                message: error?.response?.data?.message || "Không thể tạo cột mới.",
+            });
         } finally {
             setCreatingColumn(false);
         }
@@ -192,10 +197,10 @@ const Board = ({search,priorityFilter,assigneeFilter,onAssigneesChange}) => {
                 console.error("Request URL:", error.config?.url);
                 console.error("Request body:", error.config?.data);
 
-                alert(
-                    error.response?.data?.message ||
-                    "Không thể di chuyển Task."
-                );
+                setNotification({
+                    title: "Không thể di chuyển Task",
+                    message: error.response?.data?.message || "Không thể di chuyển Task.",
+                });
 
                 await loadBoard();
             }
@@ -317,10 +322,10 @@ const Board = ({search,priorityFilter,assigneeFilter,onAssigneesChange}) => {
             console.error("Request URL:", error.config?.url);
             console.error("Request body:", error.config?.data);
 
-            alert(
-                error.response?.data?.message ||
-                "Không thể di chuyển Task."
-            );
+            setNotification({
+                title: "Không thể di chuyển Task",
+                message: error.response?.data?.message || "Không thể di chuyển Task.",
+            });
 
             await loadBoard();
         }
@@ -769,6 +774,12 @@ const Board = ({search,priorityFilter,assigneeFilter,onAssigneesChange}) => {
                     )}
                 </div>
             </DndContext>
+            <NotificationModal
+                isOpen={Boolean(notification)}
+                title={notification?.title}
+                message={notification?.message}
+                onClose={() => setNotification(null)}
+            />
         </>
     );
 };

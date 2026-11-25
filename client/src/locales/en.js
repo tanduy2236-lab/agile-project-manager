@@ -53,6 +53,7 @@ export default {
             emailRequired: "Email is required",
             emailInvalid: "Email is invalid",
             passwordRequired: "Password is required",
+            invalidCredentials: "Incorrect email or password.",
             loginFailed: "Login failed.",
             successTitle: "Login successful",
             successMessage: "You have successfully logged in. Going to the main page now."

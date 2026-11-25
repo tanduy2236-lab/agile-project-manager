@@ -69,6 +69,9 @@ test.describe("Đăng ký và đăng nhập", () => {
         await page.getByTestId("login-submit").click();
 
         await expect(page.getByTestId("login-error")).toBeVisible();
+        await expect(page.getByTestId("login-error")).toHaveText(
+            "Email hoặc mật khẩu không chính xác.",
+        );
         await expect(page).toHaveURL(/\/login/);
         await attachScreenshot(page, testInfo, "login-invalid-password");
     });

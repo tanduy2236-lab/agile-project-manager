@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { deleteColumn } from "../../api/task.api";
+import NotificationModal from "../NotificationModal";
 
 const DeleteColumnModal = ({ projectId, column, onClose, onConfirm }) => {
     const [loading, setLoading] = useState(false);
+    const [notification, setNotification] = useState(null);
     const containerRef = useRef(null);
     const closeButtonRef = useRef(null);
 
@@ -25,7 +27,10 @@ const DeleteColumnModal = ({ projectId, column, onClose, onConfirm }) => {
             onClose();
         } catch (error) {
             console.error("Error deleting column:", error);
-            alert(error?.response?.data?.message || "Không thể xóa cột.");
+            setNotification({
+                title: "Không thể xóa cột",
+                message: error?.response?.data?.message || "Không thể xóa cột.",
+            });
         } finally {
             setLoading(false);
         }
@@ -38,6 +43,7 @@ const DeleteColumnModal = ({ projectId, column, onClose, onConfirm }) => {
     };
 
     return (
+        <>
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm dark:bg-black/60"
             onMouseDown={onBackdropClick}
@@ -73,7 +79,6 @@ const DeleteColumnModal = ({ projectId, column, onClose, onConfirm }) => {
                             </p>
                         </div>
                     </div>
-
                     <button
                         ref={closeButtonRef}
                         onClick={onClose}
@@ -116,6 +121,13 @@ const DeleteColumnModal = ({ projectId, column, onClose, onConfirm }) => {
                 </div>
             </div>
         </div>
+        <NotificationModal
+            isOpen={Boolean(notification)}
+            title={notification?.title}
+            message={notification?.message}
+            onClose={() => setNotification(null)}
+        />
+        </>
     );
 };
 

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import {createTask,updateTask} from "../../api/task.api";
 import { getProjectMembers } from "../../api/project.api";
+import NotificationModal from "../NotificationModal";
 const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
     const [members, setMembers] = useState([]);
     const [loadingMembers, setLoadingMembers] = useState(true);
+    const [notification, setNotification] = useState(null);
 
     useEffect(() => {
         const loadMembers = async () => {
@@ -47,7 +49,10 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
         e.preventDefault();
 
         if (!formData.title.trim()) {
-            alert("Vui lòng nhập tên Task.");
+            setNotification({
+                title: "Thiếu thông tin",
+                message: "Vui lòng nhập tên Task.",
+            });
             return;
         }
 
@@ -57,7 +62,10 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                 !Number.isInteger(Number(formData.storyPoint)) ||
                 Number(formData.storyPoint) < 0)
         ) {
-            alert("Story Point phải là số nguyên không âm.");
+            setNotification({
+                title: "Giá trị không hợp lệ",
+                message: "Story Point phải là số nguyên không âm.",
+            });
             return;
         }
 
@@ -102,19 +110,20 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
                 error.response?.status === 409 ||
                 error.response?.data?.code === "TASK_VERSION_CONFLICT"
             ) {
-                alert(
-                    "Task đã được người khác cập nhật. " +
-                    "Vui lòng tải lại dữ liệu trước khi sửa tiếp."
-                );
+                setNotification({
+                    title: "Task đã thay đổi",
+                    message: "Task đã được người khác cập nhật. Vui lòng tải lại dữ liệu trước khi sửa tiếp.",
+                });
             } else {
-                alert(
-                    error.response?.data?.message ||
-                    "Không thể lưu Task. Vui lòng thử lại."
-                );
+                setNotification({
+                    title: "Không thể lưu Task",
+                    message: error.response?.data?.message || "Không thể lưu Task. Vui lòng thử lại.",
+                });
             }
         }
     };
     return (
+        <>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
             <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-700 dark:bg-slate-800">
 
@@ -293,6 +302,13 @@ const TaskFormModal = ({mode,task,projectId,columnId,onClose,onSuccess}) => {
 
             </div>
         </div>
+        <NotificationModal
+            isOpen={Boolean(notification)}
+            title={notification?.title}
+            message={notification?.message}
+            onClose={() => setNotification(null)}
+        />
+        </>
     );
 };
 

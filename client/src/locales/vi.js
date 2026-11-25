@@ -53,6 +53,7 @@ export default {
             emailRequired: "Email là bắt buộc",
             emailInvalid: "Email không hợp lệ",
             passwordRequired: "Mật khẩu là bắt buộc",
+            invalidCredentials: "Email hoặc mật khẩu không chính xác.",
             loginFailed: "Đăng nhập thất bại.",
             successTitle: "Đăng nhập thành công",
             successMessage: "Bạn đã đăng nhập thành công. Đang chuyển đến trang chính."

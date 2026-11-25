@@ -34,6 +34,8 @@ import {
     listenForLanguageChange,
 } from "../../utils/language";
 import { formatDateDDMMYYYY } from "../../utils/date";
+import ConfirmModal from "../ConfirmModal";
+import NotificationModal from "../NotificationModal";
 
 const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -49,6 +51,9 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     const [attachments, setAttachments] = useState([]);
     const [loadingAttachments, setLoadingAttachments] = useState(false);
     const [uploadingAttachment, setUploadingAttachment] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null);
+    const [notification, setNotification] = useState(null);
+    const [confirming, setConfirming] = useState(false);
     const t = getTranslations(language).taskDetail;
     const dateLocale = language === "vi" ? "vi-VN" : "en-US";
     const priorityText =
@@ -211,14 +216,12 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     }
 };
     const handleDeleteComment = async (commentId) => {
-    const confirmed = window.confirm(
-        t.deleteCommentConfirmation
-    );
-
-    if (!confirmed) {
-        return;
-    }
-
+setConfirmAction({
+    title: t.deleteCommentConfirmation,
+    message: "",
+    danger: true,
+    confirmLabel: language === "vi" ? "Xóa" : "Delete",
+    action: async () => {
     try {
         await deleteComment(commentId);
 
@@ -232,7 +235,13 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
             "Error deleting comment:",
             error.response?.data || error
         );
+    setNotification({
+        title: language === "vi" ? "Không thể xóa bình luận" : "Could not delete comment",
+        message: error.response?.data?.message || "",
+    });
     }
+    },
+});
     };
     if(!task) return null;  
     const handleUploadAttachment = async (e) => {
@@ -258,10 +267,10 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
             "Error uploading attachment:",
             error.response?.data || error
         );
-        window.alert(
-            error.response?.data?.message ||
-            t.uploadAttachmentFailed
-        );
+        setNotification({
+            title: t.uploadAttachmentFailed,
+            message: error.response?.data?.message || "",
+        });
     } finally {
         setUploadingAttachment(false);
 
@@ -269,12 +278,12 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     }
 };
     const handleDeleteAttachment = async (attachmentId) => {
-    const confirmed = window.confirm(
-        t.deleteAttachmentConfirmation
-    );
-
-    if (!confirmed) return;
-
+    setConfirmAction({
+        title: t.deleteAttachmentConfirmation,
+        message: "",
+        danger: true,
+        confirmLabel: language === "vi" ? "Xóa" : "Delete",
+        action: async () => {
     try {
         await deleteAttachment(attachmentId);
 
@@ -288,7 +297,13 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
             "Error deleting attachment:",
             error.response?.data || error
         );
+        setNotification({
+            title: language === "vi" ? "Không thể xóa tệp đính kèm" : "Could not delete attachment",
+            message: error.response?.data?.message || "",
+        });
     }
+        },
+    });
 };
     const getFileIcon = (fileType) => {
         if (!fileType) return Paperclip;
@@ -352,6 +367,7 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
     }
 };
     return (
+        <>
         <div
             className={`fixed inset-0 z-50 flex items-center justify-center bg-black/60 ${
                 isExpanded ? "p-2" : "p-4"
@@ -981,6 +997,32 @@ const TaskDetailModal = ({ task, onClose, onEdit, onDelete }) => {
                 </div>
             </div>
         </div>
+        <ConfirmModal
+            isOpen={Boolean(confirmAction)}
+            title={confirmAction?.title}
+            message={confirmAction?.message}
+            confirmLabel={confirmAction?.confirmLabel}
+            danger={confirmAction?.danger}
+            loading={confirming}
+            onClose={() => setConfirmAction(null)}
+            onConfirm={async () => {
+                if (!confirmAction?.action || confirming) return;
+                setConfirming(true);
+                try {
+                    await confirmAction.action();
+                } finally {
+                    setConfirming(false);
+                    setConfirmAction(null);
+                }
+            }}
+        />
+        <NotificationModal
+            isOpen={Boolean(notification)}
+            title={notification?.title}
+            message={notification?.message}
+            onClose={() => setNotification(null)}
+        />
+        </>
     );
 };
 export default TaskDetailModal;

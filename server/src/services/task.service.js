@@ -8,6 +8,8 @@ import {
     getTaskStatusForColumn,
     normalizeColumnName,
 } from "../utils/column.utils.js";
+import { isTaskCompleted } from "../utils/task.utils.js";
+import * as taskDependencyRepository from "../repositories/taskDependency.repository.js";
 import { recordActivity } from "./activity.service.js";
 import { runAutomation } from "./automationEngine.service.js";
 const safeRecordActivity = async (data) => {
@@ -490,6 +492,28 @@ export const moveTask = async (
     }
 
     const oldColumnId = task.columnId;
+
+    if (
+        Number(oldColumnId) !== Number(columnId) &&
+        isTaskCompleted({ column: newColumn })
+    ) {
+        const blockedByRecords =
+            await taskDependencyRepository.findBlockedBy(
+                Number(taskId)
+            );
+        const incompleteDependencies = blockedByRecords.filter(
+            (dependency) =>
+                !isTaskCompleted(dependency.dependsOnTask)
+        );
+
+        if (incompleteDependencies.length > 0) {
+            const error = new Error(
+                `Không thể hoàn thành Task này vì còn ${incompleteDependencies.length} công việc phụ thuộc chưa hoàn thành.`
+            );
+            error.status = 400;
+            throw error;
+        }
+    }
 
     // Lấy thông tin cột cũ
     const oldColumn = oldColumnId !== null

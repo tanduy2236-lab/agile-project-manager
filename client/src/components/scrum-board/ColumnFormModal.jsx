@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { updateColumn } from "../../api/task.api";
+import NotificationModal from "../NotificationModal";
 
 const ColumnFormModal = ({ projectId, column, onClose, onSuccess }) => {
     const [name, setName] = useState(column?.name || "");
     const [loading, setLoading] = useState(false);
+    const [notification, setNotification] = useState(null);
     const containerRef = useRef(null);
     const inputRef = useRef(null);
 
@@ -25,7 +27,10 @@ const ColumnFormModal = ({ projectId, column, onClose, onSuccess }) => {
 
         const trimmedName = name.trim();
         if (!trimmedName) {
-            alert("Vui lòng nhập tên cột.");
+            setNotification({
+                title: "Thiếu thông tin",
+                message: "Vui lòng nhập tên cột.",
+            });
             return;
         }
 
@@ -36,7 +41,10 @@ const ColumnFormModal = ({ projectId, column, onClose, onSuccess }) => {
             onClose();
         } catch (error) {
             console.error("Error updating column:", error);
-            alert(error?.response?.data?.message || "Không thể cập nhật cột.");
+            setNotification({
+                title: "Không thể cập nhật cột",
+                message: error?.response?.data?.message || "Không thể cập nhật cột.",
+            });
         } finally {
             setLoading(false);
         }
@@ -49,6 +57,7 @@ const ColumnFormModal = ({ projectId, column, onClose, onSuccess }) => {
     };
 
     return (
+        <>
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm dark:bg-black/60"
             onMouseDown={onBackdropClick}
@@ -116,6 +125,13 @@ const ColumnFormModal = ({ projectId, column, onClose, onSuccess }) => {
                 </form>
             </div>
         </div>
+        <NotificationModal
+            isOpen={Boolean(notification)}
+            title={notification?.title}
+            message={notification?.message}
+            onClose={() => setNotification(null)}
+        />
+        </>
     );
 };
 

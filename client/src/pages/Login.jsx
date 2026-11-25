@@ -79,7 +79,12 @@ const Login = () => {
             saveAuth(result);
             setShowSuccessModal(true);
         } catch (error) {
-            setServerError(error.response?.data?.error || t.auth.login.loginFailed);
+            const message = error.response?.data?.error;
+            setServerError(
+                message === "Invalid email or password"
+                    ? t.auth.login.invalidCredentials
+                    : message || t.auth.login.loginFailed,
+            );
         } finally {
             setLoading(false);
         }
